@@ -13,6 +13,9 @@ return [
             'charset' => 'utf8',
             'tablePrefix' => 'wa_',
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager',
+        ],
     ],
 
 ];
