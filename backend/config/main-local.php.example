@@ -19,6 +19,14 @@ if (!YII_ENV_TEST) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
+        'generators' => [
+            'sintret' => [
+                'class' => 'sintret\gii\generators\crud\Generator',
+            ],
+            'sintretModel' => [
+                'class' => 'sintret\gii\generators\model\Generator'
+            ]
+        ]
     ];
 }
 

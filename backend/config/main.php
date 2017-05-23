@@ -16,7 +16,15 @@ return [
         'admin' => [
             'class' => 'mdm\admin\Module',
             'layout' => 'left-menu',//yii2-admin的导航菜单
-        ]
+        ],
+        'dynagrid'=>[
+            'class'=>'\kartik\dynagrid\Module',
+            // other settings (refer documentation)
+        ],
+        'gridview'=>[
+            'class'=>'\kartik\grid\Module',
+            // other module settings
+        ],
     ],
     'components' => [
         'request' => [
