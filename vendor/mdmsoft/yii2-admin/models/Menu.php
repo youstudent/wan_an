@@ -99,6 +99,7 @@ class Menu extends \yii\db\ActiveRecord
             'route' => Yii::t('rbac-admin', 'Route'),
             'order' => Yii::t('rbac-admin', 'Order'),
             'data' => Yii::t('rbac-admin', 'Data'),
+            'icon' => Yii::t('rbac-admin', 'Icon'),
         ];
     }
 

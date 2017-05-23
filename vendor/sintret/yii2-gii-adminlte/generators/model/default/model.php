@@ -111,6 +111,7 @@ class <?= $className ?> extends <?= '\\' . ltrim($generator->baseClass, '\\') . 
         $user = User::find()->select('username')->where(['id' => $this->userUpdate])->one();
         return $user->username;
     }
+
     */
     <?php if(isset($image) && $image){ ?>
     public static $imagePath = '@webroot/images/<?= strtolower($className) ?>/';

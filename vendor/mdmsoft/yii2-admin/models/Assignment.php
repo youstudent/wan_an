@@ -118,4 +118,5 @@ class Assignment extends Object
             return $this->user->$name;
         }
     }
+
 }

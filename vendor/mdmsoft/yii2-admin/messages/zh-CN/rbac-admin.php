@@ -56,7 +56,6 @@ return [
     'Search' => '查询',
     'Reset' => '重置',
     'Update Menu' => '更新菜单',
-    'Menus' => '菜单列表',
     'Order' => '排序',
     'Class Name' => '类名',
     'Assignment' => '分配',
@@ -65,4 +64,8 @@ return [
     'Menu' => '菜单',
     'Help' => '帮助',
     'Application' => '应用',
+    'Create User' => '添加管理员',
+    'Signup' => '添加管理员',
+    'Icon' => '图标',
+
 ];

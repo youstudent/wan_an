@@ -108,8 +108,8 @@ COMMIT;
 -- ----------------------------
 --  Table structure for `wa_user`
 -- ----------------------------
-DROP TABLE IF EXISTS `wa_user`;
-CREATE TABLE `wa_user` (
+DROP TABLE IF EXISTS `wa_adminuser`;
+CREATE TABLE `wa_adminuser` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   `auth_key` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
@@ -144,6 +144,15 @@ CREATE TABLE `log_upload` (
   `createDate` DATETIME DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=INNODB;
+CREATE TABLE `tbl_dynagrid_dtl` (
+  `id` VARCHAR(100) NOT NULL COMMENT 'Unique dynagrid detail setting identifier',
+  `category` VARCHAR(10) NOT NULL COMMENT 'Dynagrid detail setting category "filter" or "sort"',
+  `name` VARCHAR(150) NOT NULL COMMENT 'Name to identify the dynagrid detail setting',
+  `data` VARCHAR(5000) DEFAULT NULL COMMENT 'Json encoded data for the dynagrid detail configuration',
+  `dynagrid_id` VARCHAR(100) NOT NULL COMMENT 'Related dynagrid identifier',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `tbl_dynagrid_dtl_UK1` (`name`,`category`,`dynagrid_id`)
+) ENGINE=INNODB;
 CREATE TABLE `tbl_dynagrid` (
   `id` VARCHAR(100) NOT NULL COMMENT 'Unique dynagrid setting identifier',
   `filter_id` VARCHAR(100) DEFAULT NULL COMMENT 'Filter setting identifier',
@@ -155,12 +164,4 @@ CREATE TABLE `tbl_dynagrid` (
   CONSTRAINT `tbl_dynagrid_FK1` FOREIGN KEY (`filter_id`) REFERENCES `tbl_dynagrid_dtl` (`id`),
   CONSTRAINT `tbl_dynagrid_FK2` FOREIGN KEY (`sort_id`) REFERENCES `tbl_dynagrid_dtl` (`id`)
 ) ENGINE=INNODB;
-CREATE TABLE `tbl_dynagrid_dtl` (
-  `id` VARCHAR(100) NOT NULL COMMENT 'Unique dynagrid detail setting identifier',
-  `category` VARCHAR(10) NOT NULL COMMENT 'Dynagrid detail setting category "filter" or "sort"',
-  `name` VARCHAR(150) NOT NULL COMMENT 'Name to identify the dynagrid detail setting',
-  `data` VARCHAR(5000) DEFAULT NULL COMMENT 'Json encoded data for the dynagrid detail configuration',
-  `dynagrid_id` VARCHAR(100) NOT NULL COMMENT 'Related dynagrid identifier',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `tbl_dynagrid_dtl_UK1` (`name`,`category`,`dynagrid_id`)
-) ENGINE=INNODB;
+

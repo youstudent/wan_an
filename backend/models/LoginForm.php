@@ -1,5 +1,5 @@
 <?php
-namespace common\models;
+namespace backend\models;
 
 use Yii;
 use yii\base\Model;
@@ -74,5 +74,14 @@ class LoginForm extends Model
         }
 
         return $this->_user;
+    }
+
+    public function attributes()
+    {
+        return [
+            'rememberMe' => '记住我',
+            'Username' => '用户名',
+            'Password' => '密码'
+        ];
     }
 }

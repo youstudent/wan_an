@@ -1,5 +1,6 @@
 <?php
 
+use kartik\daterange\DateRangePicker;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use mdm\admin\components\Helper;
@@ -8,12 +9,16 @@ use mdm\admin\components\Helper;
 /* @var $searchModel mdm\admin\models\searchs\User */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('rbac-admin', 'Users');
+$this->title = Yii::t('rbac-admin', '管理员列表');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="user-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
+
+    <p>
+        <?= Html::a(Yii::t('rbac-admin', 'Create User'), ['signup'], ['class' => 'btn btn-success']) ?>
+    </p>
 
     <?=
     GridView::widget([
@@ -21,18 +26,38 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'username',
-            'email:email',
-            'created_at:date',
+            [
+                    'attribute' => 'username',
+                    'label' => '用户名',
+            ],
+            [
+                    'attribute' => 'email',
+                    'format' => 'email',
+                    'label' => '邮箱',
+            ],
+            [
+                    'attribute' => 'created_at',
+                    'format' => 'date',
+                    'label' => '创建时间',
+                    'filter'    => DateRangePicker::widget([
+                        'model'         => $searchModel,
+                        'attribute'     => 'created_at',
+                        'convertFormat' => true,
+                        'pluginOptions' => [
+                            'locale' => ['format' => 'Y-m-d'],
+                        ],
+                    ]),
+            ],
             [
                 'attribute' => 'status',
                 'value' => function($model) {
-                    return $model->status == 0 ? 'Inactive' : 'Active';
+                    return $model->status == 0 ? '冻结' : '激活';
                 },
                 'filter' => [
-                    0 => 'Inactive',
-                    10 => 'Active'
-                ]
+                    0 => '冻结',
+                    10 => '激活'
+                ],
+                'label' => '状态'
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
@@ -50,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-pjax' => '0',
                         ];
                         return Html::a('<span class="glyphicon glyphicon-ok"></span>', $url, $options);
-                    }
+                    },
                     ]
                 ],
             ],
