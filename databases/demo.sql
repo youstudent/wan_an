@@ -214,3 +214,84 @@ INSERT INTO `wa_migration` VALUES ('m000000_000000_base', '1495468510'), ('m1305
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+-- ----------------------------
+-- Table structure for wa_bonus
+-- ----------------------------
+DROP TABLE IF EXISTS `wa_bonus`;
+CREATE TABLE `wa_bonus` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '奖金记录自增ID',
+  `type` varchar(255) NOT NULL DEFAULT '' COMMENT '奖金类型',
+  `coin` int(10) NOT NULL DEFAULT '0' COMMENT '金额',
+  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '账号状态 1:正常 0:禁用',
+  `created_at` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间 奖金获得时间',
+  `updated_at` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='奖金记录表';
+
+-- ----------------------------
+-- Table structure for wa_deposit
+-- ----------------------------
+DROP TABLE IF EXISTS `wa_deposit`;
+CREATE TABLE `wa_deposit` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '充值记录自增ID',
+  `member_id` int(10) NOT NULL DEFAULT '1' COMMENT '充值会员id',
+  `deposit_type` varchar(255) NOT NULL DEFAULT '' COMMENT '充值类型',
+  `deposit_num` int(10) NOT NULL DEFAULT '0' COMMENT '充值金额',
+  `created_at` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间 奖金获得时间',
+  `updated_at` int(10) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`),
+  KEY `member_id` (`member_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='充值记录表';
+
+-- ----------------------------
+-- Table structure for wa_member
+-- ----------------------------
+DROP TABLE IF EXISTS `wa_member`;
+CREATE TABLE `wa_member` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '会员自增ID',
+  `site` int(11) DEFAULT '0' COMMENT '座位号',
+  `parent_id` int(10) NOT NULL DEFAULT '1' COMMENT '直推会员id',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '用户姓名',
+  `password` varchar(255) NOT NULL DEFAULT '' COMMENT '会员密码',
+  `mobile` varchar(255) NOT NULL DEFAULT '' COMMENT '电话',
+  `deposit_bank` varchar(255) NOT NULL DEFAULT '' COMMENT '开户行',
+  `bank_account` varchar(255) NOT NULL DEFAULT '' COMMENT '银行账号',
+  `address` varchar(255) NOT NULL DEFAULT '' COMMENT '地址',
+  `group_num` int(10) NOT NULL DEFAULT '0' COMMENT '区数量',
+  `child_num` int(10) NOT NULL DEFAULT '0' COMMENT '直系挂靠的会员数',
+  `a_coin` int(10) NOT NULL DEFAULT '0' COMMENT '金果数',
+  `b_coin` int(10) NOT NULL DEFAULT '0' COMMENT '金种子数',
+  `gross_income` int(10) NOT NULL DEFAULT '0' COMMENT '总收入',
+  `gorss_bonus` int(10) NOT NULL DEFAULT '0' COMMENT '总提成',
+  `last_login_time` int(10) NOT NULL DEFAULT '0' COMMENT '最后登录时间',
+  `status` int(10) DEFAULT '1' COMMENT '账号状态关联member_status',
+  `created_at` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间 注册时间 入网时间',
+  `updated_at` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='会员信息表';
+
+-- ----------------------------
+-- Table structure for wa_member_status
+-- ----------------------------
+DROP TABLE IF EXISTS `wa_member_status`;
+CREATE TABLE `wa_member_status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '状态',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '状态名',
+  `value` int(11) NOT NULL DEFAULT '1' COMMENT '状态值',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='用户状态表';
+
+-- ----------------------------
+-- Table structure for wa_outline
+-- ----------------------------
+DROP TABLE IF EXISTS `wa_outline`;
+CREATE TABLE `wa_outline` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '退网记录自增ID',
+  `member_id` int(10) NOT NULL DEFAULT '0' COMMENT '退网会员ID',
+  `status` int(10) NOT NULL DEFAULT '1' COMMENT '账号状态 1:正常 0:禁用',
+  `created_at` int(10) NOT NULL DEFAULT '0' COMMENT '创建时间',
+  `updated_at` int(10) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='退网表';
+
