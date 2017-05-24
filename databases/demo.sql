@@ -295,3 +295,84 @@ CREATE TABLE `wa_outline` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='退网表';
 
+-- ----------------------------
+-- Table structure for wa_announcements
+-- ----------------------------
+DROP TABLE IF EXISTS `wa_announcements`;
+CREATE TABLE `wa_announcements` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(30) NOT NULL COMMENT '标题',
+  `content` text NOT NULL,
+  `created_at` int(10) NOT NULL DEFAULT '0' COMMENT '发布时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='公告管理';
+
+-- ----------------------------
+-- Table structure for wa_branner
+-- ----------------------------
+DROP TABLE IF EXISTS `wa_branner`;
+CREATE TABLE `wa_branner` (
+  `id` int(11) NOT NULL,
+  `name` varchar(30) DEFAULT NULL COMMENT '轮播图名称',
+  `img` varchar(255) DEFAULT NULL COMMENT '图片',
+  `content_img` text COMMENT '轮播图文本',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='轮播图管理';
+
+-- ----------------------------
+-- Table structure for wa_fruiter
+-- ----------------------------
+DROP TABLE IF EXISTS `wa_fruiter`;
+CREATE TABLE `wa_fruiter` (
+  `id` int(11) NOT NULL,
+  `member_id` int(11) NOT NULL COMMENT '会员id',
+  `order_sn` varchar(255) NOT NULL COMMENT '订单号',
+  `fruiter_name` varchar(20) DEFAULT NULL COMMENT '果树名称',
+  `updated_at` int(10) DEFAULT NULL,
+  `fruiter_img` varchar(255) DEFAULT NULL COMMENT '果树图片',
+  `created_at` int(10) NOT NULL COMMENT '补充时间',
+  `status` int(1) NOT NULL DEFAULT '0' COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='果树管理表';
+
+-- Table structure for wa_goods
+-- ----------------------------
+DROP TABLE IF EXISTS `wa_goods`;
+CREATE TABLE `wa_goods` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) DEFAULT NULL COMMENT '商品名字',
+  `img` varchar(255) DEFAULT NULL COMMENT '商品图片',
+  `price` decimal(10,2) DEFAULT NULL COMMENT '商品价格',
+  `describe` text COMMENT '商品描述',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品管理';
+
+
+-- ----------------------------
+-- Table structure for wa_order
+-- ----------------------------
+DROP TABLE IF EXISTS `wa_order`;
+CREATE TABLE `wa_order` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `order_sn` varchar(50) DEFAULT NULL COMMENT '订单号',
+  `member_id` int(11) DEFAULT NULL COMMENT '购买会员id',
+  `name` varchar(30) DEFAULT NULL COMMENT '商品名字',
+  `price` decimal(10,2) DEFAULT NULL COMMENT '商品价格',
+  `status` int(11) DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单管理';
+
+-- ----------------------------
+-- Table structure for wa_record
+-- ----------------------------
+DROP TABLE IF EXISTS `wa_record`;
+CREATE TABLE `wa_record` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `member_id` int(11) DEFAULT NULL COMMENT '会员id',
+  `created_at` int(11) DEFAULT NULL COMMENT '申请时间',
+  `coin` decimal(20,0) DEFAULT NULL COMMENT '申请金额',
+  `updated_at` int(10) DEFAULT NULL COMMENT '处理时间',
+  `status` int(3) DEFAULT NULL COMMENT '状态',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='提现记录表';
+>>>>>>> 修改
