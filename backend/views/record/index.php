@@ -94,7 +94,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     
                 }
                 
-            }
+            },
+          
+                'filter' => [
+                    1 => '已通过',
+                    2 => '已拒绝'
+                ]
+          
+           
+   
         ],
       
          ['class' => 'kartik\grid\ActionColumn',
