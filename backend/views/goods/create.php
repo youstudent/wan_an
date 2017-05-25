@@ -16,6 +16,17 @@ use yii\helpers\Url;
 $this->title = '添加商品';
 $this->params['breadcrumbs'][] = ['label' => 'Goods', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$fileuploadedJs = <<<JS
+    function (event, data, id, index) {
+        var res = data.response;
+        var ids_input = $('input[name="GoodsImg[img_path]"]');
+        var new_ids = ids_input.val() +','+res.data.id;
+        if(res.code == 1){
+            ids_input.attr("value", new_ids);
+        }
+    }
+JS;
 ?>
 <div class="goods-create">
 
@@ -34,8 +45,10 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="row">
             <div class="col-md-6">
 
+                <?= $form->field($model, 'img_ids')->hiddenInput()->label(false) ?>
+
                 <?= $form->field($GoodsImgModel, 'img_path')->widget(FileInput::classname(),[
-                    'options' => ['multiple' => true],
+                    'options' => ['multiple' => true, 'accept' => 'image/*'],
                     'pluginOptions' => [
                         // 需要预览的文件格式
                         'previewFileType' => 'image',
@@ -77,9 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     // 一些事件行为
                     'pluginEvents' => [
                         // 上传成功后的回调方法，需要的可查看data后再做具体操作，一般不需要设置
-                        "fileuploaded" => "function (event, data, id, index) {
-            console.log(data);
-        }",
+                        "fileuploaded" => $fileuploadedJs,
                     ],
                 ]) ?>
 

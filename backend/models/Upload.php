@@ -29,6 +29,7 @@ class Upload extends Model
         $model = new GoodsImg();
         $this->img_path = UploadedFile::getInstance($model, 'img_path');
         if(isset($this->img_path)){
+            //TODO:: 这里的savePath获取的是错误的，要修复
             $model->img_path = $this->getSavePath('goods', $this->img_path->name);
             $this->img_path->saveAs($model->img_path);
             $model->save();
@@ -42,7 +43,7 @@ class Upload extends Model
         $save_path = '';
         switch($type){
             case 'goods':
-                $save_path = Yii::$app->params['upload_goods_path'] . DIRECTORY_SEPARATOR . date('Y-m-d') . DIRECTORY_SEPARATOR . sha1($filename) .'.'. $this->getFileExtension($filename);
+                $save_path = Yii::$app->params['upload_goods_path'] . DIRECTORY_SEPARATOR . date('Y-m-d') . DIRECTORY_SEPARATOR . sha1($filename . time()) .'.'. $this->getFileExtension($filename);
                 break;
         }
         if(!empty($save_path)){

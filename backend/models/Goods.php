@@ -17,6 +17,8 @@ use app\models\User;
  */
 class Goods extends \yii\db\ActiveRecord
 {
+    //暂存图片的id
+    public $img_ids;
     /**
      * @inheritdoc
      */
@@ -34,7 +36,7 @@ class Goods extends \yii\db\ActiveRecord
             [['price'], 'number'],
             [['describe'], 'string'],
             [['name'], 'string', 'max' => 30],
-            [['img'], 'string', 'max' => 255]
+            [['img'], 'string', 'max' => 255],
         ];
     }
 
