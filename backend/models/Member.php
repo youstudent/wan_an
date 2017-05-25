@@ -30,6 +30,9 @@ use Yii;
  */
 class Member extends \yii\db\ActiveRecord
 {
+    public $msg;
+    public $state;
+
     /**
      * @inheritdoc
      */
@@ -43,9 +46,11 @@ class Member extends \yii\db\ActiveRecord
      */
     public function rules()
     {
+
         return [
             [['site', 'parent_id', 'group_num', 'child_num', 'a_coin', 'b_coin', 'gross_income', 'gorss_bonus', 'last_login_time', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255]
+            [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255],
+            ['state', 'in', 'range' => [0,1,2]]
         ];
     }
 
@@ -112,4 +117,20 @@ class Member extends \yii\db\ActiveRecord
     }
 
     */
+
+    /**
+     * @param $param id status
+     * @return bool|null
+     */
+    public function changeMember($param){
+        $this->msg = $param['state'] == 1 ? '冻结' : '解冻';
+        if(!$this->validate()){
+            return null;
+        }
+
+        $info = Member::findOne(['id'=>$param['id']]);
+        $info->status = $param['state'];
+
+        return $info->save();
     }
+}

@@ -148,12 +148,16 @@ class MemberController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
+    public function actionChange()
     {
-        $this->findModel($id)->delete();
-        Yii::$app->session->setFlash('success', 'Well done! successfully to deleted data!  ');
-
+        $model = new Member();
+        if($model->changeMember(Yii::$app->request->queryParams)){
+            Yii::$app->session->setFlash('success', $model->msg . '成功');
+        }else{
+            Yii::$app->session->setFlash('error', $model->getErrors());
+        }
         return $this->redirect(['index']);
+
     }
 
     /**
