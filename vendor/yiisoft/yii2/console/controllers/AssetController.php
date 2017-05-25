@@ -80,7 +80,7 @@ class AssetController extends Controller
      *     'js' => 'js/all-shared-{hash}.js',
      *     'css' => 'css/all-shared-{hash}.css',
      *     'depends' => [
-     *         // Include all assets shared between 'backend' and 'frontend'
+     *         // Include all assets shared between 'backend' and 'api'
      *         'yii\web\YiiAsset',
      *         'app\assets\SharedAsset',
      *     ],
