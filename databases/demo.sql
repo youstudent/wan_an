@@ -221,13 +221,15 @@ SET FOREIGN_KEY_CHECKS = 1;
 DROP TABLE IF EXISTS `wa_bonus`;
 CREATE TABLE `wa_bonus` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '奖金记录自增ID',
-  `type` varchar(255) NOT NULL DEFAULT '' COMMENT '奖金类型',
-  `coin` int(10) NOT NULL DEFAULT '0' COMMENT '金额',
+  `member_id` int(11) NOT NULL COMMENT '会员ID',
+  `type` varchar(255) NOT NULL DEFAULT '' COMMENT '金果获得类型 1:绩效2:分享3:额外分享4:提现',
+  `coin_amount` int(10) NOT NULL DEFAULT '0' COMMENT '总收入',
+  `coin_count` int(10) NOT NULL DEFAULT '0' COMMENT '出入流水账金额',
   `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '账号状态 1:正常 0:禁用',
   `created_at` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间 奖金获得时间',
   `updated_at` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='奖金记录表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='金果流水表';
 
 -- ----------------------------
 -- Table structure for wa_deposit
