@@ -64,21 +64,20 @@ class recordSearch extends Record
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
-        $status='';
+        /*$status='';
         if ($this->status =='通过'){
             $status=1;
         }else if ($this->status=='拒绝'){
             $status=2;
-        }
+        }*/
         $query->andFilterWhere([
             'id' => $this->id,
             'member_id' => $this->member_id,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'status'=>$status,
+            'status'=>$this->status,
         ]);
         
-        var_dump($this->status);exit;
         return $dataProvider;
     }
 }
