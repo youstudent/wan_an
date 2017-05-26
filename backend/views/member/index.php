@@ -4,7 +4,7 @@ use kartik\daterange\DateRangePicker;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\dynagrid\DynaGrid;
-use app\models\User;
+use app\models\Member;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\searchs\MemberSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . $this->title . '</h3>',
         'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
+
     $columns = [
 //        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
                     'id',

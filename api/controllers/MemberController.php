@@ -1,24 +1,37 @@
 <?php
 /**
- * User: harlen-angkemac
- * Date: 2017/5/25 - 下午12:10
- *
+ * Created by PhpStorm.
+ * User: Administrator
+ * Date: 2017/5/25
+ * Time: 16:10
  */
 
 namespace api\controllers;
 
 
-use Yii;
+use app\models\Member;
 
-class TestController extends ApiController
+class MemberController extends ApiController
 {
-    public function actionMember()
+    /**
+     * 获取会员个人信息和团队信息
+     * @return array
+     */
+    public function actionMemberdetail()
+    {
+        $model = new Member();
+        $member_id = \Yii::$app->request->get('id');
+        if($member = $model->getOneMember($member_id)){
+            return $this->jsonReturn(1, 'success', $member);
+        }
+        return $this->jsonReturn(0, 'error');
+    }
+    public function actionDemo()
     {
 
         //获取客户端数据如
         //Yii::$app->request->post();
         //Yii::$app->request->queryParams;
-        $data = Yii::$app->request->get();
 
         //在模型中处理验证
         //如果有错误。返回 负数的code .加上错误信息
@@ -31,5 +44,4 @@ class TestController extends ApiController
         //展示类接口 - 返回对应的展示数据 ,如公告详情
         return $this->jsonReturn(1, 'success', ['title' => '大新闻', 'detail' => '公告为荣']);
     }
-
 }

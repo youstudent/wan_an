@@ -3,7 +3,7 @@
 namespace backend\models;
 
 use Yii;
-
+use backend\models\Bonus;
 
 /**
  * This is the model class for table "{{%member}}".
@@ -62,6 +62,11 @@ class Member extends \yii\db\ActiveRecord
         return [
             'id' => '会员ID',
             'site' => '座位号',
+            'bonus.coin_amount' => '总收入',
+            'bonus.coin_count' => '金额',
+            'bonus.id' => '序号',
+            'bonus.type' => '奖金类型',
+            'bonus.create_at' => '获得时间',
             'parent_id' => '直推会员ID',
             'name' => '用户姓名',
             'password' => '会员密码',
@@ -74,7 +79,7 @@ class Member extends \yii\db\ActiveRecord
             'a_coin' => '金果',
             'b_coin' => '金种子',
             'gross_income' => '总收入',
-            'gorss_bonus' => '总提成',
+            'gorss_bonus' => '总提现',
             'last_login_time' => '最后登录时间',
             'status' => '状态',
             'created_at' => '注册时间',
@@ -132,5 +137,9 @@ class Member extends \yii\db\ActiveRecord
         $info->status = $param['state'];
 
         return $info->save();
+    }
+    public function getBonus()
+    {
+        return $this->hasOne(Bonus::className(), ['member_id' => 'id']);
     }
 }
