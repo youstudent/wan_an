@@ -1,5 +1,6 @@
 <?php
 
+use backend\models\GoodsImg;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use app\models\User;
@@ -16,8 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('更新', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('删除', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this item?',
@@ -29,10 +30,23 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
             'name',
-            'img',
             'price',
+            [
+                    'attribute' => 'goods_imgs',
+                    'label' => '商品图',
+                    'format' => 'raw',
+                    'value' =>  function($model){
+                        $imgs  = $model->getGoodsImgs($model->id);
+                        $html = '';
+                        if(isset($imgs) && count($imgs)> 0){
+                            foreach($imgs as $img){
+                                $html .= Html::img($img, ['width'=> '240px', 'height'=> '240px']);
+                            }
+                        }
+                        return $html;
+                    }
+            ],
             'describe:ntext',
         ]]) ;?>
 

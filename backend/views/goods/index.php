@@ -38,7 +38,6 @@ $this->params['breadcrumbs'][] = $this->title;
     $columns = [
         ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
             'name',
-            'img',
             'price',
             'describe:ntext',
         [

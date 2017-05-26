@@ -45,8 +45,6 @@ JS;
         <div class="row">
             <div class="col-md-6">
 
-                <?= $form->field($model, 'img_ids')->hiddenInput()->label(false) ?>
-
                 <?= $form->field($GoodsImgModel, 'img_path')->widget(FileInput::classname(),[
                     'options' => ['multiple' => true, 'accept' => 'image/*'],
                     'pluginOptions' => [

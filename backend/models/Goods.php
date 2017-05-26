@@ -11,7 +11,6 @@ use app\models\User;
  *
  * @property integer $id
  * @property string $name
- * @property string $img
  * @property string $price
  * @property string $describe
  */
@@ -36,7 +35,6 @@ class Goods extends \yii\db\ActiveRecord
             [['price'], 'number'],
             [['describe'], 'string'],
             [['name'], 'string', 'max' => 30],
-            [['img'], 'string', 'max' => 255],
         ];
     }
 
@@ -48,7 +46,6 @@ class Goods extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => '商品名字',
-            'img' => '商品图片',
             'price' => '商品价格',
             'describe' => '商品描述',
         ];
@@ -79,4 +76,40 @@ class Goods extends \yii\db\ActiveRecord
     }
 
     */
+
+    public function addGoods($post)
+    {
+        if(!$this->load($post)){
+            return null;
+        }
+        if(!$this->validate()){
+            return null;
+        }
+
+        if(!isset($post['GoodsImg']['img_path']) || empty($post['GoodsImg']['img_path'])){
+            $this->addError('img_ids', '请先上传商品图片');
+            return null;
+        }
+        if(!$this->save()){
+            $this->addError('name', '保存失败');
+        }
+        //更新上传文件
+        GoodsImg::bindGoods($this->id, $post['GoodsImg']['img_path']);
+        return $this->id ? $this : null;
     }
+
+    public function getGoodsImg()
+    {
+        return $this->hasMany(GoodsImg::className(), ['goods_id' => 'id']);
+    }
+
+    public function getGoodsImgs($goods_id)
+    {
+        $imgs = GoodsImg::find()->where(['goods_id'=>$goods_id])->select('img_path')->orderBy('id')->column();
+
+        foreach($imgs as &$img){
+            $img = Yii::$app->params['img_domain'] . $img;
+        }
+        return $imgs;
+    }
+}

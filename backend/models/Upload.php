@@ -29,9 +29,9 @@ class Upload extends Model
         $model = new GoodsImg();
         $this->img_path = UploadedFile::getInstance($model, 'img_path');
         if(isset($this->img_path)){
-            //TODO:: 这里的savePath获取的是错误的，要修复
+            //获取文件上传的相对路径
             $model->img_path = $this->getSavePath('goods', $this->img_path->name);
-            $this->img_path->saveAs($model->img_path);
+            $this->img_path->saveAs(Yii::getAlias('@webroot'). $model->img_path);
             $model->save();
             return $model->id;
         }
@@ -43,11 +43,11 @@ class Upload extends Model
         $save_path = '';
         switch($type){
             case 'goods':
-                $save_path = Yii::$app->params['upload_goods_path'] . DIRECTORY_SEPARATOR . date('Y-m-d') . DIRECTORY_SEPARATOR . sha1($filename . time()) .'.'. $this->getFileExtension($filename);
+                $save_path = Yii::$app->params['upload_path']  . 'goods_imgs/'.date('Y-m-d') .'/'. sha1($filename . time()) .'.'. $this->getFileExtension($filename);
                 break;
         }
         if(!empty($save_path)){
-            $save_dir = dirname($save_path);
+            $save_dir = dirname(Yii::getAlias('@webroot').$save_path);
             if(!is_dir($save_dir)){
                 mkdir($save_dir, 0755);
 

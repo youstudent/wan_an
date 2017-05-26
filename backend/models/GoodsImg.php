@@ -29,7 +29,6 @@ class GoodsImg extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['img_path'], 'required'],
             [['goods_id'], 'integer'],
             [['img_path'], 'string', 'max' => 255]
         ];
@@ -72,4 +71,22 @@ class GoodsImg extends \yii\db\ActiveRecord
     }
 
     */
+
+    public static function bindGoods($goods_id, $ids)
+    {
+        $ids = trim($ids, ',');
+        if(strpos($ids, ',') === false){
+            $ids[] = $ids;
+        }else{
+            $ids = explode(',', $ids);
+        }
+
+        foreach($ids as $id){
+            $model = GoodsImg::findOne(['id'=>$id]);
+            $model->goods_id = $goods_id;
+            $model->save();
+        }
+        return true;
+
     }
+}
