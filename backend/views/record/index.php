@@ -13,8 +13,8 @@ $this->title = '财务管理';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <ul class="nav nav-tabs">
-    <li class="active"><a href="<?=\yii\helpers\Url::to(['record/index?status=0'])?>">待审核</a></li>
-    <li class="active"><a href="<?=\yii\helpers\Url::to(['record/index?status=1'])?>">已审核</a></li>
+    <li class="active"><a href="<?= \yii\helpers\Url::to(['record/index?status=0']) ?>">待审核</a></li>
+    <li class="active"><a href="<?= \yii\helpers\Url::to(['record/index?status=1']) ?>">已审核</a></li>
 </ul>
 <div class="record-index">
     <!--<div class="page-header">
@@ -44,38 +44,43 @@ $this->params['breadcrumbs'][] = $this->title;
         
         'member_id',
         [
-            'label'=>'会员名',
-            'attribute'=>'mamber_name',
-            'value'=> 'member.name'
-            
-       ],
+            'label' => '会员名',
+            'attribute' => 'mamber_name',
+            'value' => 'member.name'
         
+        ],
+        'coin',
         'member.mobile',
         'member.deposit_bank',
         'member.bank_account',
         [
-            'attribute'=>'created_at',
-            'value'=>function($model){
-                return date('Y-m-d H:i:s',$model->created_at);
-            }
-        ],
-       /* [
             'attribute' => 'created_at',
-            'format' => 'datetime',
-            'label' => '注册时间',
-            'filter'    => DatePangePicker::widget([
-                'model'         => $searchModel,
-                'attribute'     => 'created_at',
-                'convertFormat' => true,
-                'pluginOptions' => [
-                    'locale' => ['format' => 'Y-m-d H:i:s'],
-                ],
-            ]),
-        ],*/
+            'value' => function ($model) {
+            return date('Y-m-d H:i:s', $model->created_at);
+          }
+        ],
+        /* [
+             'attribute' => 'created_at',
+             'format' => 'datetime',
+             'label' => '注册时间',
+             'filter'    => DatePangePicker::widget([
+                 'model'         => $searchModel,
+                 'attribute'     => 'created_at',
+                 'convertFormat' => true,
+                 'pluginOptions' => [
+                     'locale' => ['format' => 'Y-m-d H:i:s'],
+                 ],
+             ]),
+         ],*/
         [
-            'attribute'=>'updated_at',
-            'value'=>function($model){
-                return date('Y-m-d H:i:s',$model->updated_at);
+            'attribute' => 'updated_at',
+            'value' => function ($model) {
+                if ($model->updated_at !==null){
+                    return date('Y-m-d H:i:s', $model->updated_at);
+                }else{
+                    return '数据还未处理';
+                }
+               
             }
         ],
         [
@@ -95,55 +100,53 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
                 
             },
-          
-                'filter' => [
-                    1 => '已通过',
-                    2 => '已拒绝'
-                ]
-          
-           
-   
+            
+            'filter' => [
+                1 => '已通过',
+                2 => '已拒绝'
+            ]
+        
+        
         ],
-      
-         ['class' => 'kartik\grid\ActionColumn',
-                    //'dropdown' => false,
-                    //'vAlign' => 'middle',
-                    //'viewOptions' => ['title' => '查看', 'data-toggle' => 'tooltip'],
-                    //'updateOptions' => ['title' => '通过'],
-                    //'deleteOptions' => ['title' => '拒绝'],
         
-                    'template' => '{update} {delete}',
-                    'buttons' => [
-                        'update' => function($url,$model,$key){
-                            $options = [
-                                'title' => Yii::t('yii', '通过'),
-                                'aria-label' => Yii::t('yii', '通过'),
-                                'data-pjax' => '0',
-                            ];
-                         if ($model->status==0){
-                             return Html::a('通过',$url, $options);
-                         }
-                         
-                        },
-                        'delete' => function($url,$model,$key){
-                            $options = [
-                                'title' => Yii::t('yii', '拒绝'),
-                                'aria-label' => Yii::t('yii', '拒绝'),
-                                'data-pjax' => '0',
-                            ];
-                         if ($model->status==0){
-                             return Html::a('拒绝',$url, $options);
-                         }
-                         
-                        },
+        ['class' => 'kartik\grid\ActionColumn',
+            //'dropdown' => false,
+            //'vAlign' => 'middle',
+            //'viewOptions' => ['title' => '查看', 'data-toggle' => 'tooltip'],
+            //'updateOptions' => ['title' => '通过'],
+            //'deleteOptions' => ['title' => '拒绝'],
+            
+            'template' => '{update} {delete}',
+            'buttons' => [
+                'update' => function ($url, $model, $key) {
+                    $options = [
+                        'title' => Yii::t('yii', '通过'),
+                        'aria-label' => Yii::t('yii', '通过'),
+                        'data-pjax' => '0',
+                    ];
+                    if ($model->status == 0) {
+                        return Html::a('通过', $url, $options);
+                    }
+                    
+                },
+                'delete' => function ($url, $model, $key) {
+                    $options = [
+                        'title' => Yii::t('yii', '拒绝'),
+                        'aria-label' => Yii::t('yii', '拒绝'),
+                        'data-pjax' => '0',
+                    ];
+                    if ($model->status == 0) {
+                        return Html::a('拒绝', $url, $options);
+                    }
+                    
+                },
+            
+            ]
         
-                    ]
-    
-    
-                ],
-    
-    
-       
+        
+        ],
+        
+        
         [
             //'class' => 'kartik\grid\CheckboxColumn',
         ],
