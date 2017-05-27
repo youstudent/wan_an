@@ -36,6 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
                     'id',
             'title',
+            'author',
             'content:ntext',
         [
             'attribute' => 'created_at',
@@ -48,6 +49,16 @@ $this->params['breadcrumbs'][] = $this->title;
             
             }
         ],
+        [
+                'attribute'=>'status',
+                'value'=>function($model){
+                if ($model->status==1){
+                    return '激活';
+                }else{
+                    return '停用';
+                }
+                }
+        ],
         
         [
             'class' => 'kartik\grid\ActionColumn',
@@ -59,6 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
             'class' => 'kartik\grid\CheckboxColumn',
+            
         ],
     ];
     

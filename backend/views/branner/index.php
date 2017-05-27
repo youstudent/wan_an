@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'id',
             'name',
             'img',
-            'content_img:ntext',
+            'content',
         [
             'class' => 'kartik\grid\ActionColumn',
             'dropdown' => false,

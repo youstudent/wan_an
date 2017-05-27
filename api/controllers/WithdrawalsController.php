@@ -31,4 +31,19 @@ class WithdrawalsController extends ApiController
            return $this->jsonReturn(0, $model->getErrors('message')[0]);
         
     }
+    
+    
+    //提现申请 列表
+    public function actionIndex(){
+        $model=new Record();
+        $id=2;
+        $data=$model->index($id);
+        if ($data){
+            return $this->jsonReturn(1, 'success',$data);
+        }
+            return $this->jsonReturn(0, $model->getErrors('message')[0]);
+        
+    }
+    
+    
 }

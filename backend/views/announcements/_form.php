@@ -23,6 +23,8 @@ use kartik\widgets\SwitchInput;
         <div class="row container">
         <div class="col-md-5">
             <?= $form->field($model, 'title')->textInput(['maxlength' => 30]) ?>
+            
+            <?= $form->field($model, 'author')->textInput(['maxlength' => 30]) ?>
     
             <?= $form->field($model, 'content')->widget('common\widgets\ueditor\Ueditor',[
                 'options'=>[

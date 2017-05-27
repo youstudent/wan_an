@@ -94,6 +94,13 @@ class Record extends \yii\db\ActiveRecord
     //记录 通过或拒绝
     public static function pass($id,$ids){
         $model=self::findOne(['id'=>$id]);
+        if($ids==2){
+          $member=Member::findOne(['id'=>$model->member_id]);
+          $a_coin=$member->a_coin;
+          $member->a_coin=$a_coin+$model->total;
+          $member->save();
+        }
+      
         $model->status=$ids;
         $model->updated_at=time();
         $model->save();

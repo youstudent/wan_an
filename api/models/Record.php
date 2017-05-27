@@ -4,6 +4,8 @@ namespace api\models;
 
 use app\models\Bonus;
 use backend\models\Member;
+use Codeception\Module\REST;
+use rmrevin\yii\fontawesome\FA;
 use Symfony\Component\CssSelector\Node\ElementNode;
 use Symfony\Component\DomCrawler\Tests\Field\InputFormFieldTest;
 use Yii;
@@ -89,7 +91,10 @@ class Record extends \yii\db\ActiveRecord
      
        if ($this->getErrors('code')!==0){
            //申请提现成功 要扣掉 10%的手续费
-           $this->coin=$data['coin']-($data['coin']* 0.1);
+           $charge=($data['coin']* 0.1);
+           $this->coin=$data['coin']-$charge;
+           $this->charge=$charge;
+           $this->total=$data['coin'];
            $this->member_id=$id;
            $this->created_at=time();
            $this->status=0;
@@ -110,6 +115,19 @@ class Record extends \yii\db\ActiveRecord
         
       return true;
       
+    }
+    
+    //提现列表
+    public function index($id){
+        //根据会员id 查询用户 申请记录数据
+        $model = self::find()->select(['id','member_id','created_at','total','status'])->where(['member_id'=>$id])->all();
+        if ($model==false){
+            $this->addError('code',0);
+            $this->addError('message','没有提现记录');
+            return false;
+        }
+            return $model;
+        
     }
  
     

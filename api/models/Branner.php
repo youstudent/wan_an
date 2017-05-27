@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace api\models;
 
 use Yii;
 use app\models\User;
@@ -31,7 +31,6 @@ class Branner extends \yii\db\ActiveRecord
     {
         return [
             [['name','content','img'],'required' ],
-            [['img'], 'file', 'extensions' => 'jpg, png', 'mimeTypes' => 'image/jpeg, image/png',],
             [['name'], 'string', 'max' => 30],
             [['status'],'safe']
         ];
@@ -44,10 +43,28 @@ class Branner extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'img'=>'图片',
-            'name' => '名称',
+            'name' => '标题',
+            'img' => '图片',
             'content' => '文本',
         ];
     }
-
+     //广告管理列表
+    public function branner(){
+           $model = self::find()->select(['id','img','http'])->orderBy('id DESC')->limit(3)->all();
+        if ($model === false){
+            return false;
+        }
+            return $model;
+        
+    }
+    
+    //广告详情
+    public function listid($id){
+        $model = self::findOne(['id'=>$id]);
+        if ($model === false){
+            return false;
+        }
+            return $model;
+    }
+    
 }

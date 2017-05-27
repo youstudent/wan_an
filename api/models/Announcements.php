@@ -1,7 +1,9 @@
 <?php
 
-namespace backend\models;
+namespace api\models;
 
+use api\tests\functional\SignupCest;
+use SebastianBergmann\CodeCoverage\Report\Xml\Facade;
 use Yii;
 use app\models\User;
 
@@ -30,7 +32,7 @@ class Announcements extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'content','author'], 'required'],
+            [['title', 'img', 'content'], 'required'],
             [['content'], 'string'],
             [['created_at'], 'integer'],
             [['title'], 'string', 'max' => 30],
@@ -49,8 +51,29 @@ class Announcements extends \yii\db\ActiveRecord
             'content' => '内容',
             'status' => '状态',
             'created_at' => '发布时间',
-            'author'=>'发布者'
         ];
+    }
+    
+    
+    //公告 接口列表
+    public function index(){
+        $model  =  self::find()->select(['id','title','created_at','author'])->where(['status'=>1])->all();
+        if ($model === false){
+            $this->addError('code',0);
+            $this->addError('message','暂时还未发布公告');
+            return false;
+        }
+        return $model;
+    
+    }
+    
+    //公告 详情
+    public function select($id){
+        $model = self::findOne(['id'=>$id]);
+        if ($model === false){
+            return false;
+        }
+            return $model;
     }
     
 }

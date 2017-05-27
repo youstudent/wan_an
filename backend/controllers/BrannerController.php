@@ -92,7 +92,19 @@ class BrannerController extends Controller
     {
         $model = new Branner();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->img = UploadedFile::getInstance($model,'img');
+            $path = 'uploads/'.date("Ymd").'/';
+            if ($model->img){
+                if (!file_exists($path)){
+                    mkdir($path,'777',true);
+                }
+                $path = $path.uniqid().'.'.$model->img->extension;
+                $model->img->saveAs($path,false);
+                $model->img=$path;
+                $model->http=Yii::$app->request->hostInfo;
+                $model->save();
+            }
             Yii::$app->session->setFlash('info', '添加成功!');
             return $this->redirect(['index', 'id' => $model->id]);
         } else {
@@ -102,7 +114,7 @@ class BrannerController extends Controller
         }
     }
 
-    /**
+/**
      * Updates an existing Branner model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -286,7 +298,7 @@ class BrannerController extends Controller
     }
     
     
-    //处理图片异步上传
+   /* //处理图片异步上传
     public function actionImage ()
     {
         $p1 = $p2 = [];
@@ -328,5 +340,5 @@ class BrannerController extends Controller
         }
         Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         return ['success' => true];
-    }
+    }*/
 }

@@ -17,10 +17,11 @@ class ApiController extends Controller
         Yii::$app->response->format = Response::FORMAT_JSON;
         $time = $time ? $time : time();
         return [
-            'timestamp' => $time,
             'code' => $code,
+            'timestamp' => $time,
+            'message' => $message,
             'data' => $data,
-            'message' => $message
+            
         ];
     }
 
