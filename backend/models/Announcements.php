@@ -16,6 +16,7 @@ use app\models\User;
  */
 class Announcements extends \yii\db\ActiveRecord
 {
+    public static $status_option=[1=>'启用',0=>'禁用'];
     /**
      * @inheritdoc
      */

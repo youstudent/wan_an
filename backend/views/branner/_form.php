@@ -29,6 +29,8 @@ use kartik\widgets\SwitchInput;
            
             <?=$form->field($model, 'img')->fileInput()?>
             
+            <?=$form->field($model, 'status')->dropDownList(\backend\models\Branner::$status_options)?>
+            
             <?= $form->field($model, 'content')->widget('common\widgets\ueditor\Ueditor',[
                 'options'=>[
                     'initialFrameWidth' => 674,

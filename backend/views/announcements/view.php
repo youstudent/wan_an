@@ -42,7 +42,14 @@ $this->params['breadcrumbs'][] = '广告管理详情';
             
                 }
             ],
-            'content',
+            [
+                'attribute' => 'content',
+                'label' => '文本',
+                'format' => 'raw',
+                'value' =>  function($model){
+                    return $model->content;
+                },
+            ],
         ]]) ;?>
 
 </div>

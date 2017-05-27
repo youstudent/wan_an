@@ -25,6 +25,7 @@ class WithdrawalsController extends ApiController
         $model=new Record();
        //调用模型方法传入接收数据
        if($model->with(\Yii::$app->request->post())){//如果返回的数据是true说明 申请成功
+           
            return $this->jsonReturn(1, 'success');
        }
           //如果返回false 返回错误信息
@@ -36,8 +37,8 @@ class WithdrawalsController extends ApiController
     //提现申请 列表
     public function actionIndex(){
         $model=new Record();
-        $id=2;
-        $data=$model->index($id);
+       
+        $data=$model->index(\Yii::$app->request->getQueryParam('id'));
         if ($data){
             return $this->jsonReturn(1, 'success',$data);
         }

@@ -103,8 +103,8 @@ class BrannerController extends Controller
                 $model->img->saveAs($path,false);
                 $model->img=$path;
                 $model->http=Yii::$app->request->hostInfo;
-                $model->save();
-            }
+             }
+            $model->save();
             Yii::$app->session->setFlash('info', '添加成功!');
             return $this->redirect(['index', 'id' => $model->id]);
         } else {
@@ -123,8 +123,22 @@ class BrannerController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->img = UploadedFile::getInstance($model,'img');
+            $path = 'uploads/'.date("Ymd").'/';
+            if ($model->img){
+                if (!file_exists($path)){
+                    mkdir($path,'777',true);
+                }
+                $path = $path.uniqid().'.'.$model->img->extension;
+                $model->img->saveAs($path,false);
+                $model->img=$path;
+                $model->http=Yii::$app->request->hostInfo;
+            }else{
+                $re = $this->findModel($id);
+                $model->img=$re->img;
+            }
+            $model->save();
             Yii::$app->session->setFlash('info', '修改成功!');
             return $this->redirect(['index', 'id' => $model->id]);
         } else {

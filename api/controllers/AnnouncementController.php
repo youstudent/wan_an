@@ -11,6 +11,7 @@ namespace api\controllers;
 
 use api\models\Announcements;
 use api\models\Branner;
+use backend\models\Record;
 use Codeception\Module\REST;
 use yii\web\Controller;
 
@@ -33,7 +34,7 @@ class AnnouncementController extends ApiController
     //公告 详情页面
     public function actionSelect(){
         $model  = new Announcements();
-        $data = $model->select(1);
+        $data = $model->select(\Yii::$app->request->getQueryParam('id'));
         if($data){//如果返回的数据是true说明 申请成功
             return $this->jsonReturn(1, 'success',$data);
         }
@@ -57,7 +58,7 @@ class AnnouncementController extends ApiController
     //广告  详情
     public function actionListid(){
         $model  = new Branner();
-        $data = $model->listid(4);
+        $data = $model->listid(\Yii::$app->request->getQueryParam('id'));
         if($data){//如果返回的数据是true说明 申请成功
             return $this->jsonReturn(1, 'success',$data);
         }
@@ -65,6 +66,14 @@ class AnnouncementController extends ApiController
            return $this->jsonReturn(0, '详情页面不存在');
     
     
+    }
+    
+    public function actionTest(){
+        $id = 2;//模拟数据
+        $re = Record::find()->where(['member_id'=>2,'date'=>date('Y-m-d')])->all();
+        if ($re !==null){
+        
+        }
     }
     
     

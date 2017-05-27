@@ -50,14 +50,14 @@ $this->params['breadcrumbs'][] = $this->title;
             }
         ],
         [
-                'attribute'=>'status',
-                'value'=>function($model){
+            'attribute'=>'status',
+            'value'=>function($model){
                 if ($model->status==1){
-                    return '激活';
+                    return '启用';
                 }else{
-                    return '停用';
+                    return '禁用';
                 }
-                }
+            }
         ],
         
         [

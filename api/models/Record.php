@@ -55,6 +55,15 @@ class Record extends \yii\db\ActiveRecord
     
     //处理申请提现
     public function with($data){
+        $id = $data['id'];//模拟数据
+        $re = Record::find()->where(['member_id'=>$id,'date'=>date('Y-m-d')])->all();
+        if ($re !==null){
+            $message= '每天只能体现一次';
+            $code = 0;
+            $this->addError('code',$code);
+            $this->addError('message',$message);
+            return false;
+        }
       if ($data['coin']<=0){
            $message= '提现金额不能为负数或0';
            $code = 0;
@@ -70,7 +79,6 @@ class Record extends \yii\db\ActiveRecord
            return false;
        };
        
-       $id = 2;//模拟数据
        
        $result =Member::findOne(['parent_id'=>$id]);
        if ($result == null){
@@ -96,6 +104,7 @@ class Record extends \yii\db\ActiveRecord
            $this->charge=$charge;
            $this->total=$data['coin'];
            $this->member_id=$id;
+           $this->date=date('Y-m-d');
            $this->created_at=time();
            $this->status=0;
            if ($this->save()){

@@ -7,20 +7,19 @@ use app\models\User;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Branner */
 
-$this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Branners', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => '广告管理', 'url' => ['index']];
+$this->params['breadcrumbs'][] = '详情';
 ?>
 <div class="branner-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode('详情') ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('修改', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('删除', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => '确认要删除吗??',
                 'method' => 'post',
             ],
         ]) ?>
@@ -31,8 +30,26 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'name',
-            'img',
-            'content',
+               [
+            'attribute' => 'img',
+            'label' => '轮播图片',
+            'format' => 'raw',
+            'value' =>  function($model){
+                if ($model->img){
+                    return  Html::img($model->http.'/'.$model->img, ['width'=> '100px', 'height'=> '100px']);
+                }
+                return '还未上传图片';
+        
+            },
+                ],
+            [
+                'attribute' => 'content',
+                'label' => '文本',
+                'format' => 'raw',
+                'value' =>  function($model){
+                     return $model->content;
+                },
+            ],
         ]]) ;?>
 
 </div>

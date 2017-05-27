@@ -16,6 +16,7 @@ use app\models\User;
  */
 class Branner extends \yii\db\ActiveRecord
 {
+    public static $status_options=[1=>'启用',0=>'禁用'];
     /**
      * @inheritdoc
      */
@@ -30,10 +31,10 @@ class Branner extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name','content','img'],'required' ],
+            [['name','content','status'],'required' ],
             [['img'], 'file', 'extensions' => 'jpg, png', 'mimeTypes' => 'image/jpeg, image/png',],
             [['name'], 'string', 'max' => 30],
-            [['status'],'safe']
+            [['img',],'safe']
         ];
     }
 
@@ -46,6 +47,7 @@ class Branner extends \yii\db\ActiveRecord
             'id' => 'ID',
             'img'=>'图片',
             'name' => '名称',
+            'status'=>'状态',
             'content' => '文本',
         ];
     }

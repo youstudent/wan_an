@@ -25,6 +25,7 @@ use kartik\widgets\SwitchInput;
             <?= $form->field($model, 'title')->textInput(['maxlength' => 30]) ?>
             
             <?= $form->field($model, 'author')->textInput(['maxlength' => 30]) ?>
+            <?= $form->field($model, 'status')->dropDownList(\backend\models\Announcements::$status_option) ?>
     
             <?= $form->field($model, 'content')->widget('common\widgets\ueditor\Ueditor',[
                 'options'=>[

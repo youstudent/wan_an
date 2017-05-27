@@ -37,8 +37,28 @@ $this->params['breadcrumbs'][] = $this->title;
         ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
                     'id',
             'name',
-            'img',
-            'content',
+        [
+            'attribute' => 'img',
+            'label' => '轮播图片',
+            'format' => 'raw',
+            'value' =>  function($model){
+             if ($model->img){
+                 return  Html::img($model->http.'/'.$model->img, ['width'=> '40px', 'height'=> '40px']);
+             }
+                 return '还未上传图片';
+                    
+             }
+        ],
+        [
+            'attribute'=>'status',
+            'value'=>function($model){
+                if ($model->status==1){
+                    return '启用';
+                }else{
+                    return '禁用';
+                }
+            }
+        ],
         [
             'class' => 'kartik\grid\ActionColumn',
             'dropdown' => false,
