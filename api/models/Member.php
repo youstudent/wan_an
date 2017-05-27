@@ -1,9 +1,11 @@
 <?php
 
-namespace app\models;
+namespace api\models;
 
 use Yii;
-
+use yii\db\Query;
+use yii\web\IdentityInterface;
+use api\models\Session;
 /**
  * This is the model class for table "{{%member}}".
  *
@@ -47,6 +49,8 @@ class Member extends \yii\db\ActiveRecord
             [['site', 'parent_id', 'group_num', 'child_num', 'a_coin', 'b_coin', 'gross_income', 'gorss_bonus', 'last_login_time', 'status', 'created_at', 'updated_at'], 'integer'],
             [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255],
             ['status', 'in', 'range' => [0,1]],
+            [['password'],'validatePassword', 'on'=>['login'] ,'skipOnError'=>false, 'skipOnEmpty' =>false ],
+            [['status'],'validateMemberStatus','on'=>['login']]
         ];
     }
 
@@ -98,5 +102,96 @@ class Member extends \yii\db\ActiveRecord
         }
         $data['child'] = 100;
         return $data;
+    }
+
+    /**
+     * 用户登录操作
+     * @param $id $password
+     * @return bool|array
+     */
+    public function login($id, $password)
+    {
+        if(empty($id) || empty($password)){
+            $this->addError('message', '账号或者密码不能为空');
+            return false;
+        }
+        $query = new Query();
+        $member = $query
+            ->from(Member::tableName())
+            ->where(['id'=>$id, 'password'=> Yii::$app->security->generatePasswordHash($password)])
+                ->one();
+        if(!isset($member) || empty($member)){
+            $this->addError('message', '账号或密码错误');
+            return false;
+        }
+        if($member['status'] != 1){
+            $this->addError('message', '请联系管理员');
+            return false;
+        }
+        // session 保存用户登录数据
+        Yii::$app->session->set('member',['member_id'=>$id,'member_name'=>$member['name']]);
+        return ['id'=>$id, 'name'=>$member['name']];
+
+
+    }
+
+    /**
+     * 退出登录
+     * @param
+     * @return bool|array
+     */
+    public function logout()
+    {
+        Yii::$app->session->clear();
+        Yii::$app->session->destroy();
+        Yii::$app->session->removeAll();
+        return true;
+    }
+
+    /**
+     * 会员资料修改
+     * @param
+     * @return Member|null the saved model or null if saving fails
+     */
+
+    public function updateDetail($id)
+    {
+        $member = Yii::$app->session->get('member');
+//        if (!$member['member_id']==$date['id'] || !$member['member_name']==$date['name']) {
+//            $this->addError('message', '数据异常联系管理员');
+//            return false;
+//        }
+        $detail = Member::findOne($member['member_id']);
+
+        if ($detail->save()) {
+            return $detail;
+        }
+        return null;
+    }
+    /**
+     * 密码修改
+     * @param
+     * @return bool|array
+     */
+
+    public function updatePass($date)
+    {
+        $member = Yii::$app->session->get('member');
+        $detail = Member::findOne($date['id']);
+        if (!$detail->password === $date['password']) {
+            $this->addError('message', '原密码不正确');
+            return false;
+        }
+        if (!$date['newpass'] === $date['repass']) {
+            $this->addError('message', '两次密码输入不一致');
+            return false;
+        }
+        if ($detail) {
+            $newmember = new Member();
+            $newmember->password = Yii::$app->security->generatePasswordHash($date['newpass']);
+            $newmember->updated_at=time();
+            $newmember->save(false);
+        }
+        return true;
     }
 }

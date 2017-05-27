@@ -29,8 +29,6 @@ use kartik\widgets\SwitchInput;
 
             <?= $form->field($model, 'deposit_bank')->textInput(['maxlength' => 255]) ?>
 
-            <?= $form->field($model, 'child_num')->textInput() ?>
-
             <?= $form->field($model, 'address')->textInput(['maxlength' => 255]) ?>
         </div>
 
@@ -41,8 +39,6 @@ use kartik\widgets\SwitchInput;
             <?= $form->field($model, 'password')->passwordInput(['maxlength' => 255]) ?>
 
             <?= $form->field($model, 'bank_account')->textInput(['maxlength' => 255]) ?>
-
-            <?= $form->field($model, 'group_num')->textInput() ?>
         </div>
 
     </div>

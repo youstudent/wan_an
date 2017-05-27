@@ -8,8 +8,10 @@
 
 namespace api\controllers;
 
-
-use app\models\Member;
+use yii;
+use api\models\Member;
+use api\models\Bonus;
+use api\models\SignupForm;
 
 class MemberController extends ApiController
 {
@@ -25,6 +27,76 @@ class MemberController extends ApiController
             return $this->jsonReturn(1, 'success', $member);
         }
         return $this->jsonReturn(0, 'error');
+    }
+
+    /**
+     * 获取会员个人资金流水
+     * @return array
+     */
+    public function actionBonus()
+    {
+        $model = new Bonus();
+        $member_id = \Yii::$app->request->get('id');
+        if($bonus = $model->getBonus($member_id)){
+            return $this->jsonReturn(1, 'success', $bonus);
+        }
+        return $this->jsonReturn(0, 'error');
+    }
+
+    /**
+     * 获取提交的登录表单
+     * @return array
+     */
+    public function actionLogin()
+    {
+        $loginModel = new Member();
+        if ($loginModel->login(Yii::$app->request->post('id'), Yii::$app->request->post('password'))) {
+            return $this->jsonReturn(1, 'success');
+        }
+        return $this->jsonReturn(0, $loginModel->getErrors('message'));
+    }
+
+    public function actionLogout()
+    {
+        $model = new Member();
+        if ($model->logout()) {
+            return $this->jsonReturn(1, 'success');
+        }
+        return $this->goHome();
+    }
+    /**
+     * 获取提交的修改内容update api
+     * @return array
+     */
+
+    public function actionUpdate()
+    {
+
+        $session = Yii::$app->session->get('member');
+        $model = Member::findOne($session['member_id']));
+        $modelA = new Member();
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            if ($member =$modelA->updateDetail($session['member_id'])) {
+                return $this->jsonReturn(1, 'success');
+            }
+        }
+        //如果返回false 返回错误信息
+        return $this->jsonReturn(0, $model->getErrors('message')[0]);
+    }
+
+    /**
+     * 获取提交密码修改 api
+     * @return array
+     */
+
+    public function actionPass()
+    {
+        $model = new Member();
+        if ($model->updatePass(Yii::$app->request->post())) {
+            return $this->jsonReturn(1, 'success');
+        }
+        //如果返回false 返回错误信息
+        return $this->jsonReturn(0, $model->getErrors('message')[0]);
     }
     public function actionDemo()
     {
