@@ -4,7 +4,7 @@ use kartik\daterange\DateRangePicker;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\dynagrid\DynaGrid;
-use app\models\User;
+use app\models\Member;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\searchs\MemberSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . $this->title . '</h3>',
         'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
+
     $columns = [
 //        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
                     'id',
@@ -61,11 +62,25 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'attribute' => 'status',
             'value' => function($model) {
-                return $model->status == 0 ? '冻结' : '正常';
+                switch ($model-> status) {
+                    case '0';
+                        return '已冻结';
+                        break;
+                    case '1';
+                        return '正常';
+                        break;
+                    case '2';
+                        return '已退网';
+                        break;
+                    default:
+                        return '未知状态';
+                        break;
+                }
             },
             'filter' => [
                 0 => '已冻结',
-                1 => '正常'
+                1 => '正常',
+                2 => '已退网'
             ]
         ],
         [
@@ -74,7 +89,28 @@ $this->params['breadcrumbs'][] = $this->title;
             'vAlign' => 'middle',
             'viewOptions' => ['title' => '奖金详情', 'data-toggle' => 'tooltip'],
             'updateOptions' => ['title' => '修改信息', 'data-toggle' => 'tooltip'],
-            'deleteOptions' => ['title' => '删除', 'data-toggle' => 'tooltip'],
+            'deleteOptions' => ['title' => '冻结', 'data-toggle' => 'tooltip'],
+            'template'=> '{view} {update} {change} {unchange}',
+            'buttons' => [
+                'view' => function ($url, $model, $key) {
+                    return Html::a(Html::tag('span', '奖金详情', ['class' => ""]), ['member/view', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '奖金详情']);
+                },
+                'update' => function ($url, $model, $key) {
+                    return Html::a(Html::tag('span', '修改', ['class' => ""]), ['member/update', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '修改']);
+                },
+                'change' => function ($url, $model, $key) {
+                    if($model->status == 0 ){
+                        return '';
+                    }
+                    return Html::a(Html::tag('span', '冻结', ['class' => ""]), ['member/change', 'id'=>$model->id, 'state' => 0], ['class' => "btn btn-xs btn-success", 'title' => '冻结']);
+                },
+                'unchange' =>  function ($url, $model, $key) {
+                    if($model->status == 1){
+                        return '';
+                    }
+                    return Html::a(Html::tag('span', '解冻', ['class' => ""]), ['member/change', 'id'=>$model->id, 'state' => 1], ['class' => "btn btn-xs btn-success", 'title' => '冻结']);
+                },
+            ]
         ],
         [
             'class' => 'kartik\grid\CheckboxColumn',

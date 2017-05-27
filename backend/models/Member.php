@@ -3,7 +3,7 @@
 namespace backend\models;
 
 use Yii;
-
+use backend\models\Bonus;
 
 /**
  * This is the model class for table "{{%member}}".
@@ -30,6 +30,9 @@ use Yii;
  */
 class Member extends \yii\db\ActiveRecord
 {
+    public $msg;
+    public $state;
+
     /**
      * @inheritdoc
      */
@@ -43,9 +46,11 @@ class Member extends \yii\db\ActiveRecord
      */
     public function rules()
     {
+
         return [
             [['site', 'parent_id', 'group_num', 'child_num', 'a_coin', 'b_coin', 'gross_income', 'gorss_bonus', 'last_login_time', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255]
+            [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255],
+            ['state', 'in', 'range' => [0,1,2]]
         ];
     }
 
@@ -57,6 +62,11 @@ class Member extends \yii\db\ActiveRecord
         return [
             'id' => '会员ID',
             'site' => '座位号',
+            'bonus.coin_amount' => '总收入',
+            'bonus.coin_count' => '金额',
+            'bonus.id' => '序号',
+            'bonus.type' => '奖金类型',
+            'bonus.create_at' => '获得时间',
             'parent_id' => '直推会员ID',
             'name' => '用户姓名',
             'password' => '会员密码',
@@ -69,7 +79,7 @@ class Member extends \yii\db\ActiveRecord
             'a_coin' => '金果',
             'b_coin' => '金种子',
             'gross_income' => '总收入',
-            'gorss_bonus' => '总提成',
+            'gorss_bonus' => '总提现',
             'last_login_time' => '最后登录时间',
             'status' => '状态',
             'created_at' => '注册时间',
@@ -112,4 +122,24 @@ class Member extends \yii\db\ActiveRecord
     }
 
     */
+
+    /**
+     * @param $param id status
+     * @return bool|null
+     */
+    public function changeMember($param){
+        $this->msg = $param['state'] == 1 ? '冻结' : '解冻';
+        if(!$this->validate()){
+            return null;
+        }
+
+        $info = Member::findOne(['id'=>$param['id']]);
+        $info->status = $param['state'];
+
+        return $info->save();
     }
+    public function getBonus()
+    {
+        return $this->hasOne(Bonus::className(), ['member_id' => 'id']);
+    }
+}
