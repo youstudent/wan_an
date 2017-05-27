@@ -73,7 +73,7 @@ class MemberController extends ApiController
     {
 
         $session = Yii::$app->session->get('member');
-        $model = Member::findOne($session['member_id']));
+        $model = Member::findOne($session['member_id']);
         $modelA = new Member();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if ($member =$modelA->updateDetail($session['member_id'])) {
