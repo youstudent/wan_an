@@ -122,7 +122,7 @@ class Member extends \yii\db\ActiveRecord
             ->from(Member::tableName())
             ->where(['id'=>$id])
             ->one();
-        if(!isset($member) || !Member::validatePassword($password,$detail->password)){
+        if(!isset($detail) || !Member::validatePassword($password,$detail->password)){
             $this->addError('message', '账号或密码错误');
             return false;
         }
