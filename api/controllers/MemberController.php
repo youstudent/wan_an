@@ -55,7 +55,10 @@ class MemberController extends ApiController
         }
         return $this->jsonReturn(0, $loginModel->getErrors('message'));
     }
-
+    /**
+     * 登出
+     * @return
+     */
     public function actionLogout()
     {
         $model = new Member();
@@ -72,16 +75,12 @@ class MemberController extends ApiController
     public function actionUpdate()
     {
 
-        $session = Yii::$app->session->get('member');
-        $model = Member::findOne($session['member_id']);
-        $modelA = new Member();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if ($member =$modelA->updateDetail($session['member_id'])) {
-                return $this->jsonReturn(1, 'success');
-            }
+        $model = new Member();
+        if ($model->updateDetail(Yii::$app->request->post())) {
+            return $this->jsonReturn(1, 'success');
         }
         //如果返回false 返回错误信息
-        return $this->jsonReturn(0, $model->getErrors('message')[0]);
+        return $this->jsonReturn(0, $model->getErrors('message'));
     }
 
     /**
@@ -96,7 +95,7 @@ class MemberController extends ApiController
             return $this->jsonReturn(1, 'success');
         }
         //如果返回false 返回错误信息
-        return $this->jsonReturn(0, $model->getErrors('message')[0]);
+        return $this->jsonReturn(0, $model->getErrors('message'));
     }
     public function actionDemo()
     {

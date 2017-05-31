@@ -115,12 +115,14 @@ class Member extends \yii\db\ActiveRecord
             $this->addError('message', '账号或者密码不能为空');
             return false;
         }
+
+        $detail = Member::findOne($id);
         $query = new Query();
         $member = $query
             ->from(Member::tableName())
-            ->where(['id'=>$id, 'password'=> Yii::$app->security->generatePasswordHash($password)])
-                ->one();
-        if(!isset($member) || empty($member)){
+            ->where(['id'=>$id])
+            ->one();
+        if(!isset($member) || !Member::validatePassword($password,$detail->password)){
             $this->addError('message', '账号或密码错误');
             return false;
         }
@@ -130,7 +132,8 @@ class Member extends \yii\db\ActiveRecord
         }
         // session 保存用户登录数据
         Yii::$app->session->set('member',['member_id'=>$id,'member_name'=>$member['name']]);
-        return ['id'=>$id, 'name'=>$member['name']];
+        $session = Yii::$app->session->get('member');
+        return true;
 
 
     }
@@ -151,22 +154,28 @@ class Member extends \yii\db\ActiveRecord
     /**
      * 会员资料修改
      * @param
-     * @return Member|null the saved model or null if saving fails
+     * @return bool|array
      */
 
-    public function updateDetail($id)
+    public function updateDetail($data)
     {
-        $member = Yii::$app->session->get('member');
 //        if (!$member['member_id']==$date['id'] || !$member['member_name']==$date['name']) {
 //            $this->addError('message', '数据异常联系管理员');
 //            return false;
 //        }
-        $detail = Member::findOne($member['member_id']);
 
-        if ($detail->save()) {
-            return $detail;
+        $session = Yii::$app->session->get('member');
+        $detail = Member::findOne($session['member_id']);
+        if ($detail) {
+            $newmember = Member::findOne($session['member_id']);
+            $newmember->name = $data['name']?$data['name']:$newmember->name;
+            $newmember->bank_account = $data['bank_account']?$data['bank_account']:$newmember->bank_account;
+            $newmember->deposit_bank = $data['deposit_bank']?$data['deposit_bank']:$newmember->deposit_bank;
+            $newmember->address = $data['address']?$data['address']:$newmember->address;
+            $newmember->updated_at=time();
+            $newmember->save(false);
         }
-        return null;
+        return true;
     }
     /**
      * 密码修改
@@ -174,24 +183,37 @@ class Member extends \yii\db\ActiveRecord
      * @return bool|array
      */
 
-    public function updatePass($date)
+    public function updatePass($data)
     {
         $member = Yii::$app->session->get('member');
-        $detail = Member::findOne($date['id']);
-        if (!$detail->password === $date['password']) {
+        $detail = Member::findOne($member['member_id']);
+        if (false === $this->validatePassword($data['password'],$detail->password)) {
             $this->addError('message', '原密码不正确');
             return false;
         }
-        if (!$date['newpass'] === $date['repass']) {
+        if ($data['newPassword'] !== $data['rePassword']) {
             $this->addError('message', '两次密码输入不一致');
             return false;
         }
         if ($detail) {
-            $newmember = new Member();
-            $newmember->password = Yii::$app->security->generatePasswordHash($date['newpass']);
-            $newmember->updated_at=time();
-            $newmember->save(false);
+            $newMember = Member::findOne($member['member_id']);
+            $newMember->password = Yii::$app->security->generatePasswordHash($data['newPassword']);
+            $newMember->updated_at=time();
+//            var_dump($newMember);die;
+            $newMember->save(false);
         }
         return true;
     }
+    /**
+     * Validates password
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password,$rePassword)
+    {
+        return Yii::$app->security->validatePassword($password, $rePassword);
+
+    }
+
 }
