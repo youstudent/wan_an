@@ -49,8 +49,6 @@ class Member extends \yii\db\ActiveRecord
             [['site', 'parent_id', 'group_num', 'child_num', 'a_coin', 'b_coin', 'gross_income', 'gorss_bonus', 'last_login_time', 'status', 'created_at', 'updated_at'], 'integer'],
             [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255],
             ['status', 'in', 'range' => [0,1]],
-            [['password'],'validatePassword', 'on'=>['login'] ,'skipOnError'=>false, 'skipOnEmpty' =>false ],
-            [['status'],'validateMemberStatus','on'=>['login']]
         ];
     }
 
