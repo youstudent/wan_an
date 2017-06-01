@@ -8,6 +8,7 @@
 namespace api\controllers;
 
 
+use api\models\RegisterForm;
 use Yii;
 
 class TestController extends ApiController
@@ -30,6 +31,17 @@ class TestController extends ApiController
 
         //展示类接口 - 返回对应的展示数据 ,如公告详情
         return $this->jsonReturn(1, 'success', ['title' => '大新闻', 'detail' => '公告为荣']);
+    }
+
+    public function actionRegister()
+    {
+        $model = new RegisterForm();
+        $post = [
+            'name' => 'test',
+            'password' => '123456',
+            'mobile' => '13812345678',
+        ];
+        $model->register($post, 1);
     }
 
 }

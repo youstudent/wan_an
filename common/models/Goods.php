@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use api\models\Order;
 use Yii;
 
 /**
@@ -48,6 +49,32 @@ class Goods extends \yii\db\ActiveRecord
     }
 
     /**
+     * 返回带购买信息的商品数据
+     * @param $member_id
+     * @return array
+     */
+    public function getGoodsListWithOrder($member_id)
+    {
+        //获取用户已经购买的果树信息
+        $model = new Order();
+        //已经购买的商品id
+        $goods_id = null;
+        if($order = $model->getMemberOrder($member_id)){
+            $goods_id = $order['goods_id'];
+        }
+        $goods_list = $this->getGoodsList();
+
+        if($goods_id){
+            foreach($goods_list as $key=> &$val){
+                if(intval($val['id']) === $goods_id){
+                    $val['has_buy'] = 1;
+                }
+            }
+        }
+        return $goods_list;
+    }
+
+    /**
      * 返回带图片的商品数据
      * @return array
      */
@@ -56,14 +83,8 @@ class Goods extends \yii\db\ActiveRecord
         $query = (new \yii\db\Query());
         $goods = $query->from(Goods::tableName())->all();
         foreach($goods as $k => &$v){
-            $v['img'] = [];
-
-            $goods_imgs = $this->getGoodsImgs($v['id']);
-            if(isset($goods_imgs) && count($goods_imgs)){
-                foreach($goods_imgs as $img){
-                    $v['img'][] = $img;
-                }
-            }
+            $v['has_buy'] = 0;
+            $v['img'] = $this->getGoodsImgs($v['id']);
         }
         return $goods;
     }
@@ -78,7 +99,6 @@ class Goods extends \yii\db\ActiveRecord
         $query = (new \yii\db\Query());
         $goods = $query->from(Goods::tableName())->where(['id' => $id])->one();
         if(isset($goods['id']) && !empty($goods['id'])){
-            $goods['img'] = [];
             $goods['img'] = $this->getGoodsImgs($id);
         }
         return $goods;
@@ -91,12 +111,10 @@ class Goods extends \yii\db\ActiveRecord
      */
     protected function getGoodsImgs($goods_id)
     {
-        $goods_imgs =  (new \yii\db\Query())->from(GoodsImg::tableName())->where(['goods_id'=> $goods_id])->select('img_path')->column();
-        if(isset($goods_imgs) && count($goods_imgs) >0 ){
-            foreach($goods_imgs as &$img){
-                $img = Yii::$app->params['img_domain'] . $img;
-            }
+        $goods_imgs =  (new \yii\db\Query())->from(GoodsImg::tableName())->where(['goods_id'=> $goods_id])->select('img_path')->one();
+        if(isset($goods_imgs['img_path']) && !empty($goods_imgs['img_path'])){
+            $goods_imgs['img_path'] = Yii::$app->params['img_domain'] . $goods_imgs['img_path'];
         }
-        return $goods_imgs;
+        return $goods_imgs['img_path'] ? $goods_imgs['img_path'] : '';
     }
 }
