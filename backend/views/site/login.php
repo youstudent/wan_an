@@ -20,28 +20,27 @@ $fieldOptions2 = [
 ?>
 
 <div class="login-box">
-    <div class="login-logo">
-        <a href="#"><b>会员管理系统</b></a>
-    </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
-        <p class="login-box-msg">登录</p>
+        <div class="login-logo">
+            <a href="#"><b>万岸</b>平台管理</a>
+        </div>
 
         <?php $form = ActiveForm::begin(['id' => 'login-form', 'enableClientValidation' => false]); ?>
 
         <?= $form
             ->field($model, 'username', $fieldOptions1)
             ->label(false)
-            ->textInput(['placeholder' => $model->getAttributeLabel('username')]) ?>
+            ->textInput(['placeholder' => $model->getAttributeLabel('用户名')]) ?>
 
         <?= $form
             ->field($model, 'password', $fieldOptions2)
             ->label(false)
-            ->passwordInput(['placeholder' => $model->getAttributeLabel('password')]) ?>
+            ->passwordInput(['placeholder' => $model->getAttributeLabel('密码')]) ?>
 
         <div class="row">
             <div class="col-xs-8">
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
+                <?= $form->field($model, 'rememberMe')->checkbox()->label('记住密码') ?>
             </div>
             <!-- /.col -->
             <div class="col-xs-4">
