@@ -222,14 +222,14 @@ DROP TABLE IF EXISTS `wa_bonus`;
 CREATE TABLE `wa_bonus` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '奖金记录自增ID',
   `member_id` int(11) NOT NULL COMMENT '会员ID',
-  `type` varchar(255) NOT NULL DEFAULT '' COMMENT '金果获得类型 1:绩效2:分享3:额外分享4:提现',
-  `coin_amount` int(10) NOT NULL DEFAULT '0' COMMENT '总收入',
-  `coin_count` int(10) NOT NULL DEFAULT '0' COMMENT '出入流水账金额',
-  `status` tinyint(4) NOT NULL DEFAULT '1' COMMENT '账号状态 1:正常 0:禁用',
+  `type` int(11) NOT NULL DEFAULT '1' COMMENT '金果获得类型 1:绩效2:分享3:额外分享4:提现5:注册奖金',
+  `coin_amount` int(11) NOT NULL DEFAULT '0' COMMENT '总收入',
+  `coin_count` int(11) NOT NULL DEFAULT '0' COMMENT '出入流水账金额',
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '流水状态 1:正常 0:禁用',
   `created_at` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间 奖金获得时间',
   `updated_at` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='金果流水表';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='金果流水表';
 
 -- ----------------------------
 -- Table structure for wa_deposit
@@ -265,13 +265,13 @@ CREATE TABLE `wa_member` (
   `a_coin` int(10) NOT NULL DEFAULT '0' COMMENT '金果数',
   `b_coin` int(10) NOT NULL DEFAULT '0' COMMENT '金种子数',
   `gross_income` int(10) NOT NULL DEFAULT '0' COMMENT '总收入',
-  `gorss_bonus` int(10) NOT NULL DEFAULT '0' COMMENT '总提成',
+  `gross_bonus` int(10) NOT NULL DEFAULT '0' COMMENT '总提成',
   `last_login_time` int(10) NOT NULL DEFAULT '0' COMMENT '最后登录时间',
-  `status` int(10) DEFAULT '1' COMMENT '账号状态关联member_status',
+  `status` int(10) DEFAULT '1' COMMENT '状态 0:被冻结 1:正常 2:已退网',
   `created_at` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间 注册时间 入网时间',
-  `updated_at` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间',
+  `updated_at` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间 退网时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='会员信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='会员信息表';
 
 -- ----------------------------
 -- Table structure for wa_member_status

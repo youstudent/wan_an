@@ -2,23 +2,24 @@
 
 namespace backend\controllers;
 
+use backend\models\FruiterImg;
 use Yii;
-use backend\models\form\MemberForm;
-use backend\models\Member;
-use backend\models\searchs\MemberSearch;
+use backend\models\Fruiter;
+use backend\models\searchs\FruiterSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use sintret\gii\models\LogUpload;
 use sintret\gii\components\Util;
-use backend\models\Bonus;
-use backend\models\searchs\BonusSearch;
+use yii\web\Request;
+use backend\models\form\UploadForm;
+
 
 /**
- * MemberController implements the CRUD actions for Member model.
+ * FruiterController implements the CRUD actions for Fruiter model.
  */
-class MemberController extends Controller
+class FruiterController extends Controller
 {
 
     public function behaviors()
@@ -59,12 +60,12 @@ class MemberController extends Controller
     }
 
     /**
-     * Lists all Member models.
+     * Lists all Fruiter models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new MemberSearch();
+        $searchModel = new FruiterSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -74,124 +75,101 @@ class MemberController extends Controller
     }
 
     /**
-     * Displays a single Member model.
+     * Displays a single Fruiter model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id)
     {
-        $searchModel = new BonusSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams, $id);
-        $model = Member::findOne(['id'=>$id]);
         return $this->render('view', [
-            'model' => $model,
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
+            'model' => $this->findModel($id),
         ]);
     }
 
     /**
-     * Creates a new Member model.
+     * Creates a new Fruiter model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Member();
+        $model = new Fruiter();
+        $FruiterImgModel = new FruiterImg();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'Well done! successfully to save data!  ');
+        if ($model->addFruiter(Yii::$app->request->post())) {
+            Yii::$app->session->setFlash('success', '添加果树成功!  ');
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'FruiterImgModel' => $FruiterImgModel
             ]);
         }
     }
 
     /**
-     * Updates an existing Member model.
+     * Updates an existing Fruiter model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
      */
-//    public function actionUpdate($id)
-//    {
-//        $model = $this->findModel($id);
-//
-//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            Yii::$app->session->setFlash('success', 'Well done! successfully to update data!  ');
-//            return $this->redirect(['index', 'id' => $model->id]);
-//        } else {
-//            return $this->render('update', [
-//                'model' => $model,
-//            ]);
-//        }
-//    }
-
-    /**
-     * Member
-     * @return string
-     */
     public function actionUpdate($id)
     {
-        $model1 = new MemberForm();
         $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if ($member = $model1->updateMember($id,Yii::$app->request->post())) {
-                Yii::$app->session->setFlash('success', '修改成功');
+        $FruiterImgModel = new FruiterImg();
+
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->updateFruiter($id,Yii::$app->request->post())) {
+                Yii::$app->session->setFlash('success', '果树信息更新成功!  ');
                 return $this->redirect(['index']);
             }
         }
 
         return $this->render('update', [
             'model' => $model,
+            'FruiterImgModel' => $FruiterImgModel,
         ]);
     }
+
     /**
-     * Deletes an existing Member model.
+     * Deletes an existing Fruiter model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
      */
-    public function actionChange()
+    public function actionDelete($id)
     {
-        $model = new Member();
-        if($model->changeMember(Yii::$app->request->queryParams)){
-            Yii::$app->session->setFlash('success', $model->msg . '成功');
-        }else{
-            Yii::$app->session->setFlash('error', $model->getErrors());
-        }
-        return $this->redirect(['index']);
+        $this->findModel($id)->delete();
+        Yii::$app->session->setFlash('success', 'Well done! successfully to deleted data!  ');
 
+        return $this->redirect(['index']);
     }
 
     /**
-     * Finds the Member model based on its primary key value.
+     * Finds the Fruiter model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Member the loaded model
+     * @return Fruiter the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Member::findOne($id)) !== null) {
+        if (($model = Fruiter::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-
     
     public function actionSample() {
 
         //$objPHPExcel = new \PHPExcel();
         $template = Util::templateExcel();
-        $model = new Member;
+        $model = new Fruiter;
         $date = date('YmdHis');
-        $name = $date.Member;
+        $name = $date.Fruiter;
         //$attributes = $model->attributeLabels();
-        $models = Member::find()->all();
+        $models = Fruiter::find()->all();
         $excelChar = Util::excelChar();
         $not = Util::excelNot();
         
@@ -221,7 +199,7 @@ class MemberController extends Controller
             }
             $params = Util::excelParsing(Yii::getAlias($filename));
             $model->params = \yii\helpers\Json::encode($params);
-            $model->title = 'parsing Member';
+            $model->title = 'parsing Fruiter';
             $model->fileori = $fileOri;
             $model->filename = $filename;
 
@@ -249,17 +227,17 @@ class MemberController extends Controller
             }
             $model->values = \yii\helpers\Json::encode($values);
             if ($model->save()) {
-                $log = 'log_Member'. Yii::$app->user->id;
+                $log = 'log_Fruiter'. Yii::$app->user->id;
                 Yii::$app->session->setFlash('success', 'Well done! successfully to Parsing data, see log on log upload menu! Please Waiting for processing indicator if available...  ');
                 Yii::$app->session->set($log, $model->id);
                 $notification = new \sintret\gii\models\Notification;
-                $notification->title = 'parsing Member';
-                $notification->message = Yii::$app->user->identity->username . ' parsing Member ';
-                $notification->params = \yii\helpers\Json::encode(['model' => 'Member', 'id' => $model->id]);
+                $notification->title = 'parsing Fruiter';
+                $notification->message = Yii::$app->user->identity->username . ' parsing Fruiter ';
+                $notification->params = \yii\helpers\Json::encode(['model' => 'Fruiter', 'id' => $model->id]);
                 $notification->save();
             }
         }
-        $route = 'member/parsing-log';
+        $route = 'fruiter/parsing-log';
 
         return $this->render('parsing', ['model' => $model, 'array' => $array,'log'=>$log,'route'=>$route]);
     }
@@ -269,7 +247,7 @@ class MemberController extends Controller
         $type = $mod->type;
         $params = \yii\helpers\Json::decode($mod->params);
         $values = \yii\helpers\Json::decode($mod->values);
-        $modelAttribute = new Member;
+        $modelAttribute = new Fruiter;
         $not = Util::excelNot();
         foreach ($modelAttribute->attributeLabels() as $k=>$v){
             if(!in_array($k, $not)){
@@ -279,9 +257,9 @@ class MemberController extends Controller
             
             foreach ($values as $value) {
                 if ($type == LogUpload::TYPE_INSERT)
-                    $model = new Member;
+                    $model = new Fruiter;
                 else
-                    $model = Member::findOne($value['id']);
+                    $model = Fruiter::findOne($value['id']);
 
                 foreach ($attr as $at) {
                     if (isset($value[$at])) {

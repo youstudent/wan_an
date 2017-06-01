@@ -22,7 +22,7 @@ use backend\models\Bonus;
  * @property integer $a_coin
  * @property integer $b_coin
  * @property integer $gross_income
- * @property integer $gorss_bonus
+ * @property integer $gross_bonus
  * @property integer $last_login_time
  * @property integer $status
  * @property integer $created_at
@@ -48,7 +48,7 @@ class Member extends \yii\db\ActiveRecord
     {
 
         return [
-            [['site', 'parent_id', 'group_num', 'child_num', 'a_coin', 'b_coin', 'gross_income', 'gorss_bonus', 'last_login_time', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['site', 'parent_id', 'group_num', 'child_num', 'a_coin', 'b_coin', 'gross_income', 'gross_bonus', 'last_login_time', 'status', 'created_at', 'updated_at'], 'integer'],
             [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255],
             ['state', 'in', 'range' => [0,1,2]]
         ];
@@ -79,7 +79,7 @@ class Member extends \yii\db\ActiveRecord
             'a_coin' => '金果',
             'b_coin' => '金种子',
             'gross_income' => '总收入',
-            'gorss_bonus' => '总提现',
+            'gross_bonus' => '总提现',
             'last_login_time' => '最后登录时间',
             'status' => '状态',
             'created_at' => '注册时间',
