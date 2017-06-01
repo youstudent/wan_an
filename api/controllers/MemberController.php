@@ -8,17 +8,20 @@
 
 namespace api\controllers;
 
-<<<<<<< HEAD
+
+<<<<<<< .mine
 
 use api\models\Member;
+=======
+use api\models\Member;
+
+>>>>>>> .theirs
 use Codeception\Module\REST;
 use common\models\Give;
-=======
+
 use yii;
-use api\models\Member;
 use api\models\Bonus;
 use api\models\SignupForm;
->>>>>>> a1c3c24240f26da19b3822881422747297c8ead9
 
 use yii;
 use api\models\Bonus;
@@ -41,30 +44,52 @@ class MemberController extends ApiController
         return $this->jsonReturn(0, 'error');
     }
 <<<<<<< .mine
+
+
+=======
+<<<<<<< .mine
 <<<<<<< HEAD
+>>>>>>> .theirs
 =======
 
 >>>>>>> .theirs
     
     public function actionDemo()
     {
+<<<<<<< .mine
+    
+=======
 
+>>>>>>> .theirs
         //获取客户端数据如
         //Yii::$app->request->post();
         //Yii::$app->request->queryParams;
+<<<<<<< .mine
+    
+=======
 
+>>>>>>> .theirs
         //在模型中处理验证
         //如果有错误。返回 负数的code .加上错误信息
         //return $this->jsonReturn(-200, '钱不够，请充值信仰', []);
-
-
-        //操作类接口 - 如果成功返回以下信息 如提现。修改个人资料
-        //return $this->jsonReturn(1, 'success', []);
-
-        //展示类接口 - 返回对应的展示数据 ,如公告详情
-        return $this->jsonReturn(1, 'success', ['title' => '大新闻', 'detail' => '公告为荣']);
+<<<<<<< .mine
+    
+    
 =======
 
+
+>>>>>>> .theirs
+        //操作类接口 - 如果成功返回以下信息 如提现。修改个人资料
+        //return $this->jsonReturn(1, 'success', []);
+<<<<<<< .mine
+    
+=======
+
+>>>>>>> .theirs
+        //展示类接口 - 返回对应的展示数据 ,如公告详情
+        return $this->jsonReturn(1, 'success', ['title' => '大新闻', 'detail' => '公告为荣']);
+    
+    }
     /**
      * 获取会员个人资金流水
      * @return array
@@ -147,7 +172,25 @@ class MemberController extends ApiController
         //如果返回false 返回错误信息
         return $this->jsonReturn(0, $model->getErrors('message'));
     }
+<<<<<<< .mine
+   /* public function actionDemo()
+    {
+=======
 
+
+>>>>>>> .theirs
+
+<<<<<<< .mine
+
+    }*/
+    
+    
+=======
+
+
+
+
+>>>>>>> .theirs
     //会员的金果和金种子
     public function actionCoin(){
         $id=3;

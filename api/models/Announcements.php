@@ -59,10 +59,13 @@ class Announcements extends \yii\db\ActiveRecord
     public function index()
     {
         $model = self::find()->where(['status'=>1])->select(['id', 'title', 'created_at', 'author'])->orderBy('id DESC')->limit(5)->all();
-        if ($model === false) {
+        if ($model === false || $model==null) {
             //$this->addError('code',0);
             $this->addError('message', '暂时还未发布公告');
             return false;
+        }
+        foreach ($model as &$v){
+            $v['created_at']=date('Y/m/d',$v['created_at']);
         }
         return $model;
         

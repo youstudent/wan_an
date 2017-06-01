@@ -47,5 +47,18 @@ class WithdrawalsController extends ApiController
         
     }
     
+    //当前会员 金果
+    public function actionCoin()
+    {
+    
+        $model = new Record();
+        $data = $model->coin();
+        if ($data) {
+            return $this->jsonReturn(1, 'success', $data);
+        }
+        return $this->jsonReturn(0, $model->getErrors('message')[0]);
+        
+    }
+    
     
 }

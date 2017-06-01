@@ -2,7 +2,7 @@
 
 namespace api\models;
 
-use app\models\Bonus;
+use api\models\Bonus;
 use backend\models\Member;
 use Codeception\Module\REST;
 use rmrevin\yii\fontawesome\FA;
@@ -107,10 +107,10 @@ class Record extends \yii\db\ActiveRecord
             $this->date = date('Y-m-d');
             $this->created_at = time();
             $this->status = 0;
-            if ($this->save()) {
+            if ($this->save(false)) {
                 // 申请成功减去会员对应的金果
                 $result->a_coin = $result->a_coin - $data['coin'];
-                $result->save();
+                $result->save(false);
                 //保存数据到 流水表里面
                 $Bonus = new Bonus();
                 $Bonus->member_id = $id;
@@ -137,10 +137,23 @@ class Record extends \yii\db\ActiveRecord
             return false;
         }
         foreach ($model as &$v) {
-            $v['created_at'] = date('Y-m-d', $v['created_at']);
+            $v['created_at'] = date('Y/m/d', $v['created_at']);
         }
         return $model;
         
+    }
+    
+    
+    //当前会员金果
+    public function coin(){
+        $id=2;
+        $data = \api\models\Member::find()->select('a_coin')->where(['id'=>$id])->all();
+        if ($data == false || $data == null){
+            $this->addError('code', 0);
+            $this->addError('message', '用户信息不存在');
+            return false;
+        }
+        return $data;
     }
     
     
