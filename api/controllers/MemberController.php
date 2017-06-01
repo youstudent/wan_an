@@ -8,6 +8,8 @@
 
 namespace api\controllers;
 
+use api\models\RegisterForm;
+use common\models\District;
 use yii;
 use api\models\Member;
 use api\models\Bonus;
@@ -97,8 +99,16 @@ class MemberController extends ApiController
         //如果返回false 返回错误信息
         return $this->jsonReturn(0, $model->getErrors('message'));
     }
-    public function actionDemo()
+    public function actionRegister()
     {
-
+        $model = new RegisterForm();
+        $post = [
+            'name' => 'test',
+            'password' => '123456',
+            'mobile' => 123456
+        ];
+        $referrer_id = 1;
+        $action_member_id = 1;
+        $model->register($post, $referrer_id, $action_member_id = null);
     }
 }

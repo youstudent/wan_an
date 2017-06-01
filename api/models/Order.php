@@ -11,6 +11,7 @@ use Yii;
  * @property string $name
  * @property string $price
  * @property integer $status
+ * @property integer $goods_id
  */
 class Order extends \yii\db\ActiveRecord
 {
@@ -28,7 +29,7 @@ class Order extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['member_id', 'status'], 'integer'],
+            [['member_id', 'status','goods_id'], 'integer'],
             [['price'], 'number'],
             [['order_sn'], 'string', 'max' => 50],
             [['name'], 'string', 'max' => 30]
@@ -88,6 +89,7 @@ class Order extends \yii\db\ActiveRecord
         $this->name = $goods['name'];
         $this->price = $goods['price'];
         $this->status = 1;
+        $this->goods_id = $goods_id;
         return $this->save() ? $this : null;
     }
     /**
