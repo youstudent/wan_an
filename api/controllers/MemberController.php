@@ -8,17 +8,15 @@
 
 namespace api\controllers;
 
-<<<<<<< HEAD
 
-use app\models\Member;
+use api\models\Member;
 use Codeception\Module\REST;
 use common\models\Give;
-=======
+
 use yii;
-use api\models\Member;
 use api\models\Bonus;
 use api\models\SignupForm;
->>>>>>> a1c3c24240f26da19b3822881422747297c8ead9
+use api\models\Fruiter;
 
 class MemberController extends ApiController
 {
@@ -35,26 +33,26 @@ class MemberController extends ApiController
         }
         return $this->jsonReturn(0, 'error');
     }
-<<<<<<< HEAD
+
     
     public function actionDemo()
     {
-        
+
         //获取客户端数据如
         //Yii::$app->request->post();
         //Yii::$app->request->queryParams;
-        
+
         //在模型中处理验证
         //如果有错误。返回 负数的code .加上错误信息
         //return $this->jsonReturn(-200, '钱不够，请充值信仰', []);
-        
-        
+
+
         //操作类接口 - 如果成功返回以下信息 如提现。修改个人资料
         //return $this->jsonReturn(1, 'success', []);
-        
+
         //展示类接口 - 返回对应的展示数据 ,如公告详情
         return $this->jsonReturn(1, 'success', ['title' => '大新闻', 'detail' => '公告为荣']);
-=======
+    }
 
     /**
      * 获取会员个人资金流水
@@ -124,13 +122,7 @@ class MemberController extends ApiController
         //如果返回false 返回错误信息
         return $this->jsonReturn(0, $model->getErrors('message'));
     }
-    public function actionDemo()
-    {
 
->>>>>>> a1c3c24240f26da19b3822881422747297c8ead9
-    }
-    
-    
     //会员的金果和金种子
     public function actionCoin(){
         $id=3;
@@ -168,8 +160,7 @@ class MemberController extends ApiController
         return $this->jsonReturn(0, $model->getErrors('message')[0]);
         
     }
-    
-    
+
     //获赠记录
     public function actionGain()
     {
@@ -179,5 +170,16 @@ class MemberController extends ApiController
             return $this->jsonReturn(1, 'success', $data);
         }
         return $this->jsonReturn(0, $mode->getErrors('message')[0]);
+    }
+
+    //我的果树
+    public function actionFruiter()
+    {
+        $model = new Fruiter();
+        $member_id = \Yii::$app->request->get('id');
+        if($fruiter = $model->getFruiter($member_id)){
+            return $this->jsonReturn(1, 'success', $fruiter);
+        }
+        return $this->jsonReturn(0, 'error');
     }
 }
