@@ -8,10 +8,17 @@
 
 namespace api\controllers;
 
+<<<<<<< HEAD
 
 use api\models\Member;
 use Codeception\Module\REST;
 use common\models\Give;
+=======
+use yii;
+use api\models\Member;
+use api\models\Bonus;
+use api\models\SignupForm;
+>>>>>>> a1c3c24240f26da19b3822881422747297c8ead9
 
 use yii;
 use api\models\Bonus;
@@ -33,7 +40,11 @@ class MemberController extends ApiController
         }
         return $this->jsonReturn(0, 'error');
     }
+<<<<<<< .mine
+<<<<<<< HEAD
+=======
 
+>>>>>>> .theirs
     
     public function actionDemo()
     {
@@ -52,6 +63,20 @@ class MemberController extends ApiController
 
         //展示类接口 - 返回对应的展示数据 ,如公告详情
         return $this->jsonReturn(1, 'success', ['title' => '大新闻', 'detail' => '公告为荣']);
+=======
+
+    /**
+     * 获取会员个人资金流水
+     * @return array
+     */
+    public function actionBonus()
+    {
+        $model = new Bonus();
+        $member_id = \Yii::$app->request->get('id');
+        if($bonus = $model->getBonus($member_id)){
+            return $this->jsonReturn(1, 'success', $bonus);
+        }
+        return $this->jsonReturn(0, 'error');
     }
 
     /**
