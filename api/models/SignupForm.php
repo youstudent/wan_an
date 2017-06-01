@@ -2,7 +2,7 @@
 namespace api\models;
 
 use yii\base\Model;
-use common\models\User;
+use app\models\Member;
 
 /**
  * Signup form
@@ -20,39 +20,19 @@ class SignupForm extends Model
     public function rules()
     {
         return [
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
-
-            ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
-            ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
+            [['site', 'parent_id', 'group_num', 'child_num', 'a_coin', 'b_coin', 'gross_income', 'gorss_bonus', 'last_login_time', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255],
+            ['status', 'in', 'range' => [0,1]],
 
             ['password', 'required'],
-            ['password', 'string', 'min' => 6],
+            ['password', 'string', 'min' => 6, 'max' => 16],
         ];
     }
 
     /**
-     * Signs user up.
+     * Signs member up.
      *
      * @return User|null the saved model or null if saving fails
      */
-    public function signup()
-    {
-        if (!$this->validate()) {
-            return null;
-        }
-        
-        $user = new User();
-        $user->username = $this->username;
-        $user->email = $this->email;
-        $user->setPassword($this->password);
-        $user->generateAuthKey();
-        
-        return $user->save() ? $user : null;
-    }
+
 }

@@ -8,11 +8,11 @@ use kartik\widgets\FileInput;
 use kartik\widgets\SwitchInput;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Member */
+/* @var $model backend\models\Order */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="member-form">
+<div class="order-form">
 
     <?php     $form = ActiveForm::begin([
     'type' => ActiveForm::TYPE_HORIZONTAL,
@@ -23,22 +23,20 @@ use kartik\widgets\SwitchInput;
             <div class="row">
         <div class="col-md-6">
         
-            <?= $form->field($model, 'parent_id')->textInput() ?>
+            <?= $form->field($model, 'member_id')->textInput() ?>
 
-            <?= $form->field($model, 'mobile')->textInput(['maxlength' => 255]) ?>
+            <?= $form->field($model, 'price')->textInput(['maxlength' => 10]) ?>
 
-            <?= $form->field($model, 'deposit_bank')->textInput(['maxlength' => 255]) ?>
-
-            <?= $form->field($model, 'address')->textInput(['maxlength' => 255]) ?>
+            <?= $form->field($model, 'goods_id')->textInput() ?>
         </div>
 
         <div class="col-md-6">
+        
+            <?= $form->field($model, 'order_sn')->textInput(['maxlength' => 50]) ?>
 
-            <?= $form->field($model, 'name')->textInput(['maxlength' => 255]) ?>
+            <?= $form->field($model, 'name')->textInput(['maxlength' => 30]) ?>
 
-            <?= $form->field($model, 'password')->passwordInput(['maxlength' => 255]) ?>
-
-            <?= $form->field($model, 'bank_account')->textInput(['maxlength' => 255]) ?>
+            <?= $form->field($model, 'status')->textInput() ?>
         </div>
 
     </div>

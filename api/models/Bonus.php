@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace api\models;
 
 use Yii;
 
@@ -53,5 +53,20 @@ class Bonus extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
         ];
+    }
+
+    /**
+     * 获取一个会员资金流水
+     * @param string $member_id
+     * @return array
+     */
+    public function getBonus($member_id = '')
+    {
+        $query = (new \yii\db\Query());
+        $bonus = $query->from(Bonus::tableName())->where(['member_id' => $member_id])->all();
+        if(!isset($bonus) || empty($bonus)){
+            return null;
+        }
+        return $bonus;
     }
 }

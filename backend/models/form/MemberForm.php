@@ -16,10 +16,11 @@ class MemberForm extends Member
      *
      * @return Member|null the saved model or null if saving fails
      */
-    public function updateMember($id)
+    public function updateMember($id,$data)
     {
         if ($this->validate()) {
             $member = Member::findOne($id);
+            $this->password = $data['Member']['password'];
             $member->setPassword($this->password);
             if ($member->save()) {
                 return $member;
