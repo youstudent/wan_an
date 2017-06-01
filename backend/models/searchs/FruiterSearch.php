@@ -5,12 +5,12 @@ namespace backend\models\searchs;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\Bonus;
+use backend\models\Fruiter;
 
 /**
- * BonussSearch represents the model behind the search form about `backend\models\Bonus`.
+ * FruiterSearch represents the model behind the search form about `backend\models\Fruiter`.
  */
-class BonusSearch extends Bonus
+class FruiterSearch extends Fruiter
 {
     /**
      * @inheritdoc
@@ -18,7 +18,8 @@ class BonusSearch extends Bonus
     public function rules()
     {
         return [
-            [['id', 'member_id', 'type', 'coin_amount', 'coin_count', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'member_id', 'updated_at', 'created_at', 'status'], 'integer'],
+            [['order_sn', 'fruiter_name', 'fruiter_img'], 'safe'],
         ];
     }
 
@@ -38,9 +39,9 @@ class BonusSearch extends Bonus
      *
      * @return ActiveDataProvider
      */
-    public function search($params, $id)
+    public function search($params)
     {
-        $query = Bonus::find()->where(['member_id' => $id]);
+        $query = Fruiter::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -53,13 +54,14 @@ class BonusSearch extends Bonus
         $query->andFilterWhere([
             'id' => $this->id,
             'member_id' => $this->member_id,
-            'type' => $this->type,
-            'coin_amount' => $this->coin_amount,
-            'coin_count' => $this->coin_count,
-            'status' => $this->status,
-            'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'created_at' => $this->created_at,
+            'status' => $this->status,
         ]);
+
+        $query->andFilterWhere(['like', 'order_sn', $this->order_sn])
+            ->andFilterWhere(['like', 'fruiter_name', $this->fruiter_name])
+            ->andFilterWhere(['like', 'fruiter_img', $this->fruiter_img]);
 
         return $dataProvider;
     }

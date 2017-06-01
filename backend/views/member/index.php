@@ -4,7 +4,7 @@ use kartik\daterange\DateRangePicker;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\dynagrid\DynaGrid;
-use app\models\Member;
+use backend\models\Member;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\searchs\MemberSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -43,8 +43,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'parent_id',
         [
             'attribute' => 'created_at',
-            'format' => 'datetime',
             'label' => '注册时间',
+            'value' => function ($model) {
+                return date('Y-m-d H:i:s', $model->created_at);
+            },
             'filter'    => DateRangePicker::widget([
                 'model'         => $searchModel,
                 'attribute'     => 'created_at',
@@ -58,7 +60,13 @@ $this->params['breadcrumbs'][] = $this->title;
             'b_coin',
             'group_num',
             'child_num',
-            'last_login_time:datetime',
+        [
+            'attribute' => 'last_login_time',
+            'label' => '最后登录时间',
+            'value' => function ($model) {
+                return date('Y-m-d H:i:s', $model->created_at);
+            },
+        ],
         [
             'attribute' => 'status',
             'value' => function($model) {

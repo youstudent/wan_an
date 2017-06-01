@@ -1,18 +1,15 @@
 <?php
 
-use kartik\daterange\DateRangePicker;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\dynagrid\DynaGrid;
 use backend\models\Member;
 use backend\models\Bonus;
 use yii\widgets\DetailView;
-
+use kartik\daterange\DateRangePicker;
 /* @var $this yii\web\View */
-/* @var $searchModel backend\models\searchs\BonusSearch */
+/* @var $searchModel backend\models\searchs\BonussSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-/* @var $this yii\web\View */
-/* @var $model backend\models\Bonus */
 
 $this->title = '奖金详情';
 $this->params['breadcrumbs'][] = ['label' => '会员管理', 'url' => ['index']];
@@ -25,13 +22,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'member.gross_income',
-            'member.gorss_bonus',
-            'member.a_coin',
+            'gross_income',
+            'gross_bonus',
+            'a_coin',
         ]]); ?>
     <br/>
     <br/>
-    <h2>奖金记录列表</h2>
+    <h2>奖金详情</h2>
     <?php
     $toolbars = [
         ['content' =>
@@ -47,24 +44,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
     $columns = [
-//        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
         'id',
-        'coin_count',
-        'updated_at',
-        'coin_amount',
-        'member_id',
-
         [
             'attribute' => 'created_at',
-            'format' => 'datetime',
             'label' => '获得时间',
+            'value' => function ($model) {
+                return date('Y-m-d H:i:s', $model->created_at);
+            },
             'filter'    => DateRangePicker::widget([
                 'model'         => $searchModel,
                 'attribute'     => 'created_at',
                 'convertFormat' => true,
-                'pluginOptions' => [
-                    'locale' => ['format' => 'Y-m-d'],
-                ],
+
             ]),
         ],
         [
@@ -83,8 +74,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     case '4';
                         return '提现';
                         break;
+                    case '5';
+                        return '注册奖金';
+                        break;
                     default:
-                        return '未知类型';
+                        return '未知分类';
                         break;
                 }
             },
@@ -92,7 +86,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 1 => '绩效',
                 2 => '分享',
                 3 => '额外分享',
-                4 => '提现'
+                4 => '提现',
+                5 => '注册奖金'
             ]
         ],
         [
@@ -122,5 +117,5 @@ $this->params['breadcrumbs'][] = $this->title;
 
     DynaGrid::end();
 
-?>
+    ?>
 </div>
