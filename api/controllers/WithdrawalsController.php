@@ -15,20 +15,37 @@ use yii\web\Response;
 
 class WithdrawalsController extends ApiController
 {
-   // public $enableCsrfValidation=false; //关闭crf验证
+    // public $enableCsrfValidation=false; //关闭crf验证
     
     //提现申请接口
-    public function actionAdd(){
+    public function actionAdd()
+    {
         //\Yii::$app->request->format = Response::FORMAT_JSON;//定义数据为 json数据
         //Yii::$app->response->format = Response::FORMAT_JSON;
-       //接收数据
-        $model=new Record();
-       //调用模型方法传入接收数据
-       if($model->with(\Yii::$app->request->post())){//如果返回的数据是true说明 申请成功
-           return $this->jsonReturn(1, 'success');
-       }
-          //如果返回false 返回错误信息
-           return $this->jsonReturn(0, $model->getErrors('message')[0]);
+        //接收数据
+        $model = new Record();
+        //调用模型方法传入接收数据
+        if ($model->with(\Yii::$app->request->post())) {//如果返回的数据是true说明 申请成功
+            
+            return $this->jsonReturn(1, 'success');
+        }
+        //如果返回false 返回错误信息
+        return $this->jsonReturn(0, $model->getErrors('message')[0]);
         
     }
+    
+    
+    //提现申请 列表
+    public function actionIndex()
+    {
+        $model = new Record();
+        $data = $model->index(\Yii::$app->request->getQueryParam('id'));
+        if ($data) {
+            return $this->jsonReturn(1, 'success', $data);
+        }
+        return $this->jsonReturn(0, $model->getErrors('message')[0]);
+        
+    }
+    
+    
 }

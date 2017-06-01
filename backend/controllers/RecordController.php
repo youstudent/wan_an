@@ -5,7 +5,7 @@ namespace backend\controllers;
 use backend\tests\FunctionalTester;
 use Yii;
 use backend\models\Record;
-use backend\models\searchs;
+use backend\models\searchs\RecordSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -63,7 +63,7 @@ class RecordController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new searchs();
+        $searchModel = new RecordSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -111,10 +111,7 @@ class RecordController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model=$this->findModel($id);
-        $model->status=1;
-        $model->updated_at=time();
-        $model->save();
+        Record::pass($id,1);
         return $this->redirect(['index',['status'=>0]]);
     }
 
@@ -126,10 +123,7 @@ class RecordController extends Controller
      */
     public function actionDelete($id)
     {
-        $model=$this->findModel($id);
-        $model->status=2;
-        $model->updated_at=time();
-        $model->save();
+        Record::pass($id,2);
         return $this->redirect(['index',['status'=>0]]);
     }
 

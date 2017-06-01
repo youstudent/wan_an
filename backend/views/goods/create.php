@@ -13,9 +13,9 @@ use yii\helpers\Url;
 /* @var $GoodsImgModel backend\models\GoodsImg */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '添加商品';
-$this->params['breadcrumbs'][] = ['label' => 'Goods', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '';
+$this->params['breadcrumbs'][] = ['label' => '商品管理列表', 'url' => ['index']];
+$this->params['breadcrumbs'][] = '商品添加';
 
 $fileuploadedJs = <<<JS
     function (event, data, id, index) {
@@ -29,9 +29,11 @@ $fileuploadedJs = <<<JS
 JS;
 ?>
 <div class="goods-create">
-
     <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
+    
+    </div>
+    <div class="page-header">
+        <h1 style="border-left-width: 199px;margin-left: 321px; color: #00a0e9"><?= Html::encode('商品添加')?></h1>
     </div>
 
     <div class="goods-form">

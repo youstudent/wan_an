@@ -22,7 +22,8 @@
         "dmstr/yii2-adminlte-asset": "2.*",
         "sintret/yii2-gii-adminlte": "^1.0",
         "insolita/yii2-adminlte-widgets": "^2.0",
-        "kartik-v/yii2-date-range": "dev-master"
+        "kartik-v/yii2-date-range": "dev-master",
+        "kartik-v/yii2-widget-fileinput": "@dev"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

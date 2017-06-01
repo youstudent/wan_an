@@ -82,10 +82,37 @@ class Record extends \yii\db\ActiveRecord
     }
 
     */
+    
+    
+    // 财务管理的提现记录与  会员建立一对一的关系
     public function getMember()
     {
         return $this->hasOne(Member::className(), ['id' => 'member_id']);
     }
+    
+    
+    //记录 通过或拒绝
+    public static function pass($id,$ids){
+        $model=self::findOne(['id'=>$id]);
+        if($ids==2){
+          $member=Member::findOne(['id'=>$model->member_id]);
+          $a_coin=$member->a_coin;
+          $member->a_coin=$a_coin+$model->total;
+          $member->save();
+        }
+      
+        $model->status=$ids;
+        $model->updated_at=time();
+        $model->save();
+    }
+    
+    /*//记录  拒绝
+    public static function no($id){
+        $model=self::findOne(['id'=>$id]);
+        $model->status=2;
+        $model->updated_at=time();
+        $model->save();
+    }*/
 }
 
 

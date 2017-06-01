@@ -9,13 +9,13 @@ use app\models\Member;
 /* @var $searchModel backend\models\searchs\MemberSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '会员管理';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '';
+$this->params['breadcrumbs'][] = '会员管理';
 ?>
 <div class="member-index">
 
     <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
+    
     </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
      $toolbars = [
         ['content' =>
-            Html::a('<i class="fa fa-file-excel-o"></i>', ['member/parsing'], ['type' => 'button', 'title' => 'Parsing Excel ' . $this->title, 'class' => 'btn btn-danger']) . ' ' .
+            Html::a('<i class="fa fa-file-excel-o"></i>', ['member/parsing'], ['type' => 'button', 'title' => '刷新 ' . $this->title, 'class' => 'btn btn-danger']) . ' ' .
             Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['member/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => 'Reset Grid']). ' '
 
 
@@ -32,8 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
         '{export}',
     ];
     $panels = [
-        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . $this->title . '</h3>',
-        'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
+        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . '会员管理列表' . '</h3>',
+        //'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
 
     $columns = [
