@@ -53,25 +53,28 @@ $this->params['breadcrumbs'][] = $this->title;
         'member.mobile',
         'member.deposit_bank',
         'member.bank_account',
-        [
+       /*[
             'attribute' => 'created_at',
             'value' => function ($model) {
             return date('Y-m-d H:i:s', $model->created_at);
           }
+        ],*/
+        [
+            'attribute' => 'created_at',
+            'format' => 'time',
+            'label' => '申请时间',
+            'filter'    => DateRangePicker::widget([
+                'model'         => $searchModel,
+                'attribute'     => 'created_at',
+                'convertFormat' => true,
+                'pluginOptions' => [
+                    //'locale' => ['format' => 'Y-m-d'],
+                   /* 'value' => function ($model) {
+                        return date('Y-m-d H:i:s', $model->created_at);
+                    }*/
+                ],
+            ]),
         ],
-        /* [
-             'attribute' => 'created_at',
-             'format' => 'datetime',
-             'label' => '注册时间',
-             'filter'    => DatePangePicker::widget([
-                 'model'         => $searchModel,
-                 'attribute'     => 'created_at',
-                 'convertFormat' => true,
-                 'pluginOptions' => [
-                     'locale' => ['format' => 'Y-m-d H:i:s'],
-                 ],
-             ]),
-         ],*/
         [
             'attribute' => 'updated_at',
             'value' => function ($model) {

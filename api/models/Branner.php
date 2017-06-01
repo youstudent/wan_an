@@ -48,23 +48,29 @@ class Branner extends \yii\db\ActiveRecord
             'content' => '文本',
         ];
     }
-     //广告管理列表
-    public function branner(){
-           $model = self::find()->select(['id','img','http'])->orderBy('id DESC')->limit(3)->all();
-        if ($model === false){
+    
+    //广告管理列表
+    public function branner()
+    {
+        $model = self::find()->where(['status'=>1])->select(['id', 'img', 'http'])->orderBy('id DESC')->limit(3)->all();
+        foreach ($model as &$v) {
+            $v['img'] = $v['http'] . '/' . $v['img'];
+        }
+        if ($model === false) {
             return false;
         }
-            return $model;
+        return $model;
         
     }
     
     //广告详情
-    public function listid($id){
-        $model = self::findOne(['id'=>$id]);
-        if ($model === false){
+    public function listid($id)
+    {
+        $model = self::findOne(['id' => $id]);
+        if ($model === false) {
             return false;
         }
-            return $model;
+        return $model;
     }
     
 }

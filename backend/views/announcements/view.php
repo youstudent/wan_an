@@ -6,15 +6,21 @@ use app\models\User;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Announcements */
-
+$this->title = '';
 //$this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => '公告管理', 'url' => ['index']];
-$this->params['breadcrumbs'][] = '广告管理详情';
+$this->params['breadcrumbs'][] = ['label' => '公告管理列表', 'url' => ['index']];
+$this->params['breadcrumbs'][] = '公告管理详情';
 ?>
 <div class="announcements-view">
+    <div class="page-header">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    </div>
+    <div class="page-header">
+        <h1 style="text-align: center; color: #00a0e9"><?= Html::encode('商品添加')?></h1>
+    </div>
+    <div class="page-header">
 
+    </div>
     <p>
         <?= Html::a('更新', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a('删除', ['delete', 'id' => $model->id], [

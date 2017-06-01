@@ -32,16 +32,17 @@ use kartik\widgets\SwitchInput;
                     'initialFrameWidth' => 558,
                 ]
             ]) ?>
+            <div class="row">
+                <div class="col-md-10 col-md-offset-2 pull-left">
+                    <?= Html::submitButton($model->isNewRecord ? '添加' : '修改', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                </div>
+            </div>
         </div>
         
 
     </div>
 
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-                <?= Html::submitButton($model->isNewRecord ? '添加' : '修改', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-        </div>
-    </div>
+    
 
         <?php ActiveForm::end(); ?>
 

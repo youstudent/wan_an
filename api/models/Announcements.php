@@ -56,24 +56,27 @@ class Announcements extends \yii\db\ActiveRecord
     
     
     //公告 接口列表
-    public function index(){
-        $model  =  self::find()->select(['id','title','created_at','author'])->where(['status'=>1])->all();
-        if ($model === false){
-            $this->addError('code',0);
-            $this->addError('message','暂时还未发布公告');
+    public function index()
+    {
+        $model = self::find()->where(['status'=>1])->select(['id', 'title', 'created_at', 'author'])->orderBy('id DESC')->limit(5)->all();
+        if ($model === false) {
+            //$this->addError('code',0);
+            $this->addError('message', '暂时还未发布公告');
             return false;
         }
         return $model;
-    
+        
     }
     
     //公告 详情
-    public function select($id){
-        $model = self::findOne(['id'=>$id]);
-        if ($model === false){
+    public function select($id)
+    {
+        $model = self::findOne(['id' => $id]);
+        if ($model === false) {
             return false;
         }
-            return $model;
+        // $model['created_at']=date('Y-m-d',$model['created_at']);
+        return $model;
     }
     
 }

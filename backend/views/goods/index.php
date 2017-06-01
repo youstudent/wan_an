@@ -8,13 +8,13 @@ use app\models\User;
 /* @var $searchModel backend\models\searchs\GoodsSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Goods';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '';
+$this->params['breadcrumbs'][] = '商品管理列表';
 ?>
 <div class="goods-index">
 
     <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
+    
     </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     
@@ -22,9 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
      $toolbars = [
         ['content' =>
-            Html::a('<i class="glyphicon glyphicon-plus"></i>', ['goods/create'], ['type' => 'button', 'title' => 'Add ' . $this->title, 'class' => 'btn btn-success']) . ' ' .
-            Html::a('<i class="fa fa-file-excel-o"></i>', ['goods/parsing'], ['type' => 'button', 'title' => 'Parsing Excel ' . $this->title, 'class' => 'btn btn-danger']) . ' ' .
-            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['goods/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => 'Reset Grid']). ' '
+            Html::a('<i class="glyphicon glyphicon-plus"></i>', ['goods/create'], ['type' => 'button', 'title' => '添加商品', 'class' => 'btn btn-success']) . ' ' .
+           // Html::a('<i class="fa fa-file-excel-o"></i>', ['goods/parsing'], ['type' => 'button', 'title' => 'Parsing Excel ' . $this->title, 'class' => 'btn btn-danger']) . ' ' .
+            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['goods/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
 
             
         ],
@@ -32,8 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
         '{export}',
     ];
     $panels = [
-        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . $this->title . '</h3>',
-        'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
+        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>  &nbsp;' . ' 商品管理列表' . '</h3>',
+       // 'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
     $columns = [
         ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
@@ -44,9 +44,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'class' => 'kartik\grid\ActionColumn',
             'dropdown' => false,
             'vAlign' => 'middle',
-            'viewOptions' => ['title' => 'view', 'data-toggle' => 'tooltip'],
-            'updateOptions' => ['title' => 'update', 'data-toggle' => 'tooltip'],
-            'deleteOptions' => ['title' => 'delete', 'data-toggle' => 'tooltip'],
+            'viewOptions' => ['title' => '查看', 'data-toggle' => 'tooltip'],
+            'updateOptions' => ['title' => '更新', 'data-toggle' => 'tooltip'],
+            'deleteOptions' => ['title' => '删除', 'data-toggle' => 'tooltip'],
         ],
         [
             'class' => 'kartik\grid\CheckboxColumn',

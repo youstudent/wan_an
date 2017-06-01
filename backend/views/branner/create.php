@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = '广告添加';
 <div class="branner-create">
 
     <div class="page-header">
-        <h1 style="color: #00c0ef">广告位添加</h1>
+        <h1 style="color: #00c0ef">广告添加</h1>
     </div>
 
     <?= $this->render('_form', [

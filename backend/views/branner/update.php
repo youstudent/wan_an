@@ -7,7 +7,7 @@ use yii\helpers\Html;
 
 $this->title = '';
 $this->params['breadcrumbs'][] = ['label' => '广告管理', 'url' => ['index']];
-$this->params['breadcrumbs'][] = '广告位的修改';
+$this->params['breadcrumbs'][] = '广告修改';
 ?>
 <div class="branner-update">
 
