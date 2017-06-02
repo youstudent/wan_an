@@ -15,14 +15,19 @@ use yii\swiftmailer\Mailer;
 
 class RegisterForm
 {
+    public $member_id;
 
     public function register($post, $referrer_id, $action_member_id = null)
     {
         //添加会员逻辑。 1.扣除推荐人两个豆子 。 2。 给操作人加 5块钱 3.添加会员。得到会员id . 4.查询推荐人信息，获取到座位  5. 添加座位，完成挂靠关系。 6.补全所有的区域信息， 7完成添加
+        $member = $this->addMember($post, $referrer_id);
+
+        //TODO::给操作人价钱
+
 
         //step1 . 判断推荐人是否区满
         $this->step1($referrer_id);
-
+        echo 'success';
 
         //先写最普通的40人的排序
 //        $count = District::find()->groupBy('member_id')->count();
@@ -60,31 +65,72 @@ class RegisterForm
      */
     public function step1($referrer_id)
     {
-        //获取推荐人所在的所有区
-        $district = $this->getMemberDistrict($referrer_id);
-        //获取这些人的区
-        $statuss = (new \yii\db\Query())->from(District::tableName())->where(['in', 'district', $district])->select('count(`id`) as num,id,district')->groupBy('district')->orderBy('district asc')->all();
+        //添加自身的区域
+        //$this->addNode($this->member_id, $this->member_id, 1);
 
-        //从高位获取，找到第一个 未满40人的区。并在哪里安排下会员
-        foreach($statuss as $status){
-           if($status['num'] < 40){
-               //在这里给会员安家
-               $member_district = $status['district'];
-               //找到这个区最近的一个座位
-               $seat = (new \yii\db\Query())->from(District::tableName())->where(['district'=> $member_district])->orderBy('seat desc')->select('seat')->scalar() + 1;
-               //根据这个座位在映射图寻找挂靠领导信息及自身的位置信息
-               $pos = Tree::$structure[$seat];
-               //保存这个这个位置信息
-               $pos['node'];
-               $pos['position'];
-               //添加到座位关系表中
-           }
-        }
+        //获取推荐人的可用id
+        $referrer_districts = $this->getMemberDistrictSeatCount($referrer_id);
 
 
+
+        echo '<pre>';
+        //开始递归存放了
+        $parent = Tree::$structure[$referrer_districts['num']+1];
+        print_r($parent);
+        echo '<hr>';
+
+        //找上级节点
+        do{
+            $flag = true;
+            //根据区域id 找到会员id
+            $parent_member = $this->byDistrictsGetMemberId($referrer_districts['district']);
+            print_r($parent_member);
+            echo '<hr>';
+
+            //给上级节点所在区域添加一个座位. 先找到
+            $seat = $this->getDistrictSeatCount($parent_member['member_id']);
+            print_r($seat);
+            echo '<hr>';
+            if($seat < 40){
+                //$this->addNode($this->member_id, $parent_member['districts'], $seat+ 1);
+
+                //获取父节点的memner_id
+
+            }else{
+                $flag = false;
+            }
+            $flag = false;
+
+        } while($flag);
 
     }
 
+
+    /**
+     * 从区域id和座位找到指定的会员id
+     * @param $districts
+     * @param int $seat
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function byDistrictsGetMemberId($districts, $seat = 1){
+        return District::find()->where(['district' => $districts, 'seat'=> $seat])->one();
+    }
+    /**
+     * 获取会员推荐的人，必要存放的区域
+     * @param $member_id
+     * @return null
+     */
+    public function getMemberDistrictSeatCount($member_id)
+    {
+        $district = $this->getMemberDistrict($member_id);
+        $lists = (new \yii\db\Query())->from(District::tableName())->where(['district'=>$district])->select('count(`id`) as num,id,district')->groupBy('district')->orderBy(['district'=> SORT_ASC])->all();
+        foreach($lists as $list){
+            if($list['num'] < 40){
+                return $list;
+            }
+        }
+        return null;
+    }
     /**
      * 返回会员所有区的id
      * @param $member_id
@@ -92,7 +138,27 @@ class RegisterForm
      */
     public function getMemberDistrict($member_id)
     {
-        return District::find()->where(['member_id'=>$member_id])->select('district')->orderBy('district desc')->column();
+        return District::find()->where(['member_id'=>$member_id])->select('district')->orderBy(['district'=> SORT_DESC])->column();
+    }
+
+    /**
+     * 根据会员id。获取会员的root区
+     * @param $member_id
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function getMemberRootDistrict($member_id)
+    {
+        return District::find()->where(['member_id'=>$member_id, 'seat'=>1])->one();
+    }
+
+    /**
+     * 获取区域当前会员数量
+     * @param $district
+     * @return int|string
+     */
+    public function getDistrictSeatCount($district)
+    {
+        return District::find()->where(['district'=>$district])->count();
     }
     /**
      * 添加会员
@@ -111,29 +177,18 @@ class RegisterForm
         $model->mobile = $post['mobile'];
         $model->save();
 
+        $this->member_id = $model->id;
         return $model;
     }
-
-    /**
-     * 生成自身到顶点所有区域的记录。单线祖先的记录。最长4条，在1已经被初始化的情况下，最短是2
-     * @param $member_id
-     * @param $seat 自身的座位号
-     * @param $top_seat 订单的座位号
-     */
-    public function setDistrict($member_id, $referrer_id, $seat, $top_seat, $district)
+    public function addNode($member_id, $district, $seat, $pos = null)
     {
-        $data = [];
-        while($seat !== $top_seat){
-            $data[] = [$member_id, $district, $seat, time()];
-            //$referrer_id = $this->get
-        }
+        $model = new District();
+        $model->member_id = $member_id;
+        $model->district = $district;
+        $model->created_at = time();
+        $model->seat = $seat;
 
-    }
-
-
-    public function getParentNodeDistrict($member_id)
-    {
-
+        return $model->save() ? $model : null;
     }
 
 }
