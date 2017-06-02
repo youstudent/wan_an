@@ -8,13 +8,17 @@ use app\models\User;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Goods */
 
-$this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Goods', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '';
+$this->params['breadcrumbs'][] = ['label' => '商品管理列表', 'url' => ['index']];
+$this->params['breadcrumbs'][] = '商品详情';
 ?>
 <div class="goods-view">
+    <div class="page-header">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    </div>
+    <div class="page-header">
+        <h1 style="text-align: center; color: #00a0e9"><?= Html::encode('商品详情')?></h1>
+    </div>
 
     <p>
         <?= Html::a('更新', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>

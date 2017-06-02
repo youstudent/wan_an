@@ -9,23 +9,14 @@
 namespace api\controllers;
 
 
-<<<<<<< .mine
-
-use api\models\Member;
-=======
 use api\models\Member;
 
->>>>>>> .theirs
 use Codeception\Module\REST;
 use common\models\Give;
-
 use yii;
 use api\models\Bonus;
 use api\models\SignupForm;
 
-use yii;
-use api\models\Bonus;
-use api\models\SignupForm;
 use api\models\Fruiter;
 
 class MemberController extends ApiController
@@ -43,49 +34,36 @@ class MemberController extends ApiController
         }
         return $this->jsonReturn(0, 'error');
     }
-<<<<<<< .mine
 
 
-=======
-<<<<<<< .mine
-<<<<<<< HEAD
->>>>>>> .theirs
-=======
 
->>>>>>> .theirs
+
+
     
     public function actionDemo()
     {
-<<<<<<< .mine
-    
-=======
 
->>>>>>> .theirs
+
+
+
         //获取客户端数据如
         //Yii::$app->request->post();
         //Yii::$app->request->queryParams;
-<<<<<<< .mine
-    
-=======
 
->>>>>>> .theirs
+    
+
         //在模型中处理验证
         //如果有错误。返回 负数的code .加上错误信息
         //return $this->jsonReturn(-200, '钱不够，请充值信仰', []);
-<<<<<<< .mine
+
     
     
-=======
 
 
->>>>>>> .theirs
         //操作类接口 - 如果成功返回以下信息 如提现。修改个人资料
-        //return $this->jsonReturn(1, 'success', []);
-<<<<<<< .mine
-    
-=======
 
->>>>>>> .theirs
+    
+        
         //展示类接口 - 返回对应的展示数据 ,如公告详情
         return $this->jsonReturn(1, 'success', ['title' => '大新闻', 'detail' => '公告为荣']);
     
@@ -103,21 +81,7 @@ class MemberController extends ApiController
         }
         return $this->jsonReturn(0, 'error');
     }
-
-    /**
-     * 获取会员个人资金流水
-     * @return array
-     */
-    public function actionBonus()
-    {
-        $model = new Bonus();
-        $member_id = \Yii::$app->request->get('id');
-        if($bonus = $model->getBonus($member_id)){
-            return $this->jsonReturn(1, 'success', $bonus);
-        }
-        return $this->jsonReturn(0, 'error');
-    }
-
+    
     /**
      * 获取提交的登录表单
      * @return array
@@ -172,28 +136,18 @@ class MemberController extends ApiController
         //如果返回false 返回错误信息
         return $this->jsonReturn(0, $model->getErrors('message'));
     }
-<<<<<<< .mine
+
    /* public function actionDemo()
     {
-=======
 
 
->>>>>>> .theirs
-
-<<<<<<< .mine
 
     }*/
     
-    
-=======
 
-
-
-
->>>>>>> .theirs
     //会员的金果和金种子
     public function actionCoin(){
-        $id=3;
+        $id=2;
         $data = Member::find()->where(['id'=>$id])->select(['a_coin','b_coin'])->all();
         if ($data) {//如果返回的数据是true说明 申请成功
             return $this->jsonReturn(1, 'success',$data);

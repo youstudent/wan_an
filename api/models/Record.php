@@ -58,13 +58,13 @@ class Record extends \yii\db\ActiveRecord
     {
         $id = $data['id'];//模拟数据
         $re = Record::findOne(['member_id' => $id, 'date' => date('Y-m-d')]);
-        if ($re !== null) {
+        /*if ($re !== null) {
             $message = '每天只能提现一次';
             $code = 0;
             $this->addError('code', $code);
             $this->addError('message', $message);
             return false;
-        }
+        }*/
         if ($data['coin'] <= 0) {
             $message = '提现金额不能为负数或0';
             $code = 0;
@@ -81,7 +81,7 @@ class Record extends \yii\db\ActiveRecord
         };
         
         $result = Member::findOne(['parent_id' => $id]);
-        if ($result == null) {
+        if ($result == null || $result==false) {
             $message = '必须直推至少一人才能提现';
             $code = 0;
             $this->addError('code', $code);
@@ -137,7 +137,7 @@ class Record extends \yii\db\ActiveRecord
             return false;
         }
         foreach ($model as &$v) {
-            $v['created_at'] = date('Y/m/d', $v['created_at']);
+            $v['created_at'] = date('Y/m/d H:i:s', $v['created_at']);
         }
         return $model;
         

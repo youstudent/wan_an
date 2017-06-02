@@ -2,7 +2,7 @@
 
 namespace common\models;
 
-use app\models\Member;
+use api\models\Member;
 use rmrevin\yii\fontawesome\FA;
 use Symfony\Component\DomCrawler\Field\InputFormField;
 use Yii;

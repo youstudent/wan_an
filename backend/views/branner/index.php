@@ -7,14 +7,14 @@ use app\models\User;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '广告管理';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '';
+$this->params['breadcrumbs'][] = '广告管理列表';
 ?>
 <div class="branner-index">
 
-    <!--<div class="page-header">
-        <h1><?/*= Html::encode($this->title) */?></h1>
-    </div>-->
+    <div class="page-header">
+
+    </div>
     
 
 <?php 
@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
         '{export}',
     ];
     $panels = [
-        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . $this->title . '</h3>',
+        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>'." &nbsp; 广告管理列表". '</h3>',
         //'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
     $columns = [

@@ -6,13 +6,18 @@ use app\models\User;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Branner */
-
+$this->title='';
 $this->params['breadcrumbs'][] = ['label' => '广告管理', 'url' => ['index']];
 $this->params['breadcrumbs'][] = '详情';
 ?>
 <div class="branner-view">
 
-    <h1><?= Html::encode('详情') ?></h1>
+    <div class="page-header">
+
+    </div>
+    <div class="page-header">
+        <h1 style="text-align: center; color: #00a0e9"><?= Html::encode('广告详情')?></h1>
+    </div>
 
     <p>
         <?= Html::a('修改', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
