@@ -114,10 +114,10 @@ class Record extends \yii\db\ActiveRecord
                 //保存数据到 流水表里面
                 $Bonus = new Bonus();
                 $Bonus->member_id = $id;
-                $Bonus->type = 4;
-                $Bonus->status = 1;
-                $Bonus->coin_count = $data['coin'] - ($data['coin'] * 0.1);
-                $Bonus->updated_at = time();
+                $Bonus->coin_type=1;
+                $Bonus->type = 5;
+                $Bonus->num = $data['coin'] - ($data['coin'] * 0.1);
+                $Bonus->created_at = time();
                 $Bonus->save(false);
             }
         }
