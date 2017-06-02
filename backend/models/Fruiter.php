@@ -25,7 +25,7 @@ class Fruiter extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'wa_fruiter';
+        return '{{%fruiter}}';
     }
 
     /**
