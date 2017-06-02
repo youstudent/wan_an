@@ -1,36 +1,51 @@
-<h2 style="color: #3C8DBC">统计中心</h2>
+
+<h2 style="color: #3C8DBC;text-align: center;margin-bottom: 60px;">统计中心</h2>
 <div class="cf well form-search" style="height: 68px;">
-    <form method="get" class="form-horizontal" action="searchs">
-        <div class="fl">
-            <div class="btn-group">
-                <input name="start" class="form-control" onclick="WdatePicker()" value="" placeholder="开始时间" type="text">
-            </div>
-            <div class="btn-group">
-                <input name="end" class="form-control" onclick="WdatePicker()" value="" placeholder="结束时间" type="text">
-            </div>
-            <div class="btn-group">
-                <button type="submit" class="btn btn-primary">查询</button>
-            </div>
-        </div>
-    </form>
+    <?php
+    $form = \yii\bootstrap\ActiveForm::begin(
+        ['method'=>'get',
+            'options'=>['class'=>'form-inline'],
+            'action'=>\yii\helpers\Url::to(['count/index']),
+        ]
+    );
+    echo $form->field($search,'start')->widget(\kartik\widgets\DateTimePicker::classname(), [
+        'options' => ['placeholder' => ''],
+        'pluginOptions' => [
+            'autoclose' => true,
+            'todayHighlight' => true,
+        ]
+    ]).'&nbsp &nbsp &nbsp';
+    //echo $form->field($search,'end')->textInput(['placeholder'=>'结束时间'])->label(false).'&nbsp &nbsp &nbsp';
+    echo $form->field($search,'end')->widget(\kartik\widgets\DateTimePicker::classname(), [
+        'options' => ['placeholder' => ''],
+        'pluginOptions' => [
+            'autoclose' => true,
+            'todayHighlight' => true,
+        ]
+    ]);
+    echo \yii\bootstrap\Html::submitButton('查询或刷新',['class'=>'btn bnt-info','style'=>'margin-bottom:11px;padding-left: 12px;margin-left: 19px;;']);
+    \yii\bootstrap\ActiveForm::end();
+    ?>
 </div>
 <table class="table table-hover table-bordered table-striped" >
   <thead>
     <tr class="danger" >
-      <th>总业绩</th>
       <th>分享收益</th>
       <th>绩效收益</th>
+      <th>报单业绩</th>
       <th>财务总支出</th>
       <th>结余</th>
+      <th>总业绩</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><?=$count?></td>
-      <td>44454</td>
-      <td>1000</td>
-      <td><?=$c?></td>
-      <td>-525</td>
+      <td>分享收益（直推）：产生的所有分享奖金（包括额外分享）</td>
+      <td>绩效业绩（见点）：产生的所有绩效奖金</td>
+      <td>统计产生了多少个5金果的奖励</td>
+      <td>成功提现总额</td>
+      <td>平台充值出去的总金种子数-财务总支出</td>
+      <td>会员人数*900</td>
     </tr>
   </tbody>
 </table>

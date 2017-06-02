@@ -12,7 +12,7 @@ class ApiController extends Controller
     public $enableCsrfValidation = false;
 
 
-    public function jsonReturn($code, $message, $data = [], $time = '')
+    public function jsonReturn($code, $message, $data = [], $time = '',$title='')
     {
         $headers = Yii::$app->response->headers;
         $headers->add("Access-Control-Allow-Origin", '*');
@@ -23,6 +23,7 @@ class ApiController extends Controller
             'timestamp' => $time,
             'message' => $message,
             'data' => $data,
+            'title'=>$title,
             
         ];
     }

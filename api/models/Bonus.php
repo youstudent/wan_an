@@ -70,5 +70,4 @@ class Bonus extends \yii\db\ActiveRecord
         return $bonus;
     }
     
-    //流水表的问题
 }

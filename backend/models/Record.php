@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use common\models\components\Helper;
 use Yii;
 use backend\models\User;
 
@@ -103,7 +104,10 @@ class Record extends \yii\db\ActiveRecord
       
         $model->status=$ids;
         $model->updated_at=time();
-        $model->save();
+        if ($model->save() && $ids==1){
+            $Helper = new Helper();
+            $Helper->pool($model->member_id,1,4,$model->coin,$model->charge);
+        }
     }
     
     /*//记录  拒绝

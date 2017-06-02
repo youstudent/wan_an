@@ -56,6 +56,7 @@ class Branner extends \yii\db\ActiveRecord
         foreach ($model as &$v) {
             $v['img'] = $v['http'] . '/' . $v['img'];
         }
+        
         if ($model === false) {
             return false;
         }

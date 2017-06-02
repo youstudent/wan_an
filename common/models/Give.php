@@ -3,6 +3,7 @@
 namespace common\models;
 
 use api\models\Member;
+use common\models\components\Helper;
 use rmrevin\yii\fontawesome\FA;
 use Symfony\Component\DomCrawler\Field\InputFormField;
 use Yii;
@@ -60,6 +61,11 @@ class Give extends \yii\db\ActiveRecord
         $member = Member::findOne(['id' => $id]);
         $result = Member::findOne(['parent_id' => $id]);
         $give_member  = Member::findOne(['id'=>$data['give_member_id']]);
+        
+        if ($id==$data['give_member_id']){
+            $this->addError('message','不能转金果和金种子给自己');
+            return false;
+        }
         if ($give_member==false || $give_member==null){
             $this->addError('message', '没有该会员');
             return false;
@@ -68,21 +74,20 @@ class Give extends \yii\db\ActiveRecord
             $this->addError('message', '必须直推一个人,才能赠送金果和金种子');
             return false;
         }
-        
-        if (isset($data['a_coin'])){
+        if ($data['coinType']==1){
             if ($data['give_coin'] > $member->a_coin) {
                 $this->addError('message', '你的金果余额不足');
                 return false;
             }
-            $this->type=0;
+            $this->type=1;
             $member->a_coin=($member->a_coin-$data['give_coin']);
             $give_member->a_coin=($give_member->a_coin+$data['give_coin']);
-        }else if (isset($data['b_coin'])){
+        }else if ($data['coinType']==2){
             if ($data['give_coin'] > $member->b_coin) {
                 $this->addError('message', '你的金种子余额不足');
                 return false;
             }
-            $this->type=1;
+            $this->type=2;
             $member->b_coin=($member->b_coin-$data['give_coin']);
             $give_member->b_coin=($give_member->b_coin+$data['give_coin']);
         }
@@ -94,6 +99,17 @@ class Give extends \yii\db\ActiveRecord
                 $this->created_at=time();
                 $this->give_coin=$data['give_coin'];
                 if ($this->save(false)){
+                    $ext_data=[];
+                    $ext_data['member_id']=$id;
+                    $ext_data['give_member_id']=$data['give_member_id'];
+                    $ext_data['give_coin']=$data['give_coin'];
+                    $ext_data['coin_type']=$data['coinType'];
+                    $ext_data['type']=8;
+                    $new_ext_data = serialize($ext_data);
+                    $Helper= new Helper();
+                    if ($Helper->pool($id,$data['coinType'],8,$data['give_coin'],null,$new_ext_data)===false){
+                        return false;
+                    }
                     return true;
                 }
             }

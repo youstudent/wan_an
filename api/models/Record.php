@@ -5,6 +5,7 @@ namespace api\models;
 use api\models\Bonus;
 use backend\models\Member;
 use Codeception\Module\REST;
+use common\models\components\Helper;
 use rmrevin\yii\fontawesome\FA;
 use Symfony\Component\CssSelector\Node\ElementNode;
 use Symfony\Component\DomCrawler\Tests\Field\InputFormFieldTest;
@@ -110,15 +111,18 @@ class Record extends \yii\db\ActiveRecord
             if ($this->save(false)) {
                 // 申请成功减去会员对应的金果
                 $result->a_coin = $result->a_coin - $data['coin'];
-                $result->save(false);
-                //保存数据到 流水表里面
-                $Bonus = new Bonus();
-                $Bonus->member_id = $id;
-                $Bonus->coin_type=1;
-                $Bonus->type = 5;
-                $Bonus->num = $data['coin'] - ($data['coin'] * 0.1);
-                $Bonus->created_at = time();
-                $Bonus->save(false);
+                if ($result->save(false)){
+                    //保存数据到 流水表里面
+                   /* $Helper= new Helper();
+                    $num = $data['coin'] - ($data['coin'] * 0.1);
+                    if ($Helper->pool($id,1,5,$num,$charge)===false){
+                        $this->addError('code', 0);
+                        $this->addError('message', '保存流水表失败');*/
+                        return true;
+                    //}
+                   
+                }
+                
             }
         }
         

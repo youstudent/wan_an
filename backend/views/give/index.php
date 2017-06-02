@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\dynagrid\DynaGrid;
-use app\models\User;
+use api\models\User;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\searchs\GiveSearchs */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -43,9 +43,9 @@ $this->params['breadcrumbs'][] = $this->title;
         [
             'attribute' => 'type',
             'value' => function ($model) {
-                if ($model->type==0){
+                if ($model->type==1){
                     return '金果';
-                }else if ($model->type==1){
+                }else if ($model->type==2){
                     return '金种子';
                 }else{
                     return '未知类型';

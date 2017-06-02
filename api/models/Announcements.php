@@ -67,7 +67,7 @@ class Announcements extends \yii\db\ActiveRecord
         foreach ($model as &$v){
             $v['created_at']=date('Y/m/d',$v['created_at']);
         }
-        return $model;
+        return $model ;
         
     }
     
