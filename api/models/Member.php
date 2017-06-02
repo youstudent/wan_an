@@ -89,12 +89,23 @@ class Member extends \yii\db\ActiveRecord
      * @param string $member_id
      * @return array
      */
-    public function getOneMember($member_id = '')
+    public function getOneMember()
     {
+        // 获取用户id
+        $session = Yii::$app->session->get('member');
+        $member_id = $session['member_id'];
+        // 测试
+        $member_id = 2;
         if (!$this->validate()) {
            return null;
         }
-        $data = Member::findOne($member_id)->toArray();
+
+        $arr = ['id', 'parent_id', 'name', 'mobile', 'deposit_bank', 'bank_account', 'address',
+                'group_num', 'child_num', 'a_coin', 'b_coin'];
+        $query = (new \yii\db\Query());
+        $data= $query->select($arr)->from(Member::tableName())
+                    ->where(['id' => $member_id])
+                    ->one();
         if(!isset($data) || empty($data)){
             return null;
         }
@@ -157,23 +168,27 @@ class Member extends \yii\db\ActiveRecord
 
     public function updateDetail($data)
     {
-//        if (!$member['member_id']==$date['id'] || !$member['member_name']==$date['name']) {
-//            $this->addError('message', '数据异常联系管理员');
-//            return false;
-//        }
+        // 获取用户id
+        $session = Yii::$app->session->get('member');
+        $member_id = $session['member_id'];
+        // 测试
+        $member_id = 2;
 
         $session = Yii::$app->session->get('member');
-        $detail = Member::findOne($session['member_id']);
+        $detail = Member::findOne($member_id);
         if ($detail) {
-            $newmember = Member::findOne($session['member_id']);
+            $newmember = Member::findOne($member_id);
             $newmember->name = $data['name']?$data['name']:$newmember->name;
             $newmember->bank_account = $data['bank_account']?$data['bank_account']:$newmember->bank_account;
             $newmember->deposit_bank = $data['deposit_bank']?$data['deposit_bank']:$newmember->deposit_bank;
             $newmember->address = $data['address']?$data['address']:$newmember->address;
             $newmember->updated_at=time();
             $newmember->save(false);
+            return true;
         }
-        return true;
+
+
+        return false;
     }
     /**
      * 密码修改
@@ -183,8 +198,12 @@ class Member extends \yii\db\ActiveRecord
 
     public function updatePass($data)
     {
-        $member = Yii::$app->session->get('member');
-        $detail = Member::findOne($member['member_id']);
+        // 获取用户id
+        $session = Yii::$app->session->get('member');
+        $member_id = $session['member_id'];
+        // 测试
+        $member_id = 2;
+        $detail = Member::findOne($member_id);
         if (false === $this->validatePassword($data['password'],$detail->password)) {
             $this->addError('message', '原密码不正确');
             return false;
@@ -194,7 +213,7 @@ class Member extends \yii\db\ActiveRecord
             return false;
         }
         if ($detail) {
-            $newMember = Member::findOne($member['member_id']);
+            $newMember = Member::findOne($member_id);
             $newMember->password = Yii::$app->security->generatePasswordHash($data['newPassword']);
             $newMember->updated_at=time();
 //            var_dump($newMember);die;
