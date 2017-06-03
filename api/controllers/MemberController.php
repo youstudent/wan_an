@@ -27,56 +27,23 @@ class MemberController extends ApiController
      */
     public function actionMemberdetail()
     {
+
         $model = new Member();
-        $member_id = \Yii::$app->request->get('id');
-        if ($member = $model->getOneMember($member_id)) {
+        if ($member = $model->getOneMember()) {
             return $this->jsonReturn(1, 'success', $member);
         }
         return $this->jsonReturn(0, 'error');
     }
 
-
-
-
-
-    
-    public function actionDemo()
-    {
-
-
-
-
-        //获取客户端数据如
-        //Yii::$app->request->post();
-        //Yii::$app->request->queryParams;
-
-    
-
-        //在模型中处理验证
-        //如果有错误。返回 负数的code .加上错误信息
-        //return $this->jsonReturn(-200, '钱不够，请充值信仰', []);
-
-    
-    
-
-
-        //操作类接口 - 如果成功返回以下信息 如提现。修改个人资料
-
-    
-        
-        //展示类接口 - 返回对应的展示数据 ,如公告详情
-        return $this->jsonReturn(1, 'success', ['title' => '大新闻', 'detail' => '公告为荣']);
-    
-    }
     /**
-     * 获取会员个人资金流水
+     * 获取会员个人收益明细
      * @return array
      */
     public function actionBonus()
     {
         $model = new Bonus();
-        $member_id = \Yii::$app->request->get('id');
-        if($bonus = $model->getBonus($member_id)){
+        $type = \Yii::$app->request->get('type');
+        if($bonus = $model->getBonus($type)){
             return $this->jsonReturn(1, 'success', $bonus);
         }
         return $this->jsonReturn(0, 'error');
@@ -106,14 +73,13 @@ class MemberController extends ApiController
         }
         return $this->goHome();
     }
+
     /**
      * 获取提交的修改内容update api
      * @return array
      */
-
     public function actionUpdate()
     {
-
         $model = new Member();
         if ($model->updateDetail(Yii::$app->request->post())) {
             return $this->jsonReturn(1, 'success');
@@ -136,14 +102,6 @@ class MemberController extends ApiController
         //如果返回false 返回错误信息
         return $this->jsonReturn(0, $model->getErrors('message'));
     }
-
-   /* public function actionDemo()
-    {
-
-
-
-    }*/
-    
 
     //会员的金果和金种子
     public function actionCoin(){
@@ -198,8 +156,7 @@ class MemberController extends ApiController
     public function actionFruiter()
     {
         $model = new Fruiter();
-        $member_id = \Yii::$app->request->get('id');
-        if($fruiter = $model->getFruiter($member_id)){
+        if($fruiter = $model->getFruiter()){
             return $this->jsonReturn(1, 'success', $fruiter);
         }
         return $this->jsonReturn(0, 'error');

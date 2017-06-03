@@ -24,7 +24,7 @@ class Deposit extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'wa_deposit';
+        return '{{%deposit}}';
     }
 
     /**
@@ -84,6 +84,9 @@ class Deposit extends \yii\db\ActiveRecord
     {
         $id = $data['Deposit']['member_id'];
         $result = Member::findOne(['id' => $id]);
+        if (!$result) {
+            Yii::$app->session->setFlash('error', '用户不存在');
+        }
         if ($data['Deposit']['operation'] == 2 ) {
             if ($result->a_coin < $data['Deposit']['num'] || $result->b_coin < $data['Deposit']['num']) {
 

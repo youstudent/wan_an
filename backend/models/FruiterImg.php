@@ -19,7 +19,7 @@ class FruiterImg extends \yii\db\ActiveRecord
      */
     public static function tableName()
     {
-        return 'wa_fruiter_img';
+        return '{{%fruiter_img}}';
     }
 
     /**

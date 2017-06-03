@@ -60,12 +60,37 @@ class Bonus extends \yii\db\ActiveRecord
      * @param string $member_id
      * @return array
      */
-    public function getBonus($member_id = '')
+    public function getBonus($type)
     {
+        // 获取用户id
+        $session = Yii::$app->session->get('member');
+        $member_id = $session['member_id'];
+        // 测试
+        $member_id = 2;
+
         $query = (new \yii\db\Query());
-        $bonus = $query->from(Bonus::tableName())->where(['member_id' => $member_id])->all();
+
+        // 判断调用的type类型
+        // 全部
+        if ($type == 0) {
+            $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>[1,2,3,5]])->all();
+        }
+
+        // 绩效
+        if ($type == 1) {
+            $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>1])->all();
+        }
+
+        // 分享
+        if ($type == 2) {
+            $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>2])->all();
+        }
+
         if(!isset($bonus) || empty($bonus)){
             return null;
+        }
+        foreach ($bonus as &$v) {
+            $v['created_at'] = date('Y/m/d H:i:s', $v['created_at']);
         }
         return $bonus;
     }
