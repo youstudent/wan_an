@@ -32,6 +32,8 @@ use api\models\Session;
 class Member extends \yii\db\ActiveRecord
 {
     public $child;
+    public $gross_income;
+    public $gorss_bonus;
     /**
      * @inheritdoc
      */

@@ -11,50 +11,43 @@ namespace api\models;
 use common\models\District;
 use common\models\Tree;
 use Yii;
+use yii\db\Exception;
 use yii\swiftmailer\Mailer;
 
 class RegisterForm
 {
     public $member_id;
+    public $errorMsg;
 
     public function register($post, $referrer_id, $action_member_id = null)
     {
-        //添加会员逻辑。 1.扣除推荐人两个豆子 。 2。 给操作人加 5块钱 3.添加会员。得到会员id . 4.查询推荐人信息，获取到座位  5. 添加座位，完成挂靠关系。 6.补全所有的区域信息， 7完成添加
+        $transaction = Yii::$app->db->beginTransaction();
+        //TODO:: 给操作人加奖金
         $member = $this->addMember($post, $referrer_id);
 
+        if($member == false){
+            $this->errorMsg = '添加会员失败';
+            $transaction->rollBack();
+            return false;
+        }
         //TODO::给操作人价钱
 
 
         //step1 . 判断推荐人是否区满
-        $this->step1($referrer_id);
-        echo 'success';
+        $result = $this->step1($referrer_id);
+        if($result == false){
+            $this->errorMsg = '座位寻找错误';
+            $transaction->rollBack();
+            return false;
+        }
+        try{
+            $transaction->commit();
+            return true;
+        }catch(Exception $e){
+            $transaction->rollBack();
+            return false;
+        }
 
-        //先写最普通的40人的排序
-//        $count = District::find()->groupBy('member_id')->count();
-//        if($count <= 40){
-//            //所有会员都在一个区，不用判断区. 先获取用户的最大id
-//            $max = District::find()->groupBy('member_id')->orderBy('seat desc')->one();
-//
-//            //根据映射图，找到玩家的座位
-//            $new = Tree::$structure[$max['seat']+1];
-//            if(isset($new) && !empty($new)){
-//                //添加会员
-//
-//                $member = $this->addMember($post, $referrer_id);
-//
-//                //添加关联表
-//                $re = new District();
-//                $re->member_id = $member->id;
-//                $re->district = 1;
-//                $re->seat = $max['seat'] + 1;
-//                $re->created_at = time();
-//                $re->save();
-//
-//                //添加上一级的关联表
-//
-//            }
-//
-//        }
     }
 
     /**
@@ -65,46 +58,58 @@ class RegisterForm
      */
     public function step1($referrer_id)
     {
+        $transaction = Yii::$app->db->beginTransaction();
         //添加自身的区域
-        //$this->addNode($this->member_id, $this->member_id, 1);
+        $result = $this->addNode($this->member_id, $this->member_id, 1);
+        if($result == false){
+            $this->errorMsg = '添加自身区域失败';
+            $transaction->rollBack();
+            return false;
+        }
 
-        //获取推荐人的可用id
-        $referrer_districts = $this->getMemberDistrictSeatCount($referrer_id);
-
-
-
-        echo '<pre>';
-        //开始递归存放了
-        $parent = Tree::$structure[$referrer_districts['num']+1];
-        print_r($parent);
-        echo '<hr>';
-
-        //找上级节点
-        do{
-            $flag = true;
-            //根据区域id 找到会员id
-            $parent_member = $this->byDistrictsGetMemberId($referrer_districts['district']);
-            print_r($parent_member);
-            echo '<hr>';
-
-            //给上级节点所在区域添加一个座位. 先找到
-            $seat = $this->getDistrictSeatCount($parent_member['member_id']);
-            print_r($seat);
-            echo '<hr>';
-            if($seat < 40){
-                //$this->addNode($this->member_id, $parent_member['districts'], $seat+ 1);
-
-                //获取父节点的memner_id
-
-            }else{
-                $flag = false;
-            }
-            $flag = false;
-
-        } while($flag);
-
+        $result = $this->addDistrictSeat($referrer_id);
+        if($result == false){
+            $this->errorMsg = '添加父级区域失败';
+            $transaction->rollBack();
+            return false;
+        }
+        return true;
     }
 
+    /**
+     * 添加会员到所有的区
+     * @param $referrer_id
+     * @return bool
+     */
+    public function addDistrictSeat($referrer_id)
+    {
+        //先收集需要的设置的id
+        $affiliated_node = $this->getMemberDistrictSeatCount($referrer_id);
+        //基础区域值,用这个区域，找到所有需要添加位置的member_id
+        $base__district = $affiliated_node['district'];
+        $affiliated_one = $this->byDistrictsGetMemberId($base__district);
+
+        $seat = $affiliated_node['num'] + 1;
+        //得到会员的member_id
+        $node = [];
+        $member_id = $this->member_id;
+        while($affiliated_one['member_id'] !== $member_id){
+            $seat_node = Tree::$structure[$seat];
+            $seat = $seat_node['node'];
+            $one = $this->byDistrictsGetMemberId($base__district, $seat);
+            $seat_node['member_id'] = $member_id = $one['member_id'];
+            $seat_node['district'] = $district = $this->getMemberRootDistrict($member_id);
+            $seat_node['seat']  = $this->getDistrictSeatCount($district);
+
+            $node[] = $seat_node;
+            $result = $this->addNode($this->member_id, $seat_node['district'], $seat_node['seat'] + 1);
+            if($result == false){
+                return false;
+            }
+            //TODO::给分享人或者挂靠人价钱，这里要判断 。即是分享人也是挂靠人的特俗情况
+        }
+        return true;
+    }
 
     /**
      * 从区域id和座位找到指定的会员id
@@ -144,11 +149,11 @@ class RegisterForm
     /**
      * 根据会员id。获取会员的root区
      * @param $member_id
-     * @return array|null|\yii\db\ActiveRecord
+     * @return false|null|string
      */
     public function getMemberRootDistrict($member_id)
     {
-        return District::find()->where(['member_id'=>$member_id, 'seat'=>1])->one();
+        return District::find()->where(['member_id'=>$member_id, 'seat'=>1])->select('district')->scalar();
     }
 
     /**
@@ -176,6 +181,7 @@ class RegisterForm
         $model->child_num +=1;
         $model->mobile = $post['mobile'];
         $model->save();
+
 
         $this->member_id = $model->id;
         return $model;

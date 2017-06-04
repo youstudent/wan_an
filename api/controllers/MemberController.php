@@ -105,10 +105,14 @@ class MemberController extends ApiController
         $post = [
             'name' => 'test',
             'password' => '123456',
-            'mobile' => 123456
+            'mobile' => '13688464645'
         ];
         $referrer_id = 1;
         $action_member_id = 1;
-        $model->register($post, $referrer_id, $action_member_id = null);
+        if($model->register($post, $referrer_id, $action_member_id)){
+            echo 'success';
+        }else{
+            echo $model->errorMsg;
+        }
     }
 }
