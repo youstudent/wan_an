@@ -60,7 +60,10 @@ class Fruiter extends \yii\db\ActiveRecord
         $member_id = 2;
 
         $query = (new \yii\db\Query());
-        $fruiter = $query->select('fruiter_name,img_path')->from(Fruiter::tableName())->leftJoin(FruiterImg::tableName(), '{{%fruiter_img}}.fruiter_id = {{%fruiter}}.id')->where(['member_id' => $member_id])->one();
+        $fruiter = $query->select('fruiter_name,img_path')->from(Fruiter::tableName())
+            ->leftJoin(FruiterImg::tableName(), '{{%fruiter_img}}.fruiter_id = {{%fruiter}}.id')
+            ->where(['member_id' => $member_id])
+            ->one();
         if($fruiter['img_path']){
             $fruiter['img_path'] = Yii::$app->params['img_domain'].$fruiter['img_path'];
         }

@@ -26,7 +26,6 @@ $this->params['breadcrumbs'][] = '会员管理列表';
            // Html::a('<i class="fa fa-file-excel-o"></i>', ['member/parsing'], ['type' => 'button', 'title' => '刷新 ' . $this->title, 'class' => 'btn btn-danger']) . ' ' .
             Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['member/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
 
-
         ],
         ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
         '{export}',
@@ -56,9 +55,21 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                 ],
             ]),
         ],
-            'a_coin',
-            'b_coin',
-            'group_num',
+
+        [
+            'attribute' => 'a_coin',
+            'label' => '金果数',
+            'value' => function ($model) {
+                return $model->getBonus(1, $model->id);
+            },
+        ],
+        [
+            'attribute' => 'b_coin',
+            'label' => '金种子数',
+            'value' => function ($model) {
+                return $model->getBonus(2, $model->id);
+            },
+        ],
             'child_num',
         [
             'attribute' => 'last_login_time',

@@ -18,7 +18,8 @@ class BonusSearch extends Bonus
     public function rules()
     {
         return [
-            [['id', 'member_id', 'type', 'coin_amount', 'coin_count', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'member_id', 'coin_type', 'type', 'num', 'created_at', 'updated_at', 'poundage'], 'integer'],
+            [['ext_data'], 'safe'],
         ];
     }
 
@@ -40,7 +41,7 @@ class BonusSearch extends Bonus
      */
     public function search($params, $id)
     {
-        $query = Bonus::find()->where(['member_id' => $id]);
+        $query = Bonus::find()->where(['member_id' => $id, 'coin_type' => 1, 'type' => [1,2,3,5]]);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -53,13 +54,15 @@ class BonusSearch extends Bonus
         $query->andFilterWhere([
             'id' => $this->id,
             'member_id' => $this->member_id,
+            'coin_type' => $this->coin_type,
             'type' => $this->type,
-            'coin_amount' => $this->coin_amount,
-            'coin_count' => $this->coin_count,
-            'status' => $this->status,
+            'num' => $this->num,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'poundage' => $this->poundage,
         ]);
+
+        $query->andFilterWhere(['like', 'ext_data', $this->ext_data]);
 
         return $dataProvider;
     }

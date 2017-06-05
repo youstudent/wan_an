@@ -6,10 +6,9 @@ use Yii;
 use backend\models\Bonus;
 
 /**
- * This is the model class for table "{{%member}}".
+ * This is the model class for table "wa_member".
  *
  * @property integer $id
- * @property integer $site
  * @property integer $parent_id
  * @property string $name
  * @property string $password
@@ -17,16 +16,14 @@ use backend\models\Bonus;
  * @property string $deposit_bank
  * @property string $bank_account
  * @property string $address
- * @property integer $group_num
- * @property integer $child_num
- * @property integer $a_coin
- * @property integer $b_coin
- * @property integer $gross_income
- * @property integer $gross_bonus
  * @property integer $last_login_time
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $vip_number
+ * @property integer $a_coin
+ * @property integer $b_coin
+ * @property integer $child_num
  */
 class Member extends \yii\db\ActiveRecord
 {
@@ -46,11 +43,10 @@ class Member extends \yii\db\ActiveRecord
      */
     public function rules()
     {
-
         return [
-            [['site', 'parent_id', 'group_num', 'child_num', 'a_coin', 'b_coin', 'gross_income', 'gross_bonus', 'last_login_time', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255],
-            ['state', 'in', 'range' => [0,1,2]]
+            [['parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num'], 'integer'],
+            [['vip_number', 'a_coin', 'b_coin', 'child_num'], 'required'],
+            [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255]
         ];
     }
 
@@ -60,30 +56,22 @@ class Member extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => '会员ID',
-            'site' => '座位号',
-            'bonus.coin_amount' => '总收入',
-            'bonus.coin_count' => '金额',
-            'bonus.id' => '序号',
-            'bonus.type' => '奖金类型',
-            'bonus.create_at' => '获得时间',
-            'parent_id' => '直推会员ID',
+            'id' => '会员自增ID',
+            'parent_id' => '直推会员id',
             'name' => '用户姓名',
             'password' => '会员密码',
             'mobile' => '电话',
             'deposit_bank' => '开户行',
             'bank_account' => '银行账号',
             'address' => '地址',
-            'group_num' => '区数量',
-            'child_num' => '直系挂靠会员数',
-            'a_coin' => '金果',
-            'b_coin' => '金种子',
-            'gross_income' => '总收入',
-            'gross_bonus' => '总提现',
             'last_login_time' => '最后登录时间',
             'status' => '状态',
-            'created_at' => '注册时间',
-            'updated_at' => '更新时间',
+            'created_at' => '创建时间 注册时间 入网时间',
+            'updated_at' => '更新时间 退网时间',
+            'vip_number' => '会员卡号',
+            'a_coin' => '金果数',
+            'b_coin' => '金种子数',
+            'child_num' => '直推数量',
         ];
     }
 
@@ -138,8 +126,30 @@ class Member extends \yii\db\ActiveRecord
 
         return $info->save();
     }
-    public function getBonus()
+    // 资金
+    public function getBonus($num, $id)
     {
-        return $this->hasOne(Bonus::className(), ['member_id' => 'id']);
+        if ($num == 1) {
+            $query = (new \yii\db\Query());
+            $old = $query->from(Bonus::tableName())->where(['member_id' => $id, 'coin_type' => 1, 'type' => [1,2,3,5]])->sum('num');
+            $cover = $query->from(Bonus::tableName())->where(['member_id' => $id, 'coin_type' => 1, 'type' => 4])->sum('num');
+            return $old-$cover;
+        }
+        if ($num == 2) {
+            $query = (new \yii\db\Query());
+            $old = $query->from(Bonus::tableName())->where(['member_id' => $id, 'coin_type' => 2])->sum('num');
+            return $old?$old:0;
+        }
+        if ($num == 3) {
+            $query = (new \yii\db\Query());
+            $old = $query->from(Bonus::tableName())->where(['member_id' => $id, 'coin_type' => 1, 'type' => [1,2,3,5]])->sum('num');
+            return $old;
+        }
+        if ($num == 4) {
+            $query = (new \yii\db\Query());
+            $cover = $query->from(Bonus::tableName())->where(['member_id' => $id, 'coin_type' => 1, 'type' => 4])->sum('num');
+            return $cover;
+        }
+
     }
 }
