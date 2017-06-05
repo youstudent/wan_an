@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\dynagrid\DynaGrid;
-use app\models\User;
+use api\models\User;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = '公告管理列表';
             
         ],
         ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
-        '{export}',
+        //'{export}',
     ];
     $panels = [
         'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>'." &nbsp; 公告管理列表". '</h3>',

@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = '商品管理列表';
             
         ],
         ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
-        '{export}',
+        //'{export}',
     ];
     $panels = [
         'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>  &nbsp;' . ' 商品管理列表' . '</h3>',

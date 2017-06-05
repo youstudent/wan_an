@@ -70,13 +70,23 @@ class recordSearch extends Record
         }else if ($this->status=='拒绝'){
             $status=2;
         }*/
+         $start='';
+         $end = '';
+        //格式化时间
+        if ($this->created_at){
+            $start_date = substr($this->created_at,0,10);
+            $start = strtotime($start_date);
+            $end_date =  substr($this->created_at,12);
+            $end = strtotime($end_date);
+        }
         $query->andFilterWhere([
             'id' => $this->id,
             'member_id' => $this->member_id,
-            'created_at' => $this->created_at,
+            // 'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'status'=>$this->status,
-        ]);
+            'coin'=>$this->coin
+        ])->andFilterWhere(['>=','created_at',$start])->andFilterWhere(['<=','created_at',$end]);
         
         return $dataProvider;
     }

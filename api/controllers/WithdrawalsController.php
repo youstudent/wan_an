@@ -30,7 +30,7 @@ class WithdrawalsController extends ApiController
             return $this->jsonReturn(1, 'success');
         }
         //如果返回false 返回错误信息
-        return $this->jsonReturn(0, $model->getErrors('message')[0]);
+        return $this->jsonReturn(0, $model->getFirstError('message'));
         
     }
     
@@ -43,7 +43,7 @@ class WithdrawalsController extends ApiController
         if ($data) {
             return $this->jsonReturn(1, 'success', $data);
         }
-        return $this->jsonReturn(0, $model->getErrors('message')[0]);
+        return $this->jsonReturn(0, $model->getFirstError('message'));
         
     }
     
@@ -56,7 +56,7 @@ class WithdrawalsController extends ApiController
         if ($data) {
             return $this->jsonReturn(1, 'success', $data);
         }
-        return $this->jsonReturn(0, $model->getErrors('message')[0]);
+        return $this->jsonReturn(0, $model->getFirstError('message'));
         
     }
     

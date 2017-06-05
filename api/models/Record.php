@@ -67,34 +67,25 @@ class Record extends \yii\db\ActiveRecord
             return false;
         }*/
         if ($data['coin'] <= 0) {
-            $message = '提现金额不能为负数或0';
-            $code = 0;
-            $this->addError('code', $code);
-            $this->addError('message', $message);
+            $this->addError('code', 0);
+            $this->addError('message','提现金额不能为负数或0');
             return false;
         };
         if ($data['coin'] % 100 != 0) {
-            $message = '提现金额必须是100的倍数';
-            $code = 0;
-            $this->addError('code', $code);
-            $this->addError('message', $message);
+            $this->addError('code', 0);
+            $this->addError('message', '提现金额必须是100的倍数');
             return false;
         };
-        
         $result = Member::findOne(['parent_id' => $id]);
         if ($result == null || $result==false) {
-            $message = '必须直推至少一人才能提现';
-            $code = 0;
-            $this->addError('code', $code);
-            $this->addError('message', $message);
+            $this->addError('code', 0);
+            $this->addError('message', '必须直推至少一人才能提现');
             return false;
         };
         $result = Member::findOne(['id' => $id]);
         if ($result->a_coin < $data['coin']) {
-            $message = '你的余额不足';
-            $code = 0;
-            $this->addError('code', $code);
-            $this->addError('message', $message);
+            $this->addError('code', 0);
+            $this->addError('message', '你的余额不足');
             return false;
         }
         

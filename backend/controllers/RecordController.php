@@ -3,6 +3,7 @@
 namespace backend\controllers;
 
 use backend\tests\FunctionalTester;
+use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use Yii;
 use backend\models\Record;
 use backend\models\searchs\RecordSearch;
@@ -65,7 +66,6 @@ class RecordController extends Controller
     {
         $searchModel = new RecordSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

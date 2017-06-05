@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = '退网管理列表';
             Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['outline/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
         ],
         ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
-        '{export}',
+        //'{export}',
     ];
     $panels = [
         'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>  &nbsp;' . ' 退网管理列表' . '</h3>',

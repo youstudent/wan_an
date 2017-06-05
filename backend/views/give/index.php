@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = '赠送记录';
             
         ],
         ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
-        '{export}',
+       // '{export}',
     ];
     $panels = [
         'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>  &nbsp;' . ' 赠送记录列表' . '</h3>',

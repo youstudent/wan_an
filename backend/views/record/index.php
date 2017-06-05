@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = '财务管理列表';
 
          ],
         ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
-        '{export}',
+        //'{export}',
     ];
     $panels = [
         'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>'." &nbsp; 财务管理列表". '</h3>',
@@ -73,11 +73,10 @@ $this->params['breadcrumbs'][] = '财务管理列表';
                 'attribute'     => 'created_at',
                 'convertFormat' => true,
                 'pluginOptions' => [
-                    //'locale' => ['format' => 'Y-m-d'],
-                   /* 'value' => function ($model) {
+                    'value' => function ($model) {
                         return date('Y-m-d H:i:s', $model->created_at);
-                    }*/
-                ],
+                    }
+                ]
             ]),
         ],
         [
@@ -152,7 +151,6 @@ $this->params['breadcrumbs'][] = '财务管理列表';
         
         
         ],
-        
         
         [
             //'class' => 'kartik\grid\CheckboxColumn',

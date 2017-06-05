@@ -94,7 +94,7 @@ class BrannerController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->img = UploadedFile::getInstance($model,'img');
-            $path = 'uploads/'.date("Ymd").'/';
+            $path = 'public/upload/branner_imgs/'.date("Ymd").'/';
             if ($model->img){
                 if (!file_exists($path)){
                     mkdir($path,'777',true);
@@ -125,7 +125,7 @@ class BrannerController extends Controller
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post())) {
             $model->img = UploadedFile::getInstance($model,'img');
-            $path = 'uploads/'.date("Ymd").'/';
+            $path = 'public/upload/branner_imgs/'.date("Ymd").'/';
             if ($model->img){
                 if (!file_exists($path)){
                     mkdir($path,'777',true);

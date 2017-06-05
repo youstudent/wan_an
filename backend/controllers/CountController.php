@@ -32,11 +32,13 @@ class CountController extends Controller
         $num1 = '';
         $num2 = '';
         $num3 = '';
-        $num4 = '';
+        $num4 = '';  //成功提现的总额
         $num5 = '';
         $num6 = '';
         $num7 = '';
         $num8 = '';
+        //总结余
+        $balance = $num6-$num4;
         foreach ($rows as $row) {
             //循环数据   根据类型区分
             switch ($row->type) {
@@ -56,7 +58,9 @@ class CountController extends Controller
                     $num5 += $row->num;
                     continue;
                 case 6:
-                    $num6 += $row->num;
+                    if ($row->coin_type==1){
+                        $num6 += $row->num;
+                    }
                     continue;
                 case 7:
                     $num7 += $row->num;
@@ -66,18 +70,12 @@ class CountController extends Controller
                     continue;
             }
         }
-        var_dump($num8, $num1);
+        $data=['num6'=>$num6,'num4'=>$num4];
+        var_dump($data);
         return $this->render('index', ['search' => $search]);
     }
     
     
-    //图片上传
-    public function actionTest(){
-        $model= new UploadForm();
-        
-        return $this->render('test',['model'=>$model]);
-        
-    }
     
     
 }

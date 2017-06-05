@@ -37,6 +37,7 @@ use api\models\User;
   <thead>
     <tr class="danger" >
       <th>分享收益</th>
+      <th>额外分享</th>
       <th>绩效收益</th>
       <th>报单业绩</th>
       <th>财务总支出</th>
@@ -46,7 +47,8 @@ use api\models\User;
   </thead>
   <tbody>
     <tr>
-      <td>分享收益（直推）：产生的所有分享奖金（包括额外分享）</td>
+      <td>分享收益（直推）</td>
+      <td>产生的所有分享奖金（包括额外分享）</td>
       <td>绩效业绩（见点）：产生的所有绩效奖金</td>
       <td>统计产生了多少个5金果的奖励</td>
       <td>成功提现总额</td>

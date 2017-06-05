@@ -22,6 +22,14 @@ return [
             // 是否在URL中显示入口脚本
             "showScriptName" => false,
         ],
+        'user' => [
+            'enableAutoLogin' => true,
+            'identityCookie' => ['name' => '_identity', 'httpOnly' => true, 'domain' =>'.wan_an'],
+        ],
+        'session' => [
+            'cookieParams' => ['domain' => '.wan_an', 'lifetime' => 0],
+            'timeout' => 3600,
+        ],
     ],
 
 ];

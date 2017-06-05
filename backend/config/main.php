@@ -39,8 +39,9 @@ return [
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
         'session' => [
-            // this is the name of the session cookie used for login on the backend
             'name' => 'advanced-backend',
+            'cookieParams' => ['domain' => '.wan_an', 'lifetime' => 0],
+            'timeout' => 3600,
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
