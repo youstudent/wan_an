@@ -21,6 +21,7 @@ CREATE TABLE `wa_district` (
 
 ALTER TABLE `wa_order` ADD `goods_id` int(11) NOT NULl COMMENT '商品id';
 
+<<<<<<< HEAD
 
 
 
@@ -80,3 +81,8 @@ CREATE TABLE `wa_fruiter` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='果树管理表';
 
 >>>>>>> .theirs
+=======
+# 会员表增加会员VIPID
+
+ALTER TABLE `wa_member` ADD `vip_number` int(11) NOT NULL COMMENT '会员卡号';
+>>>>>>> 98f2752f864d8aedf1bfcfc891a4db62adf146a3

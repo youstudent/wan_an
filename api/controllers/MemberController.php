@@ -8,7 +8,13 @@
 
 namespace api\controllers;
 
+<<<<<<< HEAD
 
+=======
+use api\models\RegisterForm;
+use common\models\District;
+use yii;
+>>>>>>> 98f2752f864d8aedf1bfcfc891a4db62adf146a3
 use api\models\Member;
 
 use Codeception\Module\REST;
@@ -114,6 +120,7 @@ class MemberController extends ApiController
         return $this->jsonReturn(0,'未查询到会员信息');
         
     }
+<<<<<<< HEAD
     
     
     //赠送申请
@@ -160,5 +167,36 @@ class MemberController extends ApiController
             return $this->jsonReturn(1, 'success', $fruiter);
         }
         return $this->jsonReturn(0, '你还没有认购果树');
+=======
+
+    /**
+     * 注册会员
+     * @return array
+     */
+    public function actionRegister()
+    {
+        $model = new RegisterForm();
+        $member_id = 1;
+
+        if($model->register(Yii::$app->request->post(), $member_id)){
+            return $this->jsonReturn(1, 'success', ['vip_number'=>$model->vip_number]);
+        }
+        return $this->jsonReturn(0, $model->errorMsg);
+>>>>>>> 98f2752f864d8aedf1bfcfc891a4db62adf146a3
     }
+
+    /**
+     * 返回会员信息
+     * @return array
+     */
+    public function actionValidate()
+    {
+        $model = new Member();
+        if($one = $model->getOneMember(Yii::$app->request->queryParams)){
+            return $this->jsonReturn(1, 'success', $one);
+        }
+
+        return $this->jsonReturn(0, $model->getFirstError('message'));
+    }
+
 }
