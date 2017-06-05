@@ -28,6 +28,7 @@ use api\models\Session;
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $vip_number
  */
 class Member extends \yii\db\ActiveRecord
 {
@@ -91,12 +92,12 @@ class Member extends \yii\db\ActiveRecord
      * @param string $member_id
      * @return array
      */
-    public function getOneMember($member_id = '')
+    public function getOneMember($params)
     {
         if (!$this->validate()) {
            return null;
         }
-        $data = Member::findOne($member_id)->toArray();
+        $data = Member::findOne(['vip_number'=>$params['vip_number']])->toArray();
         if(!isset($data) || empty($data)){
             return null;
         }

@@ -99,20 +99,34 @@ class MemberController extends ApiController
         //如果返回false 返回错误信息
         return $this->jsonReturn(0, $model->getErrors('message'));
     }
+
+    /**
+     * 注册会员
+     * @return array
+     */
     public function actionRegister()
     {
         $model = new RegisterForm();
-        $post = [
-            'name' => 'test',
-            'password' => '123456',
-            'mobile' => '13688464645'
-        ];
-        $referrer_id = 1;
-        $action_member_id = 1;
-        if($model->register($post, $referrer_id, $action_member_id)){
-            echo 'success';
-        }else{
-            echo $model->errorMsg;
+        $member_id = 1;
+
+        if($model->register(Yii::$app->request->post(), $member_id)){
+            return $this->jsonReturn(1, 'success', ['vip_number'=>$model->vip_number]);
         }
+        return $this->jsonReturn(0, $model->errorMsg);
     }
+
+    /**
+     * 返回会员信息
+     * @return array
+     */
+    public function actionValidate()
+    {
+        $model = new Member();
+        if($one = $model->getOneMember(Yii::$app->request->queryParams)){
+            return $this->jsonReturn(1, 'success', $one);
+        }
+
+        return $this->jsonReturn(0, $model->getFirstError('message'));
+    }
+
 }
