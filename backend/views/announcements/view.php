@@ -16,7 +16,7 @@ $this->params['breadcrumbs'][] = '公告管理详情';
 
     </div>
     <div class="page-header">
-        <h1 style="text-align: center; color: #00a0e9"><?= Html::encode('商品添加')?></h1>
+        <h1 style="text-align: center; color: #00a0e9"><?= Html::encode('公告详情')?></h1>
     </div>
     <div class="page-header">
 

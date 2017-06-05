@@ -13,8 +13,8 @@ use yii\helpers\Url;
 /* @var $FruiterImgModel backend\models\FruiterImg */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = '果树补充 ';
-$this->params['breadcrumbs'][] = ['label' => '果树管理', 'url' => ['index']];
+$this->title = '';
+$this->params['breadcrumbs'][] = ['label' => '果树管理列表', 'url' => ['index']];
 $this->params['breadcrumbs'][] = '果树补充';
 
 $fileuploadedJs = <<<JS
@@ -31,9 +31,11 @@ JS;
 <div class="fruiter-update">
 
     <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
-    </div>
 
+    </div>
+    <div class="page-header">
+        <h1 style="border-left-width: 199px;margin-left: 321px; color: #00a0e9"><?= Html::encode('果树补充')?></h1>
+    </div>
     <div class="fruiter-form">
 
         <?php     $form = ActiveForm::begin([

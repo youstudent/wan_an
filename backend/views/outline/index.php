@@ -9,13 +9,13 @@ use app\models\Member;
 /* @var $searchModel backend\models\searchs\OutlineSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '退网管理';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '';
+$this->params['breadcrumbs'][] = '退网管理列表';
 ?>
 <div class="outline-index">
 
     <div class="page-header">
-        <h1><?= Html::encode($this->title) ?></h1>
+    
     </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     
@@ -23,14 +23,14 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php 
      $toolbars = [
         ['content' =>
-            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['outline/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => 'Reset Grid']). ' '
+            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['outline/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
         ],
         ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
         '{export}',
     ];
     $panels = [
-        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . $this->title . '</h3>',
-        'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
+        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>  &nbsp;' . ' 退网管理列表' . '</h3>',
+       // 'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
     $columns = [
         ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
@@ -64,9 +64,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ]),
         ],
 
-        [
+        /*[
             'class' => 'kartik\grid\CheckboxColumn',
-        ],
+        ],*/
     ];
     
     $dynagrid = DynaGrid::begin([

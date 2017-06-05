@@ -8,7 +8,7 @@ use yii\web\YiiAsset;
 /* @var $this yii\web\View */
 /* @var $routes [] */
 
-$this->title = Yii::t('rbac-admin', 'Routes');
+$this->title = '';
 $this->params['breadcrumbs'][] = $this->title;
 
 AnimateAsset::register($this);
@@ -27,7 +27,7 @@ $animateIcon = ' <i class="glyphicon glyphicon-refresh glyphicon-refresh-animate
             <input id="inp-route" type="text" class="form-control"
                    placeholder="<?= Yii::t('rbac-admin', 'New route(s)') ?>">
             <span class="input-group-btn">
-                <?= Html::a(Yii::t('rbac-admin', 'Add') . $animateIcon, ['create'], [
+                <?= Html::a(Yii::t('rbac-admin', '添加') . $animateIcon, ['create'], [
                     'class' => 'btn btn-success',
                     'id' => 'btn-new'
                 ]) ?>

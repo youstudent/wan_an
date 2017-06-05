@@ -178,7 +178,7 @@ class Member extends \yii\db\ActiveRecord
         $detail = Member::findOne($member_id);
         if ($detail) {
             $newmember = Member::findOne($member_id);
-            $newmember->name = $data['name']?$data['name']:$newmember->name;
+            //$newmember->name = $data['name']?$data['name']:$newmember->name;
             $newmember->bank_account = $data['bank_account']?$data['bank_account']:$newmember->bank_account;
             $newmember->deposit_bank = $data['deposit_bank']?$data['deposit_bank']:$newmember->deposit_bank;
             $newmember->address = $data['address']?$data['address']:$newmember->address;

@@ -8,12 +8,12 @@ use yii\widgets\Pjax;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 /* @var $searchModel mdm\admin\models\searchs\Menu */
 
-$this->title = Yii::t('rbac-admin', 'Menus');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '';
+$this->params['breadcrumbs'][] = '菜单列表';
 ?>
 <div class="menu-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>菜单列表</h1>
     <?php // echo $this->render('_search', ['model' => $searchModel]);  ?>
 
     <p>

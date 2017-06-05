@@ -10,8 +10,8 @@ use yii\widgets\Pjax;
 /* @var $usernameField string */
 /* @var $extraColumns string[] */
 
-$this->title = Yii::t('rbac-admin', 'Assignments');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '';
+$this->params['breadcrumbs'][] = '分配';
 
 $columns = [
     ['class' => 'yii\grid\SerialColumn'],
@@ -27,7 +27,12 @@ $columns[] = [
 ?>
 <div class="assignment-index">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="page-header">
+
+    </div>
+    <div class="page-header">
+        <h1 style="text-align: center; color: #00a0e9"><?= Html::encode('权限列表')?></h1>
+    </div>
 
     <?php Pjax::begin(); ?>
     <?=

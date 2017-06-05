@@ -10,7 +10,7 @@ use backend\models\Member;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = '';
-$this->params['breadcrumbs'][] = '会员管理';
+$this->params['breadcrumbs'][] = '会员管理列表';
 ?>
 <div class="member-index">
 
@@ -23,8 +23,8 @@ $this->params['breadcrumbs'][] = '会员管理';
 <?php 
      $toolbars = [
         ['content' =>
-            Html::a('<i class="fa fa-file-excel-o"></i>', ['member/parsing'], ['type' => 'button', 'title' => '刷新 ' . $this->title, 'class' => 'btn btn-danger']) . ' ' .
-            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['member/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => 'Reset Grid']). ' '
+           // Html::a('<i class="fa fa-file-excel-o"></i>', ['member/parsing'], ['type' => 'button', 'title' => '刷新 ' . $this->title, 'class' => 'btn btn-danger']) . ' ' .
+            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['member/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
 
 
         ],
@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = '会员管理';
         '{export}',
     ];
     $panels = [
-        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . '会员管理列表' . '</h3>',
+        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>  &nbsp;' . ' 会员管理列表' . '</h3>',
         //'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
 

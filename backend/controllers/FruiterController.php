@@ -140,7 +140,7 @@ class FruiterController extends Controller
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
-        Yii::$app->session->setFlash('success', 'Well done! successfully to deleted data!  ');
+        Yii::$app->session->setFlash('danger', '删除成功!');
 
         return $this->redirect(['index']);
     }

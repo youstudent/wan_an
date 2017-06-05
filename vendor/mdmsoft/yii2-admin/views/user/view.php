@@ -7,15 +7,20 @@ use mdm\admin\components\Helper;
 /* @var $this yii\web\View */
 /* @var $model mdm\admin\models\User */
 
-$this->title = $model->username;
+$this->title = '';
 $this->params['breadcrumbs'][] = ['label' => Yii::t('rbac-admin', 'Users'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = '详情';
 
 $controllerId = $this->context->uniqueId . '/';
 ?>
 <div class="user-view">
+    
+    <div class="page-header">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    </div>
+    <div class="page-header">
+        <h1 style="text-align: center; color: #00a0e9"><?= Html::encode('用户详情')?></h1>
+    </div>
 
     <p>
         <?php

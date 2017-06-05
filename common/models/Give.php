@@ -128,6 +128,9 @@ class Give extends \yii\db\ActiveRecord
             $this->addError('message','没有赠送数据');
             return false;
         }
+        foreach ($data as &$v){
+            $v['created_at']=date('Y/m/d H:i:s',$v['created_at']);
+        }
         return $data;
     }
     
@@ -139,6 +142,9 @@ class Give extends \yii\db\ActiveRecord
         if ($data==false || $data==null){
             $this->addError('message','没有获赠送数据');
             return false;
+        }
+        foreach ($data as &$v){
+            $v['created_at']=date('Y/m/d H:i:s',$v['created_at']);
         }
         return $data;
     }

@@ -1,7 +1,13 @@
-
+<?php
+use yii\helpers\Html;
+use kartik\grid\GridView;
+use kartik\dynagrid\DynaGrid;
+use api\models\User;
+?>
 <h2 style="color: #3C8DBC;text-align: center;margin-bottom: 60px;">统计中心</h2>
 <div class="cf well form-search" style="height: 68px;">
     <?php
+    $this->title = '';
     $form = \yii\bootstrap\ActiveForm::begin(
         ['method'=>'get',
             'options'=>['class'=>'form-inline'],

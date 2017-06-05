@@ -9,15 +9,15 @@ use mdm\admin\components\Helper;
 /* @var $searchModel mdm\admin\models\searchs\User */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = Yii::t('rbac-admin', '管理员列表');
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '';
+$this->params['breadcrumbs'][] = '管理员列表';
 ?>
 <div class="user-index">
+    <div class="page-header">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
+    </div>
     <p>
-        <?= Html::a(Yii::t('rbac-admin', 'Create User'), ['signup'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a(Yii::t('rbac-admin', 'Create User'), ['signup'], ['class' => 'btn btn-success ']) ?>
     </p>
 
     <?=

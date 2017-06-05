@@ -9,34 +9,39 @@ use backend\models\User;
 /* @var $searchModel backend\models\searchs */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '财务管理';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '';
+$this->params['breadcrumbs'][] = '财务管理列表';
 ?>
+
+<div class="page-header">
+
+</div>
 <ul class="nav nav-tabs">
-    <li class="active"><a href="<?= \yii\helpers\Url::to(['record/index?status=0']) ?>">待审核</a></li>
-    <li class="active"><a href="<?= \yii\helpers\Url::to(['record/index?status=1']) ?>">已审核</a></li>
+    <li class="dropdown"><a href="<?= \yii\helpers\Url::to(['record/index?status=0']) ?>">待审核</a></li>
+    <li class="dropdown"><a href="<?= \yii\helpers\Url::to(['record/index?status=1']) ?>">已审核</a></li>
 </ul>
 <div class="record-index">
-    <!--<div class="page-header">
-        <h1><? /*= Html::encode($this->title) */ ?></h1>
-    </div>-->
+    <div class="page-header">
+    
+    </div>
+    
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
     
     
     <?php
     $toolbars = [
-        /* ['content' =>
-             Html::a('<i class="glyphicon glyphicon-plus"></i>', ['record/create'], ['type' => 'button', 'title' => '添加数据 ' ,'class' => 'btn btn-success']) . ' ' .
-             Html::a('<i class="fa fa-file-excel-o"></i>', ['record/parsing'], ['type' => 'button', 'title' => 'Parsing Excel ' . $this->title, 'class' => 'btn btn-danger']) . ' ' .
-             Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['record/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => 'Reset Grid']). ' '
+        ['content' =>
+            // Html::a('<i class="glyphicon glyphicon-plus"></i>', ['record/create'], ['type' => 'button', 'title' => '添加数据 ' ,'class' => 'btn btn-success']) . ' ' .
+            // Html::a('<i class="fa fa-file-excel-o"></i>', ['record/parsing'], ['type' => 'button', 'title' => 'Parsing Excel ' . $this->title, 'class' => 'btn btn-danger']) . ' ' .
+             Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['record/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
 
 
-         ],*/
+         ],
         ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
         '{export}',
     ];
     $panels = [
-        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . $this->title . '</h3>',
+        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>'." &nbsp; 财务管理列表". '</h3>',
     
     ];
     $columns = [
@@ -103,7 +108,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
                 
             },
-            
             'filter' => [
                 1 => '已通过',
                 2 => '已拒绝'

@@ -159,6 +159,6 @@ class MemberController extends ApiController
         if($fruiter = $model->getFruiter()){
             return $this->jsonReturn(1, 'success', $fruiter);
         }
-        return $this->jsonReturn(0, 'error');
+        return $this->jsonReturn(0, '你还没有认购果树');
     }
 }

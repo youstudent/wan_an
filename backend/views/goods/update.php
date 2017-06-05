@@ -15,7 +15,7 @@ use yii\helpers\Url;
 
 $this->title = '';
 $this->params['breadcrumbs'][] = ['label' => '商品管理列表', 'url' => ['index']];
-$this->params['breadcrumbs'][] = '商品更新';
+$this->params['breadcrumbs'][] = '商品修改';
 
 $fileuploadedJs = <<<JS
     function (event, data, id, index) {
@@ -34,7 +34,7 @@ JS;
 
     </div>
     <div class="page-header">
-        <h1 style="border-left-width: 199px;margin-left: 321px; color: #00a0e9"><?= Html::encode('商品更新')?></h1>
+        <h1 style="border-left-width: 199px;margin-left: 321px; color: #00a0e9"><?= Html::encode('商品修改')?></h1>
     </div>
     <div class="goods-form">
 

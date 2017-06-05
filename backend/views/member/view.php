@@ -11,13 +11,18 @@ use kartik\daterange\DateRangePicker;
 /* @var $searchModel backend\models\searchs\BonussSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '奖金详情';
-$this->params['breadcrumbs'][] = ['label' => '会员管理', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '';
+$this->params['breadcrumbs'][] = ['label' => '会员管理列表', 'url' => ['index']];
+$this->params['breadcrumbs'][] = '奖金详情';
 ?>
 <div class="member-view">
 
-    <h2>奖金总览</h2>
+    <div class="page-header">
+
+    </div>
+    <div class="page-header">
+        <h1 style="text-align: center; color: #00a0e9"><?= Html::encode('奖金总览')?></h1>
+    </div>
 
     <?= DetailView::widget([
         'model' => $model,
@@ -27,12 +32,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'a_coin',
         ]]); ?>
     <br/>
-    <br/>
-    <h2>奖金详情</h2>
     <?php
     $toolbars = [
         ['content' =>
-            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['member/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => 'Reset Grid']). ' '
+            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['member/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
 
 
         ],
@@ -40,8 +43,8 @@ $this->params['breadcrumbs'][] = $this->title;
         '{export}',
     ];
     $panels = [
-        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . $this->title . '</h3>',
-        'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
+        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>  &nbsp;' . ' 奖金详情列表' . '</h3>',
+       // 'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
     $columns = [
         'id',

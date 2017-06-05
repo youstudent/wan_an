@@ -8,8 +8,8 @@ use app\models\User;
 /* @var $searchModel backend\models\searchs\FruiterSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Fruiters';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '';
+$this->params['breadcrumbs'][] = '果树管理列表';
 ?>
 <div class="fruiter-index">
 
@@ -22,7 +22,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <?php
      $toolbars = [
         ['content' =>
-            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['fruiter/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => 'Reset Grid']). ' '
+            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['fruiter/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
 
             
         ],
@@ -30,8 +30,8 @@ $this->params['breadcrumbs'][] = $this->title;
         '{export}',
     ];
     $panels = [
-        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . $this->title . '</h3>',
-        'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
+        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>'." &nbsp; 果树管理列表". '</h3>',
+        //'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
     $columns = [
 //        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
@@ -49,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 $html = '';
                 if(isset($imgs) && count($imgs)> 0){
                     foreach($imgs as $img){
-                        $html .= Html::img($img, ['width'=> '120px', 'height'=> '120px']);
+                        $html .= Html::img($img, ['width'=> '40px', 'height'=> '40px']);
                     }
                 }
                 return $html;

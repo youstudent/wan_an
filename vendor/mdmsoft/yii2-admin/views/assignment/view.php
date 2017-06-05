@@ -10,13 +10,13 @@ use yii\web\YiiAsset;
 /* @var $model mdm\admin\models\Assignment */
 /* @var $fullnameField string */
 
-$userName = $model->{$usernameField};
+$userName = '';
 if (!empty($fullnameField)) {
     $userName .= ' (' . ArrayHelper::getValue($model, $fullnameField) . ')';
 }
 $userName = Html::encode($userName);
 
-$this->title = Yii::t('rbac-admin', 'Assignment') . ' : ' . $userName;
+$this->title ='';
 
 $this->params['breadcrumbs'][] = ['label' => Yii::t('rbac-admin', 'Assignments'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $userName;
@@ -31,8 +31,12 @@ $this->registerJs($this->render('_script.js'));
 $animateIcon = ' <i class="glyphicon glyphicon-refresh glyphicon-refresh-animate"></i>';
 ?>
 <div class="assignment-index">
-    <h1><?= $this->title ?></h1>
+    <div class="page-header">
 
+    </div>
+    <div class="page-header">
+
+    </div>
     <div class="row">
         <div class="col-sm-5">
             <input class="form-control search" data-target="avaliable"

@@ -68,7 +68,7 @@ JS;
                         // 最少上传的文件个数限制
                         'minFileCount' => 1,
                         // 最多上传的文件个数限制
-                        'maxFileCount' => 1,
+                        'maxFileCount' => 8,
                         // 是否显示移除按钮，指input上面的移除按钮，非具体图片上的移除按钮
                         'showRemove' => true,
                         // 是否显示上传按钮，指input上面的上传按钮，非具体图片上的上传按钮

@@ -8,8 +8,8 @@ use api\models\User;
 /* @var $searchModel backend\models\searchs\GiveSearchs */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = '赠送记录';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = '';
+$this->params['breadcrumbs'][] = '赠送记录';
 ?>
 <div class="give-index">
 
@@ -32,7 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
         '{export}',
     ];
     $panels = [
-        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . $this->title . '</h3>',
+        'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>  &nbsp;' . ' 赠送记录列表' . '</h3>',
         //'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
     $columns = [

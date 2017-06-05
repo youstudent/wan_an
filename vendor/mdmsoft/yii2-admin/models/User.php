@@ -29,7 +29,6 @@ class User extends ActiveRecord implements IdentityInterface
 {
     const STATUS_INACTIVE = 0;
     const STATUS_ACTIVE = 10;
-
     /**
      * @inheritdoc
      */
@@ -58,7 +57,16 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
         ];
     }
-
+    public function attributeLabels()
+    {
+        return [
+          'username'=>'用户名',
+          'email'=>'邮箱',
+          'created_at'=>'时间',
+          'status'=>'状态',
+        ];
+    }
+    
     /**
      * @inheritdoc
      */

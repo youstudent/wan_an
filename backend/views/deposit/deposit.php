@@ -11,9 +11,9 @@ use kartik\widgets\SwitchInput;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Deposit */
 
-$this->title = '充值';
+$this->title = '';
 $this->params['breadcrumbs'][] = ['label' => '充值管理', 'url' => ['deposit']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = '充值';
 ?>
 <div class="deposit-create">
 
@@ -23,15 +23,22 @@ $this->params['breadcrumbs'][] = $this->title;
     ]);?>
 
 
-    <div class="row">
-        <div class="col-md-6">
+    <div class="row ">
+        <div class="page-header">
 
-            <?= $form->field($model, 'member_id')->textInput(['style'=>'width:150px']) ?>
+        </div>  <div class="page-header">
+
+        </div>  <div class="page-header">
+            <h1 style="border-left-width: 199px;margin-left: 240px; color: #00a0e9"><?= Html::encode('充值')?></h1>
+        </div>
+        <div class="col-md-6 ">
+
+            <?= $form->field($model, 'member_id')->textInput(['style'=>'width:300px']) ?>
 
             <?= $form->field($model, 'type')->dropDownList(['1'=>'金果', '2'=>'金种子'],
-                ['prompt'=>'请选择','style'=>'width:120px'])  ?>
+                ['prompt'=>'请选择','style'=>'width:300px'])  ?>
 
-            <?= $form->field($model, 'num')->textInput(['style'=>'width:150px']) ?>
+            <?= $form->field($model, 'num')->textInput(['style'=>'width:300px']) ?>
 
             <?= $form->field($model, 'operation')->hiddenInput(['value'=>1]) ?>
 
@@ -41,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-            <?= Html::submitButton('充值', ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton('充值', ['class' => 'btn btn-danger']) ?>
         </div>
     </div>
 
