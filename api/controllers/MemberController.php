@@ -59,7 +59,7 @@ class MemberController extends ApiController
         if ($loginModel->login(Yii::$app->request->post('id'), Yii::$app->request->post('password'))) {
             return $this->jsonReturn(1, 'success');
         }
-        return $this->jsonReturn(0, $loginModel->getErrors('message'));
+        return $this->jsonReturn(0, $loginModel->getFirstError('message'));
     }
     /**
      * 登出
@@ -85,7 +85,7 @@ class MemberController extends ApiController
             return $this->jsonReturn(1, 'success');
         }
         //如果返回false 返回错误信息
-        return $this->jsonReturn(0, $model->getErrors('message'));
+        return $this->jsonReturn(0, $model->getFirstError('message'));
     }
 
     /**
@@ -100,7 +100,7 @@ class MemberController extends ApiController
             return $this->jsonReturn(1, 'success');
         }
         //如果返回false 返回错误信息
-        return $this->jsonReturn(0, $model->getErrors('message'));
+        return $this->jsonReturn(0, $model->getFirstError('message'));
     }
 
     //会员的金果和金种子
@@ -126,7 +126,7 @@ class MemberController extends ApiController
             return $this->jsonReturn(1, 'success');
         }
         //如果返回false 返回错误信息
-        return $this->jsonReturn(0, $model->getErrors('message')[0]);
+        return $this->jsonReturn(0, $model->getFirstError('message'));
     }
     
     //赠送记录
@@ -137,7 +137,7 @@ class MemberController extends ApiController
         if ($data) {
             return $this->jsonReturn(1, 'success', $data);
         }
-        return $this->jsonReturn(0, $model->getErrors('message')[0]);
+        return $this->jsonReturn(0, $model->getFirstError('message'));
         
     }
 
@@ -149,7 +149,7 @@ class MemberController extends ApiController
         if ($data) {
             return $this->jsonReturn(1, 'success', $data);
         }
-        return $this->jsonReturn(0, $mode->getErrors('message')[0]);
+        return $this->jsonReturn(0, $mode->getFirstError('message'));
     }
 
     //我的果树

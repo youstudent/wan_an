@@ -4,7 +4,7 @@ namespace backend\controllers;
 
 use Yii;
 use backend\models\Bonus;
-use backend\models\searchs\BonussSearch;
+use backend\models\searchs\BonusSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -61,8 +61,8 @@ class BonusController extends Controller
      */
     public function actionIndex($id)
     {
-        $searchModel = new BonussSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new BonusSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$id);
 
         return $this->render('index', [
             'model' => $this->findModel($id),

@@ -154,7 +154,15 @@ class Member extends \yii\db\ActiveRecord
      */
     public function logout()
     {
-        Yii::$app->session->clear();
+//        Yii::$app->session->clear();
+        // 获取用户id
+        $session = Yii::$app->session->get('member');
+        $member_id = $session['member_id'];
+        // 测试
+        $member_id = 2;
+        $model = Member::findOne($member_id);
+        $model->last_login_time = time();
+        $model->save();
         Yii::$app->session->destroy();
         Yii::$app->session->removeAll();
         return true;
@@ -177,21 +185,8 @@ class Member extends \yii\db\ActiveRecord
         $session = Yii::$app->session->get('member');
         $detail = Member::findOne($member_id);
         if ($detail) {
-<<<<<<< .mine
-<<<<<<< .mine
             $newmember = Member::findOne($member_id);
-            //$newmember->name = $data['name']?$data['name']:$newmember->name;
-=======
-            $newmember = Member::findOne($member_id);
-=======
-            $newmember = Member::findOne($member_id);
-
-
-
-
->>>>>>> .theirs
             $newmember->name = $data['name']?$data['name']:$newmember->name;
->>>>>>> .theirs
             $newmember->bank_account = $data['bank_account']?$data['bank_account']:$newmember->bank_account;
             $newmember->deposit_bank = $data['deposit_bank']?$data['deposit_bank']:$newmember->deposit_bank;
             $newmember->address = $data['address']?$data['address']:$newmember->address;
