@@ -46,7 +46,17 @@ use api\models\User;
     </tr>
   </thead>
   <tbody>
-    <tr>
+  <tr>
+      <td><?=$data['num2']?></td>
+      <td><?=$data['num3']?></td>
+      <td><?=$data['num1']?></td>
+      <td><?=$data['num5']?></td>
+      <td><?=$data['num4']?></td>
+      <td><?=$data['balance']?></td>
+      <td><?=$data['num10']?></td>
+  </tr>
+  <!--
+  <tr>
       <td>分享收益（直推）</td>
       <td>产生的所有分享奖金（包括额外分享）</td>
       <td>绩效业绩（见点）：产生的所有绩效奖金</td>
@@ -55,5 +65,6 @@ use api\models\User;
       <td>平台充值出去的总金种子数-财务总支出</td>
       <td>会员人数*900</td>
     </tr>
+  -->
   </tbody>
 </table>

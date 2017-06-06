@@ -57,12 +57,14 @@ class Give extends \yii\db\ActiveRecord
     
     //金果和金种子的赠送
     public function give($data){
-        $id = 2;
-        $member = Member::findOne(['id' => $id]);
-        $result = Member::findOne(['parent_id' => $id]);
+        $session = Yii::$app->session->get('member');
+        $member_id = $session['member_id'];
+        //$id = 2;
+        $member = Member::findOne(['id' => $member_id]);
+        $result = Member::findOne(['parent_id' => $member_id]);
         $give_member  = Member::findOne(['id'=>$data['give_member_id']]);
         
-        if ($id==$data['give_member_id']){
+        if ($member_id==$data['give_member_id']){
             $this->addError('message','不能转金果和金种子给自己');
             return false;
         }
@@ -94,20 +96,20 @@ class Give extends \yii\db\ActiveRecord
         
         if ($member->save(false)){
             if ($give_member->save(false)){
-                $this->member_id=$id;
+                $this->member_id=$member_id;
                 $this->give_member_id=$data['give_member_id'];
                 $this->created_at=time();
                 $this->give_coin=$data['give_coin'];
                 if ($this->save(false)){
                     $ext_data=[];
-                    $ext_data['member_id']=$id;
+                    $ext_data['member_id']=$member_id;
                     $ext_data['give_member_id']=$data['give_member_id'];
                     $ext_data['give_coin']=$data['give_coin'];
                     $ext_data['coin_type']=$data['coinType'];
                     $ext_data['type']=8;
                     $new_ext_data = serialize($ext_data);
                     $Helper= new Helper();
-                    if ($Helper->pool($id,$data['coinType'],8,$data['give_coin'],null,$new_ext_data)===false){
+                    if ($Helper->pool($member_id,$data['coinType'],8,$data['give_coin'],null,$new_ext_data)===false){
                         return false;
                     }
                     return true;
@@ -122,7 +124,9 @@ class Give extends \yii\db\ActiveRecord
     
     //赠送记录
     public function gives(){
-        $member_id=2;
+        //$member_id=2;
+        $session = Yii::$app->session->get('member');
+        $member_id = $session['member_id'];
         $data = Give::find()->where(['member_id'=>$member_id])->all();
         if ($data==false || $data==null){
             $this->addError('message','没有赠送数据');
@@ -137,8 +141,10 @@ class Give extends \yii\db\ActiveRecord
     
     //获赠记录
     public function gain(){
-        $give_member_id = 3;
-        $data = Give::find()->where(['give_member_id'=>$give_member_id])->all();
+        $session = Yii::$app->session->get('member');
+        $member_id = $session['member_id'];
+        //$give_member_id = 3;
+        $data = Give::find()->where(['give_member_id'=>$member_id])->all();
         if ($data==false || $data==null){
             $this->addError('message','没有获赠送数据');
             return false;

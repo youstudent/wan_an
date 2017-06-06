@@ -58,25 +58,17 @@ $this->params['breadcrumbs'][] = '财务管理列表';
         'member.mobile',
         'member.deposit_bank',
         'member.bank_account',
-       /*[
-            'attribute' => 'created_at',
-            'value' => function ($model) {
-            return date('Y-m-d H:i:s', $model->created_at);
-          }
-        ],*/
         [
             'attribute' => 'created_at',
-            'format' => 'time',
             'label' => '申请时间',
+            'value' => function ($model) {
+                return date('Y-m-d H:i:s', $model->created_at);
+            },
             'filter'    => DateRangePicker::widget([
                 'model'         => $searchModel,
                 'attribute'     => 'created_at',
                 'convertFormat' => true,
-                'pluginOptions' => [
-                    'value' => function ($model) {
-                        return date('Y-m-d H:i:s', $model->created_at);
-                    }
-                ]
+        
             ]),
         ],
         [

@@ -44,9 +44,9 @@ $this->params['breadcrumbs'][] = '商品详情';
                         $imgs  = $model->getGoodsImgs($model->id);
                         $html = '';
                         if(isset($imgs) && count($imgs)> 0){
-                            foreach($imgs as $img){
-                                $html .= Html::img($img, ['width'=> '240px', 'height'=> '240px']);
-                            }
+                            //foreach($imgs as $img){
+                                $html .= Html::img($imgs, ['width'=> '240px', 'height'=> '240px']);
+                           // }
                         }
                         return $html;
                     }

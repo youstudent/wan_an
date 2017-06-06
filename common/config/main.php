@@ -22,6 +22,7 @@ return [
             // 是否在URL中显示入口脚本
             "showScriptName" => false,
         ],
+        //session 共享
         'user' => [
             'enableAutoLogin' => true,
             'identityCookie' => ['name' => '_identity', 'httpOnly' => true, 'domain' =>'.wan_an'],

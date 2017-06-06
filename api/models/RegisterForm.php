@@ -231,7 +231,7 @@ class RegisterForm extends Member
     /**
      * 返回会员的所有区域
      * @param $member_id
-     * @return int|string
+     * @return int|string|array
      */
     public function getMemberDistrict($member_id)
     {
@@ -286,7 +286,7 @@ class RegisterForm extends Member
      * @param $district
      * @param $seat
      * @param null $pos
-     * @return District|null
+     * @return District|null|bool
      */
     public function addNode($member_id, $district, $seat, $pos = null)
     {

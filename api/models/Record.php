@@ -57,15 +57,17 @@ class Record extends \yii\db\ActiveRecord
     //处理申请提现
     public function with($data)
     {
-        $id = $data['id'];//模拟数据
+       // $id = $data['id'];//模拟数据
+        $session = Yii::$app->session->get('member');
+        $id = $session['member_id'];
         $re = Record::findOne(['member_id' => $id, 'date' => date('Y-m-d')]);
-        /*if ($re !== null) {
+        if ($re !== null) {
             $message = '每天只能提现一次';
             $code = 0;
             $this->addError('code', $code);
             $this->addError('message', $message);
             return false;
-        }*/
+        }
         if ($data['coin'] <= 0) {
             $this->addError('code', 0);
             $this->addError('message','提现金额不能为负数或0');
@@ -103,22 +105,13 @@ class Record extends \yii\db\ActiveRecord
                 // 申请成功减去会员对应的金果
                 $result->a_coin = $result->a_coin - $data['coin'];
                 if ($result->save(false)){
-                    //保存数据到 流水表里面
-                   /* $Helper= new Helper();
-                    $num = $data['coin'] - ($data['coin'] * 0.1);
-                    if ($Helper->pool($id,1,5,$num,$charge)===false){
-                        $this->addError('code', 0);
-                        $this->addError('message', '保存流水表失败');*/
                         return true;
-                    //}
-                   
                 }
                 
             }
         }
         
         return true;
-        
     }
     
     //提现列表
@@ -141,8 +134,9 @@ class Record extends \yii\db\ActiveRecord
     
     //当前会员金果
     public function coin(){
-        $id=2;
-        $data = \api\models\Member::find()->select('a_coin')->where(['id'=>$id])->all();
+        $session = Yii::$app->session->get('member');
+        $member_id = $session['member_id'];
+        $data = \api\models\Member::find()->select('a_coin')->where(['id'=>$member_id])->all();
         if ($data == false || $data == null){
             $this->addError('code', 0);
             $this->addError('message', '用户信息不存在');

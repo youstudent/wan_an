@@ -28,7 +28,7 @@ class CountController extends Controller
         $query = Bonus::find();
         $search->search($query);
         $rows = $query->all();
-        //获得类型 1:绩效 2:分享 3:额外分享 4:提现 5:注册奖金 6:充值 7:扣除 8:赠送 9:产生5元奖励 11:注册会员人数
+        //获得类型 1:绩效 2:分享 3:额外分享 4:提现 5:注册奖金 6:充值 7:扣除 8:赠送 9:提现返回 10:注册扣除',
         $num1 = '';
         $num2 = '';
         $num3 = '';
@@ -37,8 +37,8 @@ class CountController extends Controller
         $num6 = '';
         $num7 = '';
         $num8 = '';
+        $num10= '';
         //总结余
-        $balance = $num6-$num4;
         foreach ($rows as $row) {
             //循环数据   根据类型区分
             switch ($row->type) {
@@ -55,10 +55,10 @@ class CountController extends Controller
                     $num4 += $row->num;
                     continue;
                 case 5:
-                    $num5 += $row->num;
+                    $num5 += $row->num*5;
                     continue;
                 case 6:
-                    if ($row->coin_type==1){
+                    if ($row->coin_type==2){
                         $num6 += $row->num;
                     }
                     continue;
@@ -68,11 +68,13 @@ class CountController extends Controller
                 case 8:
                     $num8 += $row->num;
                     continue;
+                case 10:
+                    $num10+=1*900;
             }
         }
-        $data=['num6'=>$num6,'num4'=>$num4];
-        var_dump($data);
-        return $this->render('index', ['search' => $search]);
+        $balance = $num6-$num4;
+        $data=['balance'=>$balance,'num4'=>$num4,'num5'=>$num5,'num10'=>$num10,'num2'=>$num2,'num1'=>$num1,'num3'=>$num3];
+        return $this->render('index', ['search' => $search,'data'=>$data]);
     }
     
     

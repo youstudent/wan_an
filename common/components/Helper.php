@@ -3,7 +3,10 @@
 namespace common\components;
 
 
-class Helper{
+use backend\models\Member;
+use yii\db\ActiveRecord;
 
-    //public static
+class Helper extends ActiveRecord
+{
+
 }

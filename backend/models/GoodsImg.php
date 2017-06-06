@@ -76,16 +76,17 @@ class GoodsImg extends \yii\db\ActiveRecord
     {
         $ids = trim($ids, ',');
         if(strpos($ids, ',') === false){
-            $ids[] = $ids;
+            $ids  =(int)$ids;
+            //var_dump($ids);exit;
+          // $ids[] = $ids;
         }else{
             $ids = explode(',', $ids);
         }
-
-        foreach($ids as $id){
-            $model = GoodsImg::findOne(['id'=>$id]);
+       
+            $model = GoodsImg::findOne(['id'=>$ids]);
             $model->goods_id = $goods_id;
             $model->save();
-        }
+        
         return true;
 
     }

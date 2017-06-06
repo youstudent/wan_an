@@ -108,8 +108,9 @@ class MemberController extends ApiController
     //会员的金果和金种子
     public function actionCoin()
     {
-        $id = 2;
-        $data = Member::find()->where(['id' => $id])->select(['a_coin', 'b_coin'])->all();
+        $session = Yii::$app->session->get('member');
+        $member_id = $session['member_id'];
+        $data = Member::find()->where(['id' => $member_id])->select(['a_coin', 'b_coin'])->all();
         if ($data) {//如果返回的数据是true说明 申请成功
             return $this->jsonReturn(1, 'success', $data);
         }
