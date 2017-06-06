@@ -99,6 +99,14 @@ class Deposit extends \yii\db\ActiveRecord
             $this->created_at=time();
             if ($this->save()) {
                 $type = $data['Deposit']['operation'] ==1 ? 6 : 7;
+                if ($data['Deposit']['operation'] ==1) {
+                    $data['Deposit']['type']==1?$result->a_coin += $data['Deposit']['num']:$result->b_coin += $data['Deposit']['num'];
+                    $result->save();
+                } else {
+                    $data['Deposit']['type']==1?$result->a_coin -= $data['Deposit']['num']:$result->b_coin -= $data['Deposit']['num'];
+                    $result->save();
+                }
+
                 $Helper= new Helper();
                 if ($Helper->pool($id,$data['Deposit']['type'],$type,$data['Deposit']['num'],null,null)===false){
                     return false;
