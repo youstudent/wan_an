@@ -9,6 +9,7 @@ namespace api\controllers;
 
 
 use api\models\RegisterForm;
+use common\models\District;
 use Yii;
 
 class TestController extends ApiController
@@ -33,15 +34,12 @@ class TestController extends ApiController
         return $this->jsonReturn(1, 'success', ['title' => '大新闻', 'detail' => '公告为荣']);
     }
 
-    public function actionRegister()
+    public function actionTest()
     {
-        $model = new RegisterForm();
-        $post = [
-            'name' => 'test',
-            'password' => '123456',
-            'mobile' => '13812345678',
-        ];
-        $model->register($post, 1);
+        $model = new District();
+        $data = $model->tree(17, 1);
+        return $this->jsonReturn(1, 'success', $data);
     }
+
 
 }

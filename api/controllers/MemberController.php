@@ -9,6 +9,7 @@
 namespace api\controllers;
 
 use api\models\RegisterForm;
+use Codeception\Lib\Di;
 use common\models\District;
 use yii;
 use api\models\Member;
@@ -19,6 +20,7 @@ use api\models\Bonus;
 use api\models\SignupForm;
 
 use api\models\Fruiter;
+use yii\helpers\ArrayHelper;
 
 class MemberController extends ApiController
 {
@@ -171,9 +173,8 @@ class MemberController extends ApiController
     public function actionRegister()
     {
         $model = new RegisterForm();
-        $member_id = 1;
-        
-        if ($model->register(Yii::$app->request->post(), $member_id)) {
+
+        if ($model->register(Yii::$app->request->post(), ArrayHelper::getValue(Yii::$app->session->get('member'), 'member_id'))) {
             return $this->jsonReturn(1, 'success', ['vip_number' => $model->vip_number]);
         }
         return $this->jsonReturn(0, $model->errorMsg);
@@ -192,5 +193,18 @@ class MemberController extends ApiController
         
         return $this->jsonReturn(0, $model->getFirstError('message'));
     }
-    
+
+    /**
+     * 获取树状信息
+     * @return array
+     */
+    public function actionTree()
+    {
+        $model = new District();
+        if($data = $model->simpleTree(Yii::$app->request->post(), ArrayHelper::getValue(Yii::$app->session->get('member'), 'vip_number'))){
+            return $this->jsonReturn(1, 'success', $data);
+        }
+        return $this->jsonReturn(0, $model->errorMsg);
+    }
+
 }
