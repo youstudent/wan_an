@@ -2,6 +2,7 @@
 
 namespace backend\models\searchs;
 
+use backend\models\Bonus;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -18,7 +19,7 @@ class MemberSearch extends Member
     public function rules()
     {
         return [
-            [['id', 'site', 'parent_id', 'group_num', 'child_num', 'a_coin', 'b_coin', 'gross_income', 'gorss_bonus', 'last_login_time', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num'], 'integer'],
             [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'safe'],
         ];
     }
@@ -53,18 +54,15 @@ class MemberSearch extends Member
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'site' => $this->site,
             'parent_id' => $this->parent_id,
-            'group_num' => $this->group_num,
-            'child_num' => $this->child_num,
-            'a_coin' => $this->a_coin,
-            'b_coin' => $this->b_coin,
-            'gross_income' => $this->gross_income,
-            'gorss_bonus' => $this->gorss_bonus,
             'last_login_time' => $this->last_login_time,
             'status' => $this->status,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'vip_number' => $this->vip_number,
+            'a_coin' => $this->a_coin,
+            'b_coin' => $this->b_coin,
+            'child_num' => $this->child_num,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

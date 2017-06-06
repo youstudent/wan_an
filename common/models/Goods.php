@@ -68,6 +68,8 @@ class Goods extends \yii\db\ActiveRecord
             foreach($goods_list as $key=> &$val){
                 if(intval($val['id']) === $goods_id){
                     $val['has_buy'] = 1;
+                }else{
+                    $val['has_buy'] = -1;
                 }
             }
         }

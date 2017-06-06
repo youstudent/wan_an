@@ -4,7 +4,7 @@ namespace backend\models;
 
 use Yii;
 use backend\models\Member;
-
+use common\models\components\Helper;
 
 /**
  * This is the model class for table "wa_deposit".
@@ -96,8 +96,13 @@ class Deposit extends \yii\db\ActiveRecord
         }
 
         if ($this->validate()) {
-
+            $this->created_at=time();
             if ($this->save()) {
+                $type = $data['Deposit']['operation'] ==1 ? 6 : 7;
+                $Helper= new Helper();
+                if ($Helper->pool($id,$data['Deposit']['type'],$type,$data['Deposit']['num'],null,null)===false){
+                    return false;
+                }
                 return $this;
             }
         }

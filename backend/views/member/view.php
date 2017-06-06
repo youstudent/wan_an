@@ -27,9 +27,27 @@ $this->params['breadcrumbs'][] = '奖金详情';
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'gross_income',
-            'gross_bonus',
-            'a_coin',
+            [
+                'attribute' => 'gross_income',
+                'label' => '总收入',
+                'value' => function ($model) {
+                    return $model->getBonus(3, $model->id);
+                },
+            ],
+            [
+                'attribute' => 'gross_bonus',
+                'label' => '提现',
+                'value' => function ($model) {
+                    return $model->getBonus(4, $model->id);
+                },
+            ],
+            [
+                'attribute' => 'a_coin',
+                'label' => '金果数',
+                'value' => function ($model) {
+                    return $model->getBonus(1, $model->id);
+                },
+            ],
         ]]); ?>
     <br/>
     <?php
@@ -90,7 +108,7 @@ $this->params['breadcrumbs'][] = '奖金详情';
                 2 => '分享',
                 3 => '额外分享',
                 4 => '提现',
-                5 => '注册奖金'
+                5 => '注册奖金',
             ]
         ],
         [

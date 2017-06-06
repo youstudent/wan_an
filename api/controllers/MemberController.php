@@ -8,12 +8,13 @@
 
 namespace api\controllers;
 
-
+use api\models\RegisterForm;
+use common\models\District;
+use yii;
 use api\models\Member;
 
 use Codeception\Module\REST;
 use common\models\Give;
-use yii;
 use api\models\Bonus;
 use api\models\SignupForm;
 
@@ -27,14 +28,14 @@ class MemberController extends ApiController
      */
     public function actionMemberdetail()
     {
-
+        
         $model = new Member();
         if ($member = $model->getOneMember()) {
             return $this->jsonReturn(1, 'success', $member);
         }
         return $this->jsonReturn(0, 'error');
     }
-
+    
     /**
      * 获取会员个人收益明细
      * @return array
@@ -43,7 +44,7 @@ class MemberController extends ApiController
     {
         $model = new Bonus();
         $type = \Yii::$app->request->get('type');
-        if($bonus = $model->getBonus($type)){
+        if ($bonus = $model->getBonus($type)) {
             return $this->jsonReturn(1, 'success', $bonus);
         }
         return $this->jsonReturn(0, 'error');
@@ -59,8 +60,9 @@ class MemberController extends ApiController
         if ($loginModel->login(Yii::$app->request->post('id'), Yii::$app->request->post('password'))) {
             return $this->jsonReturn(1, 'success');
         }
-        return $this->jsonReturn(0, $loginModel->getErrors('message'));
+        return $this->jsonReturn(0, $loginModel->getFirstError('message'));
     }
+    
     /**
      * 登出
      * @return
@@ -73,7 +75,7 @@ class MemberController extends ApiController
         }
         return $this->goHome();
     }
-
+    
     /**
      * 获取提交的修改内容update api
      * @return array
@@ -85,14 +87,14 @@ class MemberController extends ApiController
             return $this->jsonReturn(1, 'success');
         }
         //如果返回false 返回错误信息
-        return $this->jsonReturn(0, $model->getErrors('message'));
+        return $this->jsonReturn(0, $model->getFirstError('message'));
     }
-
+    
     /**
      * 获取提交密码修改 api
      * @return array
      */
-
+    
     public function actionPass()
     {
         $model = new Member();
@@ -100,21 +102,21 @@ class MemberController extends ApiController
             return $this->jsonReturn(1, 'success');
         }
         //如果返回false 返回错误信息
-        return $this->jsonReturn(0, $model->getErrors('message'));
-    }
-
-    //会员的金果和金种子
-    public function actionCoin(){
-        $id=2;
-        $data = Member::find()->where(['id'=>$id])->select(['a_coin','b_coin'])->all();
-        if ($data) {//如果返回的数据是true说明 申请成功
-            return $this->jsonReturn(1, 'success',$data);
-        }
-        //如果返回false 返回错误信息
-        return $this->jsonReturn(0,'未查询到会员信息');
-        
+        return $this->jsonReturn(0, $model->getFirstError('message'));
     }
     
+    //会员的金果和金种子
+    public function actionCoin()
+    {
+        $id = 2;
+        $data = Member::find()->where(['id' => $id])->select(['a_coin', 'b_coin'])->all();
+        if ($data) {//如果返回的数据是true说明 申请成功
+            return $this->jsonReturn(1, 'success', $data);
+        }
+        //如果返回false 返回错误信息
+        return $this->jsonReturn(0, '未查询到会员信息');
+        
+    }
     
     //赠送申请
     public function actionGive()
@@ -137,10 +139,11 @@ class MemberController extends ApiController
         if ($data) {
             return $this->jsonReturn(1, 'success', $data);
         }
-        return $this->jsonReturn(0,$model->getFirstError('message'));
+        
+        return $this->jsonReturn(0, $model->getFirstError('message'));
         
     }
-
+    
     //获赠记录
     public function actionGain()
     {
@@ -150,15 +153,46 @@ class MemberController extends ApiController
             return $this->jsonReturn(1, 'success', $data);
         }
         return $this->jsonReturn(0, $model->getFirstError('message'));
+    
+    
     }
-
-    //我的果树
-    public function actionFruiter()
-    {
-        $model = new Fruiter();
-        if($fruiter = $model->getFruiter()){
-            return $this->jsonReturn(1, 'success', $fruiter);
+        //我的果树
+        public function actionFruiter()
+        {
+            $model = new Fruiter();
+            if ($fruiter = $model->getFruiter()) {
+                return $this->jsonReturn(1, 'success', $fruiter);
+            }
+            return $this->jsonReturn(0, '你还没有认购果树');
         }
-        return $this->jsonReturn(0, '你还没有认购果树');
-    }
+        
+        /**
+         * 注册会员
+         * @return array
+         */
+        public function actionRegister()
+        {
+            $model = new RegisterForm();
+            $member_id = 1;
+            
+            if ($model->register(Yii::$app->request->post(), $member_id)) {
+                return $this->jsonReturn(1, 'success', ['vip_number' => $model->vip_number]);
+            }
+            return $this->jsonReturn(0, $model->errorMsg);
+        }
+        
+        /**
+         * 返回会员信息
+         * @return array
+         */
+        public function actionValidate()
+        {
+            $model = new Member();
+            if ($one = $model->getOne(Yii::$app->request->queryParams)) {
+                return $this->jsonReturn(1, 'success', $one);
+            }
+            
+            return $this->jsonReturn(0, $model->getFirstError('message'));
+        }
+    
 }
