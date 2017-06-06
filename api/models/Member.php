@@ -29,6 +29,7 @@ use api\models\Session;
  */
 class Member extends \yii\db\ActiveRecord
 {
+    public $verifyCode;
     public $child;
     public $gross_income;
     public $gorss_bonus;
@@ -50,6 +51,8 @@ class Member extends \yii\db\ActiveRecord
             [['parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num'], 'integer'],
             [['vip_number', 'a_coin', 'b_coin', 'child_num'], 'required'],
             [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255],
+            // verifyCode needs to be entered correctly
+            ['verifyCode', 'captcha'],
         ];
     }
 
@@ -75,6 +78,7 @@ class Member extends \yii\db\ActiveRecord
             'a_coin' => '金果数',
             'b_coin' => '金种子数',
             'child_num' => '直推数量',
+            'verifyCode' => 'Verification Code',
         ];
     }
 
