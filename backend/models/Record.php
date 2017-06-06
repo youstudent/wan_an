@@ -94,18 +94,21 @@ class Record extends \yii\db\ActiveRecord
     
     //记录 通过或拒绝
     public static function pass($id,$ids){
+        $Helper = new Helper();
         $model=self::findOne(['id'=>$id]);
         if($ids==2){
           $member=Member::findOne(['id'=>$model->member_id]);
           $a_coin=$member->a_coin;
           $member->a_coin=$a_coin+$model->total;
-          $member->save();
+          if($member->save()){
+              // 申请拒绝
+              $Helper->pool($model->member_id,1,9,$model->total);
+          }
         }
-      
         $model->status=$ids;
         $model->updated_at=time();
         if ($model->save() && $ids==1){
-            $Helper = new Helper();
+             // 申请通过
             $Helper->pool($model->member_id,1,4,$model->coin,$model->charge);
         }
     }
