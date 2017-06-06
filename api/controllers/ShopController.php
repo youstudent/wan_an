@@ -11,6 +11,7 @@ namespace api\controllers;
 use common\models\Goods;
 use api\models\Order;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class ShopController extends ApiController
 {
@@ -22,8 +23,7 @@ class ShopController extends ApiController
     public function actionGoodsList()
     {
         $model = new Goods();
-        $member_id = 1;
-        $data = $model->getGoodsListWithOrder($member_id);
+        $data = $model->getGoodsListWithOrder(ArrayHelper::getValue(Yii::$app->session->get('member'), 'member_id'));
         if(!isset($data) || count($data) <= 0 ){
             return $this->jsonReturn( 0, 'error');
         }
@@ -50,9 +50,8 @@ class ShopController extends ApiController
      */
     public function actionBuy()
     {
-        $member_id = 1;
         $model = new Order();
-        if(!$model->buy($member_id, Yii::$app->request->getQueryParam('goods_id'))){
+        if(!$model->buy(ArrayHelper::getValue(Yii::$app->session->get('member'), 'member_id'), Yii::$app->request->getQueryParam('goods_id'))){
             return $this->jsonReturn( 0, $model->errorMsg);
         }
         return $this->jsonReturn( 1, 'success');

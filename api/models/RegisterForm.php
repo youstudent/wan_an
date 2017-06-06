@@ -8,6 +8,7 @@
 namespace api\models;
 
 
+use common\components\Helper;
 use common\models\District;
 use common\models\Tree;
 use Yii;
@@ -84,7 +85,7 @@ class RegisterForm extends Member
         //获取
         $this->vip_number = Member::find()->count() + 1;
         $this->password = Yii::$app->security->generatePasswordHash($this->password);
-        $member = $this->save();
+        $member = $this->save(false);
         $this->member_id = $this->id;
 
         if ($member == false) {
@@ -134,6 +135,8 @@ class RegisterForm extends Member
        $this->a_coin =0;
        $this->b_coin =0;
        //TODO::生成扣款记录和奖励记录
+        Helper::saveBonusLog($member_id, 1, 10, 0);
+
        return true;
     }
     /**
