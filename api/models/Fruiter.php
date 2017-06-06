@@ -56,8 +56,6 @@ class Fruiter extends \yii\db\ActiveRecord
     {
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
-        // 测试
-        $member_id = 2;
 
         $query = (new \yii\db\Query());
         $fruiter = $query->select('fruiter_name,img_path')->from(Fruiter::tableName())
