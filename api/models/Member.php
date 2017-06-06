@@ -2,6 +2,7 @@
 
 namespace api\models;
 
+use common\models\District;
 use Yii;
 use yii\db\Query;
 use yii\web\IdentityInterface;
@@ -31,6 +32,7 @@ class Member extends \yii\db\ActiveRecord
     public $child;
     public $gross_income;
     public $gorss_bonus;
+    public $group_num;
     /**
      * @inheritdoc
      */
@@ -48,7 +50,6 @@ class Member extends \yii\db\ActiveRecord
             [['parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num'], 'integer'],
             [['vip_number', 'a_coin', 'b_coin', 'child_num'], 'required'],
             [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255],
-            ['status', 'in', 'range' => [0,1]],
         ];
     }
 
@@ -92,11 +93,6 @@ class Member extends \yii\db\ActiveRecord
         // 获取用户id
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
-        // 测试
-        $member_id = 2;
-        if (!$this->validate()) {
-           return null;
-        }
 
         $arr = ['id', 'parent_id', 'name', 'mobile', 'deposit_bank', 'bank_account', 'address',
                 'child_num', 'a_coin', 'b_coin'];
@@ -107,10 +103,67 @@ class Member extends \yii\db\ActiveRecord
         if(!isset($data) || empty($data)){
             return null;
         }
-        $data['child'] = 100;
+
+        $data['child_num'] = $this->son($member_id);
+        $data['group_num'] = $this->group($member_id)?$this->group($member_id):1;
+        $data['child'] = $this->child($member_id)<0?0:$this->child($member_id);
+
         return $data;
     }
+    /**
+     * 直推数查询
+     * @return int
+     */
+    public function son($id)
+    {
+        $query = (new \yii\db\Query());
+        $num = $query->from(Member::tableName())->where(['parent_id' => $id])->count();
 
+        return $num;
+    }
+
+    /**
+     * 区数量查询
+     * @return int
+     */
+    public function group($id)
+    {
+        $query = (new \yii\db\Query());
+        $district = $query->select('district')->from(District::tableName())->where(['member_id' => $id, 'seat' => 1])->one();
+
+        $query = (new \yii\db\Query());
+        $data = $query->from(District::tableName())->where(['district' => $district['district']])->all();
+        $num = 0;
+        if (count($data) >= 40) {
+            $num ++;
+            foreach ($data as $v) {
+                $this->group($v['member_id']);
+            }
+        }
+
+        return $num;
+    }
+
+    /**
+     * 挂靠总量查询
+     * @return int
+     */
+    public function child($id)
+    {
+        $query = (new \yii\db\Query());
+        $district = $query->select('district')->from(District::tableName())->where(['member_id' => $id, 'seat' => 1])->one();
+        $query = (new \yii\db\Query());
+        $data = $query->from(District::tableName())->where(['district' => $district['district']])->all();
+        $num = 0;
+        $num += count($data)-1;
+        if (count($data) >= 40) {
+            foreach ($data as $v) {
+                $this->child($v['member_id']);
+            }
+        }
+
+        return $num;
+    }
     /**
      * 用户登录操作
      * @param $id $password
@@ -139,7 +192,7 @@ class Member extends \yii\db\ActiveRecord
         }
         // session 保存用户登录数据
         Yii::$app->session->set('member',['member_id'=>$id,'member_name'=>$member['name']]);
-        $session = Yii::$app->session->get('member');
+
         return true;
 
 
@@ -156,8 +209,7 @@ class Member extends \yii\db\ActiveRecord
         // 获取用户id
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
-        // 测试
-        $member_id = 2;
+
         $model = Member::findOne($member_id);
         $model->last_login_time = time();
         $model->save();
@@ -177,8 +229,6 @@ class Member extends \yii\db\ActiveRecord
         // 获取用户id
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
-        // 测试
-        $member_id = 2;
 
         $session = Yii::$app->session->get('member');
         $detail = Member::findOne($member_id);
@@ -207,8 +257,7 @@ class Member extends \yii\db\ActiveRecord
         // 获取用户id
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
-        // 测试
-        $member_id = 2;
+
         $detail = Member::findOne($member_id);
         if (false === $this->validatePassword($data['password'],$detail->password)) {
             $this->addError('message', '原密码不正确');
@@ -222,7 +271,6 @@ class Member extends \yii\db\ActiveRecord
             $newMember = Member::findOne($member_id);
             $newMember->password = Yii::$app->security->generatePasswordHash($data['newPassword']);
             $newMember->updated_at=time();
-//            var_dump($newMember);die;
             $newMember->save(false);
         }
         return true;

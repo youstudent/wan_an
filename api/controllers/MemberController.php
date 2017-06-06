@@ -51,32 +51,6 @@ class MemberController extends ApiController
     }
 
     /**
-     * 获取提交的登录表单
-     * @return array
-     */
-    public function actionLogin()
-    {
-        $loginModel = new Member();
-        if ($loginModel->login(Yii::$app->request->post('id'), Yii::$app->request->post('password'))) {
-            return $this->jsonReturn(1, 'success');
-        }
-        return $this->jsonReturn(0, $loginModel->getFirstError('message'));
-    }
-
-    /**
-     * 登出
-     * @return
-     */
-    public function actionLogout()
-    {
-        $model = new Member();
-        if ($model->logout()) {
-            return $this->jsonReturn(1, 'success');
-        }
-        return $this->goHome();
-    }
-
-    /**
      * 获取提交的修改内容update api
      * @return array
      */
