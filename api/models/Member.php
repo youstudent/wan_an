@@ -7,10 +7,9 @@ use yii\db\Query;
 use yii\web\IdentityInterface;
 use api\models\Session;
 /**
- * This is the model class for table "{{%member}}".
+ * This is the model class for table "wa_member".
  *
  * @property integer $id
- * @property integer $site
  * @property integer $parent_id
  * @property string $name
  * @property string $password
@@ -18,17 +17,14 @@ use api\models\Session;
  * @property string $deposit_bank
  * @property string $bank_account
  * @property string $address
- * @property integer $group_num
- * @property integer $child_num
- * @property integer $a_coin
- * @property integer $b_coin
- * @property integer $gross_income
- * @property integer $gross_bonus
  * @property integer $last_login_time
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $vip_number
+ * @property integer $a_coin
+ * @property integer $b_coin
+ * @property integer $child_num
  */
 class Member extends \yii\db\ActiveRecord
 {
@@ -49,7 +45,8 @@ class Member extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['site', 'parent_id', 'group_num', 'child_num', 'a_coin', 'b_coin', 'gross_income', 'gross_bonus', 'last_login_time', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num'], 'integer'],
+            [['vip_number', 'a_coin', 'b_coin', 'child_num'], 'required'],
             [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255],
             ['status', 'in', 'range' => [0,1]],
         ];
@@ -62,7 +59,6 @@ class Member extends \yii\db\ActiveRecord
     {
         return [
             'id' => '会员自增ID',
-            'site' => '座位号',
             'parent_id' => '直推会员id',
             'name' => '用户姓名',
             'password' => '会员密码',
@@ -70,16 +66,14 @@ class Member extends \yii\db\ActiveRecord
             'deposit_bank' => '开户行',
             'bank_account' => '银行账号',
             'address' => '地址',
-            'group_num' => '区数量',
-            'child_num' => '直系挂靠的会员数',
-            'a_coin' => '金果数',
-            'b_coin' => '金种子数',
-            'gross_income' => '总收入',
-            'gross_bonus' => '总提成',
             'last_login_time' => '最后登录时间',
-            'status' => '状态 0:被冻结 1:正常 2:已退网',
+            'status' => '状态',
             'created_at' => '创建时间 注册时间 入网时间',
             'updated_at' => '更新时间 退网时间',
+            'vip_number' => '会员卡号',
+            'a_coin' => '金果数',
+            'b_coin' => '金种子数',
+            'child_num' => '直推数量',
         ];
     }
 
@@ -105,7 +99,7 @@ class Member extends \yii\db\ActiveRecord
         }
 
         $arr = ['id', 'parent_id', 'name', 'mobile', 'deposit_bank', 'bank_account', 'address',
-                'group_num', 'child_num', 'a_coin', 'b_coin'];
+                'child_num', 'a_coin', 'b_coin'];
         $query = (new \yii\db\Query());
         $data= $query->select($arr)->from(Member::tableName())
                     ->where(['id' => $member_id])
