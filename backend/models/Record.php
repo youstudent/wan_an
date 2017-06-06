@@ -57,32 +57,6 @@ class Record extends \yii\db\ActiveRecord
             'status' => '状态',
         ];
     }
-
-    /**
-    public function beforeSave($insert) {
-        if ($this->isNewRecord) {
-            $this->createDate = date('Y-m-d H:i:s');
-            $this->userCreate = Yii::$app->user->id;
-            $this->userUpdate = Yii::$app->user->id;
-        } else {
-            $this->updateDate = date('Y-m-d H:i:s');
-            $this->userUpdate = Yii::$app->user->id;
-        }
-        return parent::beforeSave($insert);
-    }
-    
-    public function getUserCreateLabel() {
-
-        $user = User::find()->select('username')->where(['id' => $this->userCreate])->one();
-        return $user->username;
-    }
-
-    public function getUserUpdateLabel() {
-        $user = User::find()->select('username')->where(['id' => $this->userUpdate])->one();
-        return $user->username;
-    }
-
-    */
     
     
     // 财务管理的提现记录与  会员建立一对一的关系
@@ -113,13 +87,6 @@ class Record extends \yii\db\ActiveRecord
         }
     }
     
-    /*//记录  拒绝
-    public static function no($id){
-        $model=self::findOne(['id'=>$id]);
-        $model->status=2;
-        $model->updated_at=time();
-        $model->save();
-    }*/
 }
 
 

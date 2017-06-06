@@ -50,32 +50,7 @@ class Outline extends \yii\db\ActiveRecord
             'updated_at' => '更新时间',
         ];
     }
-
-    /**
-    public function beforeSave($insert) {
-        if ($this->isNewRecord) {
-            $this->createDate = date('Y-m-d H:i:s');
-            $this->memberCreate = Yii::$app->member->id;
-            $this->memberUpdate = Yii::$app->member->id;
-        } else {
-            $this->updateDate = date('Y-m-d H:i:s');
-            $this->memberUpdate = Yii::$app->member->id;
-        }
-        return parent::beforeSave($insert);
-    }
     
-    public function getMemberCreateLabel() {
-
-        $user = Member::find()->select('name')->where(['id' => $this->userCreate])->one();
-        return $user->name;
-    }
-
-    public function getMemberUpdateLabel() {
-        $user = Member::find()->select('name')->where(['id' => $this->userUpdate])->one();
-        return $user->name;
-    }
-
-    */
     public function getMember()
     {
         return $this->hasOne(Member::className(), ['id' => 'member_id']);

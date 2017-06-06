@@ -3,7 +3,7 @@
 namespace backend\models;
 
 use Yii;
-use app\models\User;
+use api\models\User;
 
 
 /**
@@ -56,32 +56,7 @@ class Order extends \yii\db\ActiveRecord
             'goods_id'  => '商品id',
         ];
     }
-
-    /**
-     * public function beforeSave($insert) {
-     * if ($this->isNewRecord) {
-     * $this->createDate = date('Y-m-d H:i:s');
-     * $this->userCreate = Yii::$app->user->id;
-     * $this->userUpdate = Yii::$app->user->id;
-     * } else {
-     * $this->updateDate = date('Y-m-d H:i:s');
-     * $this->userUpdate = Yii::$app->user->id;
-     * }
-     * return parent::beforeSave($insert);
-     * }
-     *
-     * public function getUserCreateLabel() {
-     *
-     * $user = User::find()->select('username')->where(['id' => $this->userCreate])->one();
-     * return $user->username;
-     * }
-     *
-     * public function getUserUpdateLabel() {
-     * $user = User::find()->select('username')->where(['id' => $this->userUpdate])->one();
-     * return $user->username;
-     * }
-     */
-
+    
     public function getMember()
     {
         return $this->hasOne(Member::className(), ['member_id' => 'id']);
