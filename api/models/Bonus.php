@@ -67,8 +67,6 @@ class Bonus extends \yii\db\ActiveRecord
         // 获取用户id
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
-        // 测试
-        $member_id = 2;
 
         $query = (new \yii\db\Query());
 
@@ -94,6 +92,8 @@ class Bonus extends \yii\db\ActiveRecord
         foreach ($bonus as &$v) {
             $v['created_at'] = date('Y/m/d H:i:s', $v['created_at']);
         }
+        $oneSum = $query->from(Bonus::tableName())->where(['member_id' => $member_id, 'type' => [1,2,3,5]])->sum('num');
+        $bonus['gross'] = $oneSum;
         return $bonus;
     }
     

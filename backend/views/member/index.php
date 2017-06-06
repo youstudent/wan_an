@@ -70,7 +70,20 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                 return $model->getBonus(2, $model->id);
             },
         ],
-            'child_num',
+        [
+            'attribute' => 'group_num',
+            'label' => '区数量',
+            'value' => function ($model) {
+                return $model->getChild(2, $model->id);
+            },
+        ],
+        [
+            'attribute' => 'child',
+            'label' => '挂靠数',
+            'value' => function ($model) {
+                return $model->getChild(3, $model->id);
+            },
+        ],
         [
             'attribute' => 'last_login_time',
             'label' => '最后登录时间',

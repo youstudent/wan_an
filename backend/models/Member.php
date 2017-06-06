@@ -29,6 +29,8 @@ class Member extends \yii\db\ActiveRecord
 {
     public $msg;
     public $state;
+    public $group_num;
+    public $child;
 
     /**
      * @inheritdoc
@@ -72,6 +74,8 @@ class Member extends \yii\db\ActiveRecord
             'a_coin' => '金果数',
             'b_coin' => '金种子数',
             'child_num' => '直推数量',
+            'group_num' => '区数量',
+            'child' => '区数量',
         ];
     }
 
@@ -112,7 +116,7 @@ class Member extends \yii\db\ActiveRecord
     */
 
     /**
-     * @param $param id status
+     * @param $param
      * @return bool|null
      */
     public function changeMember($param){
@@ -151,5 +155,63 @@ class Member extends \yii\db\ActiveRecord
             return $cover;
         }
 
+    }
+    // 1直推数 2区数量 3直系挂靠会员数
+    public function getChild($num, $id)
+    {
+        if ($num == 1) {
+            $query = (new \yii\db\Query());
+            $child_num = $query->from(Member::tableName())->where(['parent_id' => $id])->count();
+            return $child_num;
+        }
+        if ($num == 2) {
+            return $this->group($id)?$this->group($id):1;
+        }
+        if ($num == 3) {
+            return $this->child($id)<0?0:$this->child($id);
+        }
+
+    }
+    /**
+     * 区数量查询
+     * @return int
+     */
+    public function group($id)
+    {
+        $query = (new \yii\db\Query());
+        $district = $query->select('district')->from(District::tableName())->where(['member_id' => $id, 'seat' => 1])->one();
+
+        $query = (new \yii\db\Query());
+        $data = $query->from(District::tableName())->where(['district' => $district['district']])->all();
+        $num = 0;
+        if (count($data) >= 40) {
+            $num ++;
+            foreach ($data as $v) {
+                $this->group($v['member_id']);
+            }
+        }
+
+        return $num;
+    }
+
+    /**
+     * 挂靠总量查询
+     * @return int
+     */
+    public function child($id)
+    {
+        $query = (new \yii\db\Query());
+        $district = $query->select('district')->from(District::tableName())->where(['member_id' => $id, 'seat' => 1])->one();
+        $query = (new \yii\db\Query());
+        $data = $query->from(District::tableName())->where(['district' => $district['district']])->all();
+        $num = 0;
+        $num += count($data)-1;
+        if (count($data) >= 40) {
+            foreach ($data as $v) {
+                $this->child($v['member_id']);
+            }
+        }
+
+        return $num;
     }
 }
