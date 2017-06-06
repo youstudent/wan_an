@@ -8,18 +8,13 @@
 
 namespace api\controllers;
 
-<<<<<<< HEAD
-
-=======
 use api\models\RegisterForm;
 use common\models\District;
 use yii;
->>>>>>> 98f2752f864d8aedf1bfcfc891a4db62adf146a3
 use api\models\Member;
 
 use Codeception\Module\REST;
 use common\models\Give;
-use yii;
 use api\models\Bonus;
 use api\models\SignupForm;
 
@@ -49,12 +44,12 @@ class MemberController extends ApiController
     {
         $model = new Bonus();
         $type = \Yii::$app->request->get('type');
-        if($bonus = $model->getBonus($type)){
+        if ($bonus = $model->getBonus($type)) {
             return $this->jsonReturn(1, 'success', $bonus);
         }
         return $this->jsonReturn(0, 'error');
     }
-    
+
     /**
      * 获取提交的登录表单
      * @return array
@@ -67,6 +62,7 @@ class MemberController extends ApiController
         }
         return $this->jsonReturn(0, $loginModel->getFirstError('message'));
     }
+
     /**
      * 登出
      * @return
@@ -110,19 +106,18 @@ class MemberController extends ApiController
     }
 
     //会员的金果和金种子
-    public function actionCoin(){
-        $id=2;
-        $data = Member::find()->where(['id'=>$id])->select(['a_coin','b_coin'])->all();
+    public function actionCoin()
+    {
+        $id = 2;
+        $data = Member::find()->where(['id' => $id])->select(['a_coin', 'b_coin'])->all();
         if ($data) {//如果返回的数据是true说明 申请成功
-            return $this->jsonReturn(1, 'success',$data);
+            return $this->jsonReturn(1, 'success', $data);
         }
         //如果返回false 返回错误信息
-        return $this->jsonReturn(0,'未查询到会员信息');
-        
+        return $this->jsonReturn(0, '未查询到会员信息');
+
     }
-<<<<<<< HEAD
-    
-    
+
     //赠送申请
     public function actionGive()
     {
@@ -135,7 +130,7 @@ class MemberController extends ApiController
         //如果返回false 返回错误信息
         return $this->jsonReturn(0, $model->getFirstError('message'));
     }
-    
+
     //赠送记录
     public function actionGives()
     {
@@ -145,7 +140,7 @@ class MemberController extends ApiController
             return $this->jsonReturn(1, 'success', $data);
         }
         return $this->jsonReturn(0, $model->getFirstError('message'));
-        
+
     }
 
     //获赠记录
@@ -163,11 +158,11 @@ class MemberController extends ApiController
     public function actionFruiter()
     {
         $model = new Fruiter();
-        if($fruiter = $model->getFruiter()){
+        if ($fruiter = $model->getFruiter()) {
             return $this->jsonReturn(1, 'success', $fruiter);
         }
         return $this->jsonReturn(0, '你还没有认购果树');
-=======
+    }
 
     /**
      * 注册会员
@@ -178,11 +173,10 @@ class MemberController extends ApiController
         $model = new RegisterForm();
         $member_id = 1;
 
-        if($model->register(Yii::$app->request->post(), $member_id)){
-            return $this->jsonReturn(1, 'success', ['vip_number'=>$model->vip_number]);
+        if ($model->register(Yii::$app->request->post(), $member_id)) {
+            return $this->jsonReturn(1, 'success', ['vip_number' => $model->vip_number]);
         }
         return $this->jsonReturn(0, $model->errorMsg);
->>>>>>> 98f2752f864d8aedf1bfcfc891a4db62adf146a3
     }
 
     /**
@@ -192,7 +186,7 @@ class MemberController extends ApiController
     public function actionValidate()
     {
         $model = new Member();
-        if($one = $model->getOneMember(Yii::$app->request->queryParams)){
+        if ($one = $model->getOne(Yii::$app->request->queryParams)) {
             return $this->jsonReturn(1, 'success', $one);
         }
 

@@ -92,11 +92,8 @@ class Member extends \yii\db\ActiveRecord
      * @param string $member_id
      * @return array
      */
-<<<<<<< HEAD
+
     public function getOneMember()
-=======
-    public function getOneMember($params)
->>>>>>> 98f2752f864d8aedf1bfcfc891a4db62adf146a3
     {
         // 获取用户id
         $session = Yii::$app->session->get('member');
@@ -106,7 +103,6 @@ class Member extends \yii\db\ActiveRecord
         if (!$this->validate()) {
            return null;
         }
-<<<<<<< HEAD
 
         $arr = ['id', 'parent_id', 'name', 'mobile', 'deposit_bank', 'bank_account', 'address',
                 'group_num', 'child_num', 'a_coin', 'b_coin'];
@@ -114,9 +110,6 @@ class Member extends \yii\db\ActiveRecord
         $data= $query->select($arr)->from(Member::tableName())
                     ->where(['id' => $member_id])
                     ->one();
-=======
-        $data = Member::findOne(['vip_number'=>$params['vip_number']])->toArray();
->>>>>>> 98f2752f864d8aedf1bfcfc891a4db62adf146a3
         if(!isset($data) || empty($data)){
             return null;
         }
@@ -250,6 +243,21 @@ class Member extends \yii\db\ActiveRecord
     {
         return Yii::$app->security->validatePassword($password, $rePassword);
 
+    }
+
+    /**
+     * 获取单个会员记录
+     * @param $params
+     * @return array|bool
+     */
+    public function getOne($params)
+    {
+        $data = Member::findOne(['vip_number'=>$params['vip_number']]);
+        if(isset($data)){
+            return ['name'=>$data->name];
+        }
+        $this->addError('message', '推荐人不存在');
+        return false;
     }
 
 }
