@@ -139,7 +139,6 @@ class MemberController extends ApiController
         if ($data) {
             return $this->jsonReturn(1, 'success', $data);
         }
-        
         return $this->jsonReturn(0, $model->getFirstError('message'));
         
     }
@@ -147,52 +146,51 @@ class MemberController extends ApiController
     //获赠记录
     public function actionGain()
     {
-        $model = new Give();
-        $data = $model->gain();
+        $mode = new Give();
+        $data = $mode->gain();
         if ($data) {
             return $this->jsonReturn(1, 'success', $data);
         }
-        return $this->jsonReturn(0, $model->getFirstError('message'));
-    
-    
+        return $this->jsonReturn(0, $mode->getFirstError('message'));
     }
-        //我的果树
-        public function actionFruiter()
-        {
-            $model = new Fruiter();
-            if ($fruiter = $model->getFruiter()) {
-                return $this->jsonReturn(1, 'success', $fruiter);
-            }
-            return $this->jsonReturn(0, '你还没有认购果树');
+    
+    //我的果树
+    public function actionFruiter()
+    {
+        $model = new Fruiter();
+        if ($fruiter = $model->getFruiter()) {
+            return $this->jsonReturn(1, 'success', $fruiter);
+        }
+        return $this->jsonReturn(0, '你还没有认购果树');
+    }
+    
+    /**
+     * 注册会员
+     * @return array
+     */
+    public function actionRegister()
+    {
+        $model = new RegisterForm();
+        $member_id = 1;
+        
+        if ($model->register(Yii::$app->request->post(), $member_id)) {
+            return $this->jsonReturn(1, 'success', ['vip_number' => $model->vip_number]);
+        }
+        return $this->jsonReturn(0, $model->errorMsg);
+    }
+    
+    /**
+     * 返回会员信息
+     * @return array
+     */
+    public function actionValidate()
+    {
+        $model = new Member();
+        if ($one = $model->getOne(Yii::$app->request->queryParams)) {
+            return $this->jsonReturn(1, 'success', $one);
         }
         
-        /**
-         * 注册会员
-         * @return array
-         */
-        public function actionRegister()
-        {
-            $model = new RegisterForm();
-            $member_id = 1;
-            
-            if ($model->register(Yii::$app->request->post(), $member_id)) {
-                return $this->jsonReturn(1, 'success', ['vip_number' => $model->vip_number]);
-            }
-            return $this->jsonReturn(0, $model->errorMsg);
-        }
-        
-        /**
-         * 返回会员信息
-         * @return array
-         */
-        public function actionValidate()
-        {
-            $model = new Member();
-            if ($one = $model->getOne(Yii::$app->request->queryParams)) {
-                return $this->jsonReturn(1, 'success', $one);
-            }
-            
-            return $this->jsonReturn(0, $model->getFirstError('message'));
-        }
+        return $this->jsonReturn(0, $model->getFirstError('message'));
+    }
     
 }
