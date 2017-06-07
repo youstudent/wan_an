@@ -24,10 +24,13 @@ class Helper{
             'type' => $type,
             'num' => $num,
             'created_at' => time(),
+            'updated_at' => time(),
             'poundage' => $poundage,
-            'ext_data' => $ext_data
+            'ext_data' => json_encode($ext_data, JSON_UNESCAPED_UNICODE)
         ];
         $model = new Bonus();
-        return $model->load($data) && $model->save() ? $model : null;
+        $model->load($data, '');
+
+        return $model->load($data, '') && $model->save(false) ? $model : null;
     }
 }

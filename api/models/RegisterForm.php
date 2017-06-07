@@ -36,7 +36,8 @@ class RegisterForm extends Member
             ['a_coin', 'integer', 'max'=> 500, 'min'=> 0, 'tooBig'=> '{attribute}最多使用500'],
             ['b_coin', 'integer', 'max'=> 900, 'min'=> 400, 'tooSmall'=> '{attribute}最少使用400'],
             ['re_password', 'validateRePassword', 'skipOnEmpty' => false, 'skipOnError' => false],
-            ['mobile','match','pattern'=>'/^0?(13|14|15|18)[0-9]{9}$/','message'=>'手机号码不正确']
+            ['mobile','match','pattern'=>'/^0?(13|14|15|18)[0-9]{9}$/','message'=>'手机号码不正确'],
+
         ];
     }
 
@@ -72,15 +73,22 @@ class RegisterForm extends Member
     {
         if(!$this->load($post, '') || !$this->validate()){
             $this->errorMsg = current($this->getFirstErrors());
-            return null;
+            return false;
         }
+
+        if($this->a_coin + $this->b_coin != 900){
+            $this->errorMsg = '注入的金豆和金种子和必须等于900';
+            return false;
+        }
+
         //判断操作人的金钱是不是够
         $result = $this->rewardActionMember($action_member_id);
         if($result == false){
             $this->errorMsg = current($this->getFirstErrors());
-            return null;
+            return false;
         }
         //$transaction = Yii::$app->db->beginTransaction();
+
 
         //获取
         $this->vip_number = Member::find()->count() + 1;
@@ -94,6 +102,9 @@ class RegisterForm extends Member
             return false;
         }
 
+
+        //给分享人添加区数和奖金记录
+        $this->setIncMemberShare($this->referrer_id);
 
         //step1 . 判断推荐人是否区满
         $result = $this->step1($this->referrer_id);
@@ -112,12 +123,25 @@ class RegisterForm extends Member
     }
 
     /**
+     * 设置直推数量的递增
+     * @param $referrer_id
+     * @return bool
+     */
+    public function setIncMemberShare($referrer_id)
+    {
+        $model = Member::findOne(['id'=>$referrer_id]);
+        $model->child_num+=1;
+        return $model->save(false);
+
+    }
+    /**
      * 操作之前，检查操作人是否有足够的金钱，并生成扣款记录和奖励记录
      * @param $member_id
      * @return bool
      */
     public function rewardActionMember($member_id)
     {
+
        $member = Member::findOne(['id'=>$member_id]);
        if($member->a_coin < $this->a_coin){
            $this->addError('a_coin', '金果数量不足');
@@ -131,11 +155,17 @@ class RegisterForm extends Member
        $member->b_coin -= $this->b_coin;
        $member->save();
 
-       //清空这两个记录的值
-       $this->a_coin =0;
-       $this->b_coin =0;
-       //TODO::生成扣款记录和奖励记录
-        Helper::saveBonusLog($member_id, 1, 10, 0);
+        //生成奖励5块钱的流水
+        Helper::saveBonusLog($member_id, 1, 2, 5);
+        //添加消耗记录
+        if($this->a_coin){
+            Helper::saveBonusLog($member_id, 1, 10, $this->a_coin);
+        }
+        Helper::saveBonusLog($member_id, 2, 11, $this->b_coin);
+
+        //清空这两个记录的值
+        $this->a_coin =0;
+        $this->b_coin =0;
 
        return true;
     }
@@ -175,21 +205,33 @@ class RegisterForm extends Member
      */
     public function addDistrictSeat($referrer_id)
     {
-        //先收集需要的设置的id
+        //根据推荐人 member_id 获取到推荐人的所有区，并查询这个区的人数。再返回人数未满的第一个区
         $affiliated_node = $this->getMemberDistrictSeatCount($referrer_id);
-        //基础区域值,用这个区域，找到所有需要添加位置的member_id
-        $base__district = $affiliated_node['district'];
-        $affiliated_one = $this->byDistrictsGetMemberId($base__district);
 
+
+        //获取会员的摆放区域
+        $base_district = $affiliated_node['district'];
+        //找到这个区域root会员信息
+        $affiliated_one = $this->byDistrictsGetMemberId($base_district);
+
+        //会员的座位号，就是这个基础区人数 + 1
         $seat = $affiliated_node['num'] + 1;
+
+
         //得到会员的member_id
         $node = [];
         $member_id = $this->member_id;
+        //记录一个循环次数
+        $i = 1;
         while ($affiliated_one['member_id'] !== $member_id) {
-            $seat_node = Tree::$structure[$seat];
-            $seat = $seat_node['node'];
-            $one = $this->byDistrictsGetMemberId($base__district, $seat);
-            $seat_node['member_id'] = $member_id = $one['member_id'];
+            //获取添加会员座位的上级座位节点信息
+            $parent_seat_node = Tree::$structure[$seat];
+
+            //上级的座位号就等于座位信息里面的座位号
+            $parent_seat = $parent_seat_node['node'];
+            //根据上级会员在区域里的座位号查询到上级的基础信息
+            $parent_one = $this->byDistrictsGetMemberId($base_district, $parent_seat);
+            $seat_node['member_id'] = $member_id = $parent_one['member_id'];
             $seat_node['district'] = $district = $this->getMemberRootDistrict($member_id);
             $seat_node['seat'] = $this->getDistrictSeatCount($district);
 
@@ -198,11 +240,35 @@ class RegisterForm extends Member
             if ($result == false) {
                 return false;
             }
-            //TODO::给分享人或者挂靠人价钱，这里要判断 。即是分享人也是挂靠人的特俗情况
+            //第一次循环就找到爹了。 这个就只用给推荐人发一个直推奖励
+            if($i == 1 && $seat_node['member_id'] == $referrer_id){
+                $coin_money = Yii::$app->params['coin_type_2_money'];
+                Helper::saveBonusLog($referrer_id, 1, 2, $coin_money, 0);
+            }else{
+                //给这个区所有的上级给见点奖
+                $coin_money = Yii::$app->params['coin_type_1_money'];
+                Helper::saveBonusLog($member_id, 1, 1, $coin_money, 0);
+            }
+            $i++;
         }
+        //添加这个会员，然后就区满的情况，要进行满区逻辑
+        if($seat == 40){
+            $result = $this->actionFullDistrict($base_district);
+            if($result == false){
+                //TODO::回滚
+                return false;
+            }
+        }
+
         return true;
     }
 
+
+    //满区逻辑
+    public function actionFullDistrict($district)
+    {
+        //TODO:: 1 检查换位条件 2. 给根会员添加有一个区数量保存 3.判断顶级会员的直推人的区数量。并执行直推区奖励
+    }
     /**
      * 从区域id和座位找到指定的会员id
      * @param $districts
@@ -215,7 +281,7 @@ class RegisterForm extends Member
     }
 
     /**
-     * 获取会员推荐的人，必要存放的区域
+     * 根据人 member_id 获取所有区，并查询这个区的人数。再返回人数未满的第一个区
      * @param $member_id
      * @return null
      */
@@ -232,7 +298,7 @@ class RegisterForm extends Member
     }
 
     /**
-     * 返回会员的所有区域
+     * 返回会员的所有区域，并按从旧区到新区的排列
      * @param $member_id
      * @return int|string
      */

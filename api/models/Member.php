@@ -139,7 +139,7 @@ class Member extends \yii\db\ActiveRecord
             return false;
         }
         // session 保存用户登录数据
-        Yii::$app->session->set('member',['member_id'=>$id,'member_name'=>$member['name'], 'member_number'=>$member['member_number']]);
+        Yii::$app->session->set('member',['member_id'=>$id,'member_name'=>$member['name'], 'vip_number'=>$member['vip_number']]);
         $session = Yii::$app->session->get('member');
         return true;
         

@@ -4,6 +4,7 @@ namespace api\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\web\Cookie;
 use yii\web\Response;
 
 class ApiController extends Controller
@@ -15,9 +16,10 @@ class ApiController extends Controller
     public function jsonReturn($code, $message, $data = [], $time = '',$title='')
     {
 
-        $headers = Yii::$app->response->headers;
-        $headers->add("Access-Control-Allow-Origin", '*');
-        $headers->add("Access-Control-Allow-Headers", 'x-requested-with,content-type');
+//        $headers = Yii::$app->response->headers;
+//        $headers->add("Access-Control-Allow-Origin", '*');
+//        $headers->add("Access-Control-Allow-Headers", 'x-requested-with,content-type');
+
         Yii::$app->response->format = Response::FORMAT_JSON;
         $time = $time ? $time : time();
         return [
@@ -26,7 +28,6 @@ class ApiController extends Controller
             'message' => $message,
             'data' => $data,
             'title'=>$title,
-            
         ];
     }
 
