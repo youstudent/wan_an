@@ -70,7 +70,6 @@ class MemberController extends ApiController
      * 获取提交密码修改 api
      * @return array
      */
-    
     public function actionPass()
     {
         $model = new Member();

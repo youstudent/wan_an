@@ -67,7 +67,7 @@ class Bonus extends \yii\db\ActiveRecord
         // 获取用户id
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
-        $member_id = 2;
+
         $query = (new \yii\db\Query());
 
         // 判断调用的type类型
