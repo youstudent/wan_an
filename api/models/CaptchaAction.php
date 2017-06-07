@@ -134,7 +134,6 @@ class CaptchaAction extends Action
                 'message' => 'success',
                 'data' => [
                     'url' => Url::to([$this->id, 'v' => uniqid()], true),
-                    'data' => $_SESSION
                 ]
             ];
         } else {
