@@ -4,6 +4,7 @@ namespace api\controllers;
 
 use Yii;
 use yii\web\Controller;
+use yii\web\Cookie;
 use yii\web\Response;
 
 class ApiController extends Controller
@@ -26,7 +27,6 @@ class ApiController extends Controller
             'message' => $message,
             'data' => $data,
             'title'=>$title,
-            
         ];
     }
 
