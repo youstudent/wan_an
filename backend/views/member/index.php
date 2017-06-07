@@ -90,6 +90,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             'value' => function ($model) {
                 return date('Y-m-d H:i:s', $model->created_at);
             },
+            'filter'    => false,
         ],
         [
             'attribute' => 'status',

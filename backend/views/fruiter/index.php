@@ -99,7 +99,6 @@ $this->params['breadcrumbs'][] = '果树管理列表';
                 'allowSortSetting' => true,
                 'gridOptions' => [
                     'dataProvider' => $dataProvider,
-                    'filterModel' => $searchModel,
                     'showPageSummary' => true,
                     'floatHeader' => true,
                     'pjax' => true,

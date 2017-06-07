@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use sintret\gii\models\LogUpload;
 use sintret\gii\components\Util;
+use backend\models\searchs\DepositSearch;
 
 
 /**
@@ -62,11 +63,11 @@ class DepositController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Deposit::find(),
-        ]);
+        $searchModel = new DepositSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

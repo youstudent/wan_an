@@ -7,6 +7,7 @@ use Yii;
 use yii\db\Query;
 use yii\web\IdentityInterface;
 use api\models\Session;
+use yii\captcha\CaptchaAction;
 /**
  * This is the model class for table "wa_member".
  *
@@ -184,7 +185,7 @@ class Member extends \yii\db\ActiveRecord
         $query = new Query();
         $member = $query
             ->from(Member::tableName())
-            ->where(['id'=>$id])
+            ->where(['vip_number'=>$id])
             ->one();
         if(!isset($detail) || !Member::validatePassword($password,$detail->password)){
             $this->addError('message', '账号或密码错误');
