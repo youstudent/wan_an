@@ -49,7 +49,7 @@ class MemberController extends ApiController
         if ($bonus = $model->getBonus($type)) {
             return $this->jsonReturn(1, 'success', $bonus);
         }
-        return $this->jsonReturn(0, 'error');
+        return $this->jsonReturn(1, '用户暂无数据');
     }
     
     /**

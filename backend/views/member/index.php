@@ -5,6 +5,7 @@ use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\dynagrid\DynaGrid;
 use backend\models\Member;
+use yii\grid\DataColumn;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\searchs\MemberSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -38,8 +39,15 @@ $this->params['breadcrumbs'][] = '会员管理列表';
     $columns = [
 //        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
                     'id',
-            'name',
-            'parent_id',
+        'mobile',
+        [
+            'attribute' => 'name',
+            'filter'    => false,
+        ],
+        [
+            'attribute' => 'parent_id',
+            'filter'    => false,
+        ],
         [
             'attribute' => 'created_at',
             'label' => '注册时间',
@@ -114,11 +122,16 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                         break;
                 }
             },
-            'filter' => [
-                0 => '已冻结',
-                1 => '正常',
-                2 => '已退网'
-            ]
+            'filter'    => false,
+//            'filter' => [
+//                0 => '已冻结',
+//                1 => '正常',
+//                2 => '已退网'
+//            ]
+            'class' => 'kartik\grid\DataColumn',
+            'filterType' => 0,
+            'noWrap' => false,
+            'vAlign' => 'middle',
         ],
         [
             'class' => 'kartik\grid\ActionColumn',

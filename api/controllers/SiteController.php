@@ -20,7 +20,7 @@ use yii\captcha\CaptchaAction;
  */
 class SiteController extends ApiController
 {
-    public $enableCsrfValidation = false;
+
     /**
      * 获取提交的登录表单
      * @return array
@@ -29,7 +29,7 @@ class SiteController extends ApiController
     {
         $loginModel = new Member();
         if(!$this->createAction('captcha')->validate(Yii::$app->request->post('authCode'), true)){
-            //return $this->jsonReturn(0, '验证码错误');
+            return $this->jsonReturn(0, '验证码错误');
         }
 
         if ($loginModel->login(Yii::$app->request->post('id'), Yii::$app->request->post('password'))) {

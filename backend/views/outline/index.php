@@ -33,34 +33,23 @@ $this->params['breadcrumbs'][] = '退网管理列表';
        // 'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
     $columns = [
-        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
-            'member_id',
+        [
+            'attribute' => 'member_id',
+            'filter'    => false,
+        ],
             'member.name',
             'member.mobile',
         [
             'attribute' => 'created_at',
-            'format' => 'datetime',
             'label' => '退网时间',
-            'filter'    => DateRangePicker::widget([
-                'model'         => $searchModel,
-                'attribute'     => 'updated_at',
-                'convertFormat' => true,
-                'pluginOptions' => [
-                    'locale' => ['format' => 'Y-m-d'],
-                ],
-            ]),
-        ],
-        [
-            'attribute' => 'created_at',
-            'format' => 'datetime',
-            'label' => '注册时间',
+            'value' => function ($model) {
+                return date('Y-m-d H:i:s', $model->created_at);
+            },
             'filter'    => DateRangePicker::widget([
                 'model'         => $searchModel,
                 'attribute'     => 'created_at',
                 'convertFormat' => true,
-                'pluginOptions' => [
-                    'locale' => ['format' => 'Y-m-d'],
-                ],
+
             ]),
         ],
 
