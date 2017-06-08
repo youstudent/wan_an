@@ -52,8 +52,7 @@ class AnnouncementController extends ApiController
         $model = new Branner();
         $data = $model->branner();
         if ($data) {//如果返回的数据是true说明 申请成功
-            $title = Announcements::find()->select(['title'])->orderBy('created_at DESC')->limit(1)->all();
-            return $this->jsonReturn(1, 'success', $data,'',$title);
+            return $this->jsonReturn(1, 'success', $data);
         }
         //如果返回false 返回错误信息
         return $this->jsonReturn(0, '图片暂不存在');

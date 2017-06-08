@@ -46,8 +46,8 @@ class Outline extends \yii\db\ActiveRecord
             'member.name' => '会员姓名',
             'member.mobile' => '电话',
             'status' => '账号状态',
-            'created_at' => '创建时间',
-            'updated_at' => '更新时间',
+            'created_at' => '退网时间',
+            'updated_at' => '注册时间',
         ];
     }
     
