@@ -60,7 +60,7 @@ class Branner extends \yii\db\ActiveRecord
             $v['img'] = Yii::$app->params['img_domain'].$v['img'];
         }
         return $model;
-        
+
     }
     
     //广告详情
