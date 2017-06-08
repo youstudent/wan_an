@@ -90,17 +90,16 @@ class RegisterForm extends Member
         //$transaction = Yii::$app->db->beginTransaction();
 
 
-        //获取
-        $this->vip_number = Member::find()->count() + 1;
-        $this->password = Yii::$app->security->generatePasswordHash($this->password);
-        $member = $this->save(false);
-        $this->member_id = $this->id;
-
-        if ($member == false) {
+        //添加会员
+        $result = $this->addMember($post);
+        if ($result == false) {
             $this->errorMsg = '添加会员失败';
             //$transaction->rollBack();
             return false;
         }
+        $this->member_id = $result->id;
+
+
 
 
         //给分享人添加区数和奖金记录
@@ -156,12 +155,12 @@ class RegisterForm extends Member
        $member->save();
 
         //生成奖励5块钱的流水
-        Helper::saveBonusLog($member_id, 1, 2, 5);
+        Helper::saveBonusLog($member_id, 5, 1, 5);
         //添加消耗记录
         if($this->a_coin){
             Helper::saveBonusLog($member_id, 1, 10, $this->a_coin);
         }
-        Helper::saveBonusLog($member_id, 2, 11, $this->b_coin);
+        Helper::saveBonusLog($member_id, 2, 10, $this->b_coin);
 
         //清空这两个记录的值
         $this->a_coin =0;
@@ -228,12 +227,12 @@ class RegisterForm extends Member
             $parent_seat_node = Tree::$structure[$seat];
 
             //上级的座位号就等于座位信息里面的座位号
-            $parent_seat = $parent_seat_node['node'];
+            $seat = $parent_seat = $parent_seat_node['node'];
             //根据上级会员在区域里的座位号查询到上级的基础信息
             $parent_one = $this->byDistrictsGetMemberId($base_district, $parent_seat);
             $seat_node['member_id'] = $member_id = $parent_one['member_id'];
             $seat_node['district'] = $district = $this->getMemberRootDistrict($member_id);
-            $seat_node['seat'] = $this->getDistrictSeatCount($district);
+            $seat_node['seat'] =  $this->getDistrictSeatCount($district);
 
             $node[] = $seat_node;
             $result = $this->addNode($this->member_id, $seat_node['district'], $seat_node['seat'] + 1);
@@ -252,7 +251,7 @@ class RegisterForm extends Member
             $i++;
         }
         //添加这个会员，然后就区满的情况，要进行满区逻辑
-        if($seat == 40){
+        if($affiliated_node['num'] = 40){
             $result = $this->actionFullDistrict($base_district);
             if($result == false){
                 //TODO::回滚
@@ -268,6 +267,27 @@ class RegisterForm extends Member
     public function actionFullDistrict($district)
     {
         //TODO:: 1 检查换位条件 2. 给根会员添加有一个区数量保存 3.判断顶级会员的直推人的区数量。并执行直推区奖励
+
+        //判断根会员是否要被换位
+        $district_info = $this->byDistrictsGetMemberId($district);
+        //获取这个根会员的基本信息
+        $member = Member::findOne(['id'=>$district_info['member_id']]);
+        if(!isset($member)){
+            $this->errorMsg = '满区逻辑-未查询到当前区拥有这';
+            return false;
+        }
+        //满足无直推会员，进行换位逻辑
+        if($member->child_num == 0){
+            //TODO::换位
+        }
+
+        //这里要添加直推区，就在这里判断一下直推区吧
+        $referrer = Member::findOne(['id'=>$member->parent_id]);
+
+        //给会员的推荐人添加一个直推区记录
+        return true;
+
+
     }
     /**
      * 从区域id和座位找到指定的会员id
@@ -333,20 +353,17 @@ class RegisterForm extends Member
      * @param $referrer_id
      * @return Member
      */
-    public function addMember($post, $referrer_id)
+    public function addMember($post)
     {
         $model = new Member();
         $model->name = $post['name'];
-        $model->password = $post['password'];
         $model->created_at = time();
-        $model->parent_id = $referrer_id;
-        $model->child_num += 1;
+        $model->updated_at = time();
+        $model->parent_id = $post['referrer_id'];
         $model->mobile = $post['mobile'];
-        $model->save();
-
-
-        $this->member_id = $model->id;
-        return $model;
+        $model->vip_number = $this->vip_number = Member::find()->max('vip_number') + 1;
+        $model->password = Yii::$app->security->generatePasswordHash($this->password);
+        return $model->save(false) ? $model : null;
     }
 
     /**
