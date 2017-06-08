@@ -75,13 +75,13 @@ class LoginForm extends Model
 
         return $this->_user;
     }
-
-    public function attributes()
+    
+    public function attributeLabels()
     {
         return [
-            'rememberMe' => '记住我',
-            'Username' => '用户名',
-            'Password' => '密码'
+            'rememberMe'=>'记住我',
+            'username'=>'用户名',
+            'password'=>'密码'
         ];
     }
 }

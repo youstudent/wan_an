@@ -75,10 +75,10 @@ class Announcements extends \yii\db\ActiveRecord
     public function select($id)
     {
         $model = self::findOne(['id' => $id]);
-        if ($model === false) {
+        if ($model === false || $model==null) {
             return false;
         }
-        // $model['created_at']=date('Y-m-d',$model['created_at']);
+        $model['created_at']=date('Y-m-d',$model['created_at']);
         return $model;
     }
     

@@ -39,7 +39,7 @@ class WithdrawalsController extends ApiController
     public function actionIndex()
     {
         $model = new Record();
-        $data = $model->index(\Yii::$app->request->getQueryParam('id'));
+        $data = $model->index();
         if ($data) {
             return $this->jsonReturn(1, 'success', $data);
         }

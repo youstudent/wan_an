@@ -49,7 +49,7 @@ class MemberController extends ApiController
         if ($bonus = $model->getBonus($type)) {
             return $this->jsonReturn(1, 'success', $bonus);
         }
-        return $this->jsonReturn(0, 'error');
+        return $this->jsonReturn(1, '用户暂无数据');
     }
     
     /**
@@ -182,4 +182,17 @@ class MemberController extends ApiController
         return $this->jsonReturn(0, $model->errorMsg);
     }
 
+    /**
+     * 退网 api
+     * @return array
+     */
+    public function actionOutline()
+    {
+        $model = new Member();
+        if ($model->outLine()) {
+            return $this->jsonReturn(1, 'success');
+        }
+        //如果返回false 返回错误信息
+        return $this->jsonReturn(0, $model->getFirstError('message'));
+    }
 }

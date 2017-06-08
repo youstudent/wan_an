@@ -30,12 +30,10 @@ class CountSearch extends Model
     //搜索
     public function search($query){
         $this->load(\Yii::$app->request->get());
-        if ($this->start){
+        if ($this->start && $this->end){
             $start = strtotime($this->start);
-            $query->andWhere(['>=','created_at',$start]);
-        }
-        if ($this->end){
             $end = strtotime($this->end);
+            $query->andWhere(['>=','created_at',$start]);
             $query->andWhere(['<=','created_at',$end]);
         }
     }

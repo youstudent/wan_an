@@ -94,15 +94,14 @@ class BrannerController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->img = UploadedFile::getInstance($model,'img');
-            $path = 'public/upload/branner_imgs/'.date("Ymd").'/';
+            $path = '/upload/branner_imgs/';
             if ($model->img){
                 if (!file_exists($path)){
-                    mkdir($path,'777',true);
+                    mkdir($path,'0777',true);
                 }
                 $path = $path.uniqid().'.'.$model->img->extension;
                 $model->img->saveAs($path,false);
                 $model->img=$path;
-                $model->http=Yii::$app->request->hostInfo;
              }
             $model->save();
             Yii::$app->session->setFlash('info', '添加成功!');
@@ -125,15 +124,14 @@ class BrannerController extends Controller
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post())) {
             $model->img = UploadedFile::getInstance($model,'img');
-            $path = 'public/upload/branner_imgs/'.date("Ymd").'/';
+            $path = '/upload/branner_imgs/';
             if ($model->img){
-                if (!file_exists($path)){
-                    mkdir($path,'777',true);
+               if (!file_exists($path)){
+                    mkdir($path,'0777',true);
                 }
                 $path = $path.uniqid().'.'.$model->img->extension;
                 $model->img->saveAs($path,false);
                 $model->img=$path;
-                $model->http=Yii::$app->request->hostInfo;
             }else{
                 $re = $this->findModel($id);
                 $model->img=$re->img;

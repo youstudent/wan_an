@@ -4,6 +4,8 @@ namespace api\models;
 
 use Yii;
 use app\models\User;
+use api\models\Member;
+use api\models\Announcements;
 
 
 /**
@@ -52,25 +54,35 @@ class Branner extends \yii\db\ActiveRecord
     //广告管理列表
     public function branner()
     {
-        $model = self::find()->where(['status'=>1])->select(['id', 'img', 'http'])->orderBy('id DESC')->limit(3)->all();
-        foreach ($model as &$v) {
-            $v['img'] = $v['http'] . '/' . $v['img'];
-        }
-        
-        if ($model === false) {
+        $model = self::find()->where(['status'=>1])->select(['id', 'img'])->orderBy('id DESC')->limit(3)->all();
+        if ($model === false || $model==null) {
             return false;
         }
+        foreach ($model as &$v) {
+            $v['img'] = Yii::$app->params['img_domain'].$v['img'];
+        }
+        $title = Announcements::find()->select(['title'])->orderBy('created_at DESC')->limit(1)->all();
+
+        $session = Yii::$app->session->get('member');
+        $member_id = $session['member_id'];
+
+        $query = (new \yii\db\Query());
+        $out_status = $query->select('out_status')->from(Member::tableName())->where(['vip_number' => $member_id])->one();
+
+        $model = ['adv'=>$model, 'title'=>$title, 'out_status'=>$out_status];
+
         return $model;
-        
+
     }
     
     //广告详情
     public function listid($id)
     {
         $model = self::findOne(['id' => $id]);
-        if ($model === false) {
+        if ($model === false || $model == null) {
             return false;
         }
+        $model->img = Yii::$app->params['img_domain'].$model->img;
         return $model;
     }
     
