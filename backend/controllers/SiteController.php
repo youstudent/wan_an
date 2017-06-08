@@ -12,11 +12,13 @@ use backend\models\LoginForm;
  */
 class SiteController extends Controller
 {
+    public $enableCsrfValidation=false;
     /**
      * @inheritdoc
      */
     public function behaviors()
     {
+        return parent::behaviors();
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -43,15 +45,6 @@ class SiteController extends Controller
 
     /**
      * @inheritdoc
-     */
-    public function actions()
-    {
-        return [
-            'error' => [
-                'class' => 'yii\web\ErrorAction',
-            ],
-        ];
-    }
 
     /**
      * Displays homepage.
@@ -96,4 +89,6 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+    
+    
 }

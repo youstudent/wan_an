@@ -97,7 +97,7 @@ class BrannerController extends Controller
             $path = 'public/upload/branner_imgs/'.date("Ymd").'/';
             if ($model->img){
                 if (!file_exists($path)){
-                    mkdir($path,'777',true);
+                    mkdir($path,'0777',true);
                 }
                 $path = $path.uniqid().'.'.$model->img->extension;
                 $model->img->saveAs($path,false);

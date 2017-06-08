@@ -19,7 +19,7 @@ use api\models\Member;
  */
 class SiteController extends ApiController
 {
-
+    public $enableCsrfValidation = false;
     /**
      * 获取提交的登录表单
      * @return array
