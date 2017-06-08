@@ -59,7 +59,7 @@ class Bonus extends \yii\db\ActiveRecord
 
     /**
      * 获取一个会员资金流水
-     * @param string $member_id
+     * @param string $type
      * @return array
      */
     public function getBonus($type)
@@ -92,8 +92,8 @@ class Bonus extends \yii\db\ActiveRecord
         foreach ($bonus as &$v) {
             $v['created_at'] = date('Y/m/d H:i:s', $v['created_at']);
         }
-        $oneSum = $query->from(Bonus::tableName())->where(['member_id' => $member_id, 'type' => [1,2,3,5]])->sum('num');
-        $bonus['gross'] = $oneSum;
+        $gross = $query->from(Bonus::tableName())->where(['member_id' => $member_id, 'type' => [1,2,3,5]])->sum('num');
+        $bonus = ['gross'=>$gross,'data'=>$bonus];
         return $bonus;
     }
     

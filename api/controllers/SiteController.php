@@ -13,6 +13,7 @@ use api\models\ResetPasswordForm;
 use api\models\SignupForm;
 use api\models\ContactForm;
 use api\models\Member;
+use yii\captcha\CaptchaAction;
 
 /**
  * Site controller
@@ -27,6 +28,10 @@ class SiteController extends ApiController
     public function actionLogin()
     {
         $loginModel = new Member();
+        if(!$this->createAction('captcha')->validate(Yii::$app->request->post('authCode'), true)){
+            //return $this->jsonReturn(0, '验证码错误');
+        }
+
         if ($loginModel->login(Yii::$app->request->post('id'), Yii::$app->request->post('password'))) {
             return $this->jsonReturn(1, 'success');
         }
@@ -45,4 +50,35 @@ class SiteController extends ApiController
         }
         return $this->goHome();
     }
+
+    /**
+     * 验证码
+     * @return
+     */
+    public function actions()
+    {
+        return [
+//                 'captcha' =>
+//                    [
+//                        'class' => 'yii\captcha\CaptchaAction',
+//                        'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+//                    ],  //默认的写法
+            'error' => [
+                'class' => 'yii\web\CaptchaAction',
+            ],
+            'captcha' => [
+                'class' => 'api\models\CaptchaAction',
+                'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
+                'backColor'=>0x000000,//背景颜色
+                'maxLength' => 2, //最大显示个数
+                'minLength' => 2,//最少显示个数
+                'height'=>25,//高度
+                'width' => 50,  //宽度
+                'foreColor'=>0xffffff,     //字体颜色
+                'offset'=>4,        //设置字符偏移量 有效果
+                //'controller'=>'login',        //拥有这个动作的controller
+            ],
+        ];
+    }
+
 }

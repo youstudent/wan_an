@@ -7,6 +7,7 @@ $params = array_merge(
 );
 
 return [
+    'defaultRoute' => 'count/index',
     'id' => 'app-backend',
     'basePath' => dirname(__DIR__),
     'controllerNamespace' => 'backend\controllers',
@@ -36,11 +37,11 @@ return [
         'user' => [
             'identityClass' => 'backend\models\User',
             'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
+            'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true, 'domain' => ''],
         ],
         'session' => [
             'name' => 'advanced-backend',
-            'cookieParams' => ['domain' => '.wan_an', 'lifetime' => 0],
+            'cookieParams' => ['lifetime' => 0],
             'timeout' => 3600,
         ],
         'log' => [

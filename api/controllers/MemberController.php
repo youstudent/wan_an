@@ -70,7 +70,6 @@ class MemberController extends ApiController
      * 获取提交密码修改 api
      * @return array
      */
-    
     public function actionPass()
     {
         $model = new Member();
@@ -175,6 +174,7 @@ class MemberController extends ApiController
      */
     public function actionTree()
     {
+
         $model = new District();
         if($data = $model->simpleTree(Yii::$app->request->post(), ArrayHelper::getValue(Yii::$app->session->get('member'), 'vip_number'))){
             return $this->jsonReturn(1, 'success', $data);

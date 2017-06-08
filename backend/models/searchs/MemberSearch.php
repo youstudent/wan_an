@@ -52,18 +52,27 @@ class MemberSearch extends Member
             return $dataProvider;
         }
 
+        $start='';
+        $end = '';
+        //格式化时间
+        if ($this->created_at){
+            $start_date = substr($this->created_at,0,10);
+            $start = strtotime($start_date);
+            $end_date =  substr($this->created_at,12);
+            $end = strtotime($end_date);
+        }
+
         $query->andFilterWhere([
             'id' => $this->id,
             'parent_id' => $this->parent_id,
             'last_login_time' => $this->last_login_time,
             'status' => $this->status,
-            'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'vip_number' => $this->vip_number,
             'a_coin' => $this->a_coin,
             'b_coin' => $this->b_coin,
             'child_num' => $this->child_num,
-        ]);
+        ])->andFilterWhere(['>=','created_at',$start])->andFilterWhere(['<=','created_at',$end]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'password', $this->password])

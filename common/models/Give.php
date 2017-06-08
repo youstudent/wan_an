@@ -63,7 +63,9 @@ class Give extends \yii\db\ActiveRecord
         $member = Member::findOne(['id' => $member_id]);
         $result = Member::findOne(['parent_id' => $member_id]);
         $give_member  = Member::findOne(['id'=>$data['give_member_id']]);
-        
+        if ($data['give_coin']<0){
+            $this->addError('message','赠送金果和金种子不能是负数');
+        }
         if ($member_id==$data['give_member_id']){
             $this->addError('message','不能转金果和金种子给自己');
             return false;

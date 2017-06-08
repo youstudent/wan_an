@@ -1,5 +1,5 @@
 <?php
 return [
     'adminEmail' => 'admin@example.com',
-    'upload_path' => '/public/upload/',
+    'upload_path' => '/upload/',
 ];

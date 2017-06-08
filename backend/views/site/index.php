@@ -1,5 +1,5 @@
 <?php
-?>
+/**/?><!--
 <div class="form-group form-group-lg captcha field-userform-verifycode required has-error">
     <label class="control-label" for="userform-verifycode">验证</label>
     <div class="row">
@@ -14,10 +14,10 @@
         </div>
     </div>
 
-    <p class="help-block help-block-error"><?php echo ($_POST && isset($model->errors['verifyCode'][0])) ? $model->errors['verifyCode'][0] : ''; ?></p>
+    <p class="help-block help-block-error"><?php /*echo ($_POST && isset($model->errors['verifyCode'][0])) ? $model->errors['verifyCode'][0] : ''; */?></p>
 </div>
-<?php
-$js = <<<JS
+--><?php
+/*$js = <<<JS
          $(function(){                   //当页面加载的时候
         changeVerifyCode();         //刷新或者重新加载一个验证码
         
@@ -42,4 +42,4 @@ $js = <<<JS
 
 JS;
 $this->registerJs($js);
-?>
+*/?>

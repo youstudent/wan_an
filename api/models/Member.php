@@ -7,6 +7,7 @@ use Yii;
 use yii\db\Query;
 use yii\web\IdentityInterface;
 use api\models\Session;
+use yii\captcha\CaptchaAction;
 /**
  * This is the model class for table "wa_member".
  *
@@ -29,6 +30,7 @@ use api\models\Session;
  */
 class Member extends \yii\db\ActiveRecord
 {
+    public $verifyCode;
     public $child;
     public $gross_income;
     public $gorss_bonus;
@@ -50,6 +52,8 @@ class Member extends \yii\db\ActiveRecord
             [['parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num'], 'integer'],
             [['vip_number', 'a_coin', 'b_coin', 'child_num'], 'required'],
             [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255],
+            // verifyCode needs to be entered correctly
+            ['verifyCode', 'captcha'],
         ];
     }
 
@@ -75,6 +79,7 @@ class Member extends \yii\db\ActiveRecord
             'a_coin' => '金果数',
             'b_coin' => '金种子数',
             'child_num' => '直推数量',
+            'verifyCode' => 'Verification Code',
         ];
     }
 
@@ -180,7 +185,7 @@ class Member extends \yii\db\ActiveRecord
         $query = new Query();
         $member = $query
             ->from(Member::tableName())
-            ->where(['id'=>$id])
+            ->where(['vip_number'=>$id])
             ->one();
         if(!isset($detail) || !Member::validatePassword($password,$detail->password)){
             $this->addError('message', '账号或密码错误');
@@ -191,8 +196,7 @@ class Member extends \yii\db\ActiveRecord
             return false;
         }
         // session 保存用户登录数据
-        Yii::$app->session->set('member',['member_id'=>$id,'member_name'=>$member['name']]);
-
+        Yii::$app->session->set('member',['member_id'=>$id,'member_name'=>$member['name'], 'vip_number'=>$member['vip_number']]);
         return true;
 
     }

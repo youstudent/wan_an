@@ -62,6 +62,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             'value' => function ($model) {
                 return $model->getBonus(1, $model->id);
             },
+            'filter'    => false,
         ],
         [
             'attribute' => 'b_coin',
@@ -69,6 +70,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             'value' => function ($model) {
                 return $model->getBonus(2, $model->id);
             },
+            'filter'    => false,
         ],
         [
             'attribute' => 'group_num',
@@ -76,6 +78,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             'value' => function ($model) {
                 return $model->getChild(2, $model->id);
             },
+            'filter'    => false,
         ],
         [
             'attribute' => 'child',
@@ -83,6 +86,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             'value' => function ($model) {
                 return $model->getChild(3, $model->id);
             },
+            'filter'    => false,
         ],
         [
             'attribute' => 'last_login_time',
@@ -90,6 +94,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             'value' => function ($model) {
                 return date('Y-m-d H:i:s', $model->created_at);
             },
+            'filter'    => false,
         ],
         [
             'attribute' => 'status',
@@ -166,7 +171,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                     'panel' => $panels,
                     'toolbar' => $toolbars,
                 ],
-                'options' => ['id' => 'Member'.Yii::$app->user->identity->id] // a unique identifier is important
+                'options' => ['id' => 'User'.Yii::$app->user->identity->id] // a unique identifier is important
     ]);
 
     DynaGrid::end();
