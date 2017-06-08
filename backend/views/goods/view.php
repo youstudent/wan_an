@@ -41,14 +41,11 @@ $this->params['breadcrumbs'][] = '商品详情';
                     'label' => '商品图',
                     'format' => 'raw',
                     'value' =>  function($model){
-                        $imgs  = $model->getGoodsImgs($model->id);
-                        $html = '';
-                        if(isset($imgs) && count($imgs)> 0){
-                            //foreach($imgs as $img){
-                                $html .= Html::img($imgs, ['width'=> '240px', 'height'=> '240px']);
-                           // }
+                        $img = GoodsImg::findOne(['goods_id'=>$model->id])->img_path;
+                        if($img){
+                            return Html::img(Yii::$app->params['img_domain'].$img, ['width'=> '240px', 'height'=> '240px']);
                         }
-                        return $html;
+                        return  '';
                     }
             ],
             'describe:ntext',

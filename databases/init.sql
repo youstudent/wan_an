@@ -189,7 +189,6 @@ CREATE TABLE `wa_branner` (
   `content` text COMMENT '图片',
   `status` int(11) DEFAULT NULL COMMENT '状态',
   `img` varchar(255) DEFAULT NULL,
-  `http` varchar(255) DEFAULT NULL COMMENT '域名',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='轮播图管理';
 
@@ -259,7 +258,7 @@ CREATE TABLE `wa_give` (
   `give_member_id` int(11) DEFAULT NULL COMMENT '赠送会员id',
   `type` int(11) DEFAULT NULL COMMENT '赠送类别  1:金果   2:金种子',
   `created_at` int(14) DEFAULT NULL COMMENT '赠送时间',
-  `give_coin` decimal(20,0) DEFAULT NULL COMMENT '赠送金额',
+  `give_coin` int(11) DEFAULT NULL COMMENT '赠送金额',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
@@ -271,7 +270,7 @@ CREATE TABLE `wa_goods` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) DEFAULT NULL COMMENT '商品名字',
   `img` varchar(255) DEFAULT NULL COMMENT '商品图片',
-  `price` decimal(10,2) DEFAULT NULL COMMENT '商品价格',
+  `price` int(11) DEFAULT NULL COMMENT '商品价格',
   `describe` text COMMENT '商品描述',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='商品管理';
@@ -347,7 +346,7 @@ CREATE TABLE `wa_order` (
   `order_sn` varchar(50) DEFAULT NULL COMMENT '订单号',
   `member_id` int(11) DEFAULT NULL COMMENT '购买会员id',
   `name` varchar(30) DEFAULT NULL COMMENT '商品名字',
-  `price` decimal(10,2) DEFAULT NULL COMMENT '商品价格',
+  `price` int(11) DEFAULT NULL COMMENT '商品价格',
   `status` int(11) DEFAULT NULL COMMENT '状态',
   `goods_id` int(11) NOT NULL COMMENT '商品id',
   PRIMARY KEY (`id`)
@@ -374,35 +373,22 @@ CREATE TABLE `wa_record` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `member_id` int(11) DEFAULT NULL COMMENT '会员id',
   `created_at` int(11) DEFAULT NULL COMMENT '申请时间',
-  `coin` decimal(20,0) DEFAULT NULL COMMENT '申请金额',
+  `coin` int(11) DEFAULT NULL COMMENT '申请金额',
   `updated_at` int(10) DEFAULT NULL COMMENT '处理时间',
   `status` int(3) DEFAULT NULL COMMENT '状态',
-  `charge` decimal(20,0) DEFAULT NULL COMMENT '手续费',
-  `total` decimal(20,0) DEFAULT NULL COMMENT '总额',
+  `charge` int(11) DEFAULT NULL COMMENT '手续费',
+  `total` int(11) DEFAULT NULL COMMENT '总额',
   `date` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='提现记录表';
 
--- ----------------------------
---  Table structure for `wa_user`
--- ----------------------------
-DROP TABLE IF EXISTS `wa_user`;
-CREATE TABLE `wa_user` (
+CREATE TABLE `wa_member_district` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `auth_key` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `password_hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `password_reset_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `status` smallint(6) NOT NULL DEFAULT '10',
-  `created_at` int(11) NOT NULL,
-  `updated_at` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `password_reset_token` (`password_reset_token`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
+  `member_id` int(11) DEFAULT NULL COMMENT '会员id',
+  `district` int(11) DEFAULT NULL COMMENT '区id',
+  `is_ extra` tinyint(1) DEFAULT '0' COMMENT '是否是本身39个会员形成的区；1是 0否',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员直推区表';
 
 
 #插入数据

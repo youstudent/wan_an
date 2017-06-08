@@ -46,7 +46,7 @@ class Member extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num'], 'integer'],
+            [['parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num', 'out_status'], 'integer'],
             [['vip_number', 'a_coin', 'b_coin', 'child_num'], 'required'],
             [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255]
         ];
