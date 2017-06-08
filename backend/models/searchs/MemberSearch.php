@@ -19,8 +19,8 @@ class MemberSearch extends Member
     public function rules()
     {
         return [
-            [['id', 'parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num'], 'integer'],
-            [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'safe'],
+            [['id', 'parent_id', 'last_login_time', 'status','updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num'], 'integer'],
+            [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address','created_at'], 'safe'],
         ];
     }
 
@@ -67,6 +67,7 @@ class MemberSearch extends Member
             'parent_id' => $this->parent_id,
             'last_login_time' => $this->last_login_time,
             'status' => $this->status,
+//            'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'vip_number' => $this->vip_number,
             'a_coin' => $this->a_coin,
