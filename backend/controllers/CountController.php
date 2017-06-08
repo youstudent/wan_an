@@ -31,7 +31,7 @@ class CountController extends Controller
         $search->search($query);
         $rows = $query->andWhere(['coin_type'=>2,'type'=>6])->orWhere(['coin_type'=>1])->groupBy('type')->asArray()->all();
         
-        
+
         var_dump($rows);
         //获得类型 1:绩效 2:分享 3:额外分享 4:提现 5:注册奖金 6:充值 7:扣除 8:赠送 9:提现返回 10:注册扣除',
         $num1 = '';

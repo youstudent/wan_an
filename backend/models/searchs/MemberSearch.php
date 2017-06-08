@@ -19,7 +19,7 @@ class MemberSearch extends Member
     public function rules()
     {
         return [
-            [['id', 'parent_id', 'last_login_time', 'status','updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num'], 'integer'],
+            [['id', 'parent_id', 'last_login_time', 'status','updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num', 'out_status'], 'integer'],
             [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address','created_at'], 'safe'],
         ];
     }
