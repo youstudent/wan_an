@@ -61,7 +61,7 @@ class Branner extends \yii\db\ActiveRecord
             return false;
         }
         return $model;
-        
+
     }
     
     //广告详情
