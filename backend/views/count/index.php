@@ -52,7 +52,7 @@ use api\models\User;
       <td><?=$data['num1']?></td>
       <td><?=$data['num5']?></td>
       <td><?=$data['num4']?></td>
-      <td><?=$data['balance']?></td>
+      <td><?=$data['total_money']?></td>
       <td><?=$data['num10']?></td>
   </tr>
   <!--
