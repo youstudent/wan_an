@@ -102,7 +102,6 @@ class BrannerController extends Controller
                 $path = $path.uniqid().'.'.$model->img->extension;
                 $model->img->saveAs($path,false);
                 $model->img=$path;
-                $model->http=Yii::$app->request->hostInfo;
              }
             $model->save();
             Yii::$app->session->setFlash('info', '添加成功!');
@@ -128,12 +127,11 @@ class BrannerController extends Controller
             $path = 'public/upload/branner_imgs/'.date("Ymd").'/';
             if ($model->img){
                 if (!file_exists($path)){
-                    mkdir($path,'777',true);
+                    mkdir($path,'0777',true);
                 }
                 $path = $path.uniqid().'.'.$model->img->extension;
                 $model->img->saveAs($path,false);
                 $model->img=$path;
-                $model->http=Yii::$app->request->hostInfo;
             }else{
                 $re = $this->findModel($id);
                 $model->img=$re->img;

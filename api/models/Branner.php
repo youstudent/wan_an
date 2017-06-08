@@ -52,13 +52,12 @@ class Branner extends \yii\db\ActiveRecord
     //广告管理列表
     public function branner()
     {
-        $model = self::find()->where(['status'=>1])->select(['id', 'img', 'http'])->orderBy('id DESC')->limit(3)->all();
-        foreach ($model as &$v) {
-            $v['img'] = $v['http'] . '/' . $v['img'];
-        }
-        
-        if ($model === false) {
+        $model = self::find()->where(['status'=>1])->select(['id', 'img'])->orderBy('id DESC')->limit(3)->all();
+        if ($model === false || $model==null) {
             return false;
+        }
+        foreach ($model as &$v) {
+            $v['img'] = Yii::$app->params['img_domain'].$v['img'];
         }
         return $model;
         
@@ -68,9 +67,10 @@ class Branner extends \yii\db\ActiveRecord
     public function listid($id)
     {
         $model = self::findOne(['id' => $id]);
-        if ($model === false) {
+        if ($model === false || $model == null) {
             return false;
         }
+        $model->img = Yii::$app->params['img_domain'].$model->img;
         return $model;
     }
     

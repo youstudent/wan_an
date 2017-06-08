@@ -115,10 +115,12 @@ class Record extends \yii\db\ActiveRecord
     }
     
     //提现列表
-    public function index($id)
+    public function index()
     {
+        $session = Yii::$app->session->get('member');
+        $member_id = $session['member_id'];
         //根据会员id 查询用户 申请记录数据
-        $model = self::find()->select(['id', 'member_id', 'created_at', 'total', 'status'])->where(['member_id' => $id])->all();
+        $model = self::find()->select(['id', 'member_id', 'created_at', 'total', 'status'])->where(['member_id' => $member_id])->all();
         if ($model == false) {
             $this->addError('code', 0);
             $this->addError('message', '没有提现记录');

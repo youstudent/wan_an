@@ -59,12 +59,12 @@ class Give extends \yii\db\ActiveRecord
     public function give($data){
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
-        //$id = 2;
         $member = Member::findOne(['id' => $member_id]);
         $result = Member::findOne(['parent_id' => $member_id]);
         $give_member  = Member::findOne(['id'=>$data['give_member_id']]);
-        if ($data['give_coin']<0){
-            $this->addError('message','赠送金果和金种子不能是负数');
+        if ($data['give_coin']<=0){
+            $this->addError('message','赠送金果和金种子必须大于0');
+            return false;
         }
         if ($member_id==$data['give_member_id']){
             $this->addError('message','不能转金果和金种子给自己');
@@ -126,7 +126,6 @@ class Give extends \yii\db\ActiveRecord
     
     //赠送记录
     public function gives(){
-        //$member_id=2;
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
         $data = Give::find()->where(['member_id'=>$member_id])->all();
@@ -145,7 +144,6 @@ class Give extends \yii\db\ActiveRecord
     public function gain(){
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
-        //$give_member_id = 3;
         $data = Give::find()->where(['give_member_id'=>$member_id])->all();
         if ($data==false || $data==null){
             $this->addError('message','没有获赠送数据');
