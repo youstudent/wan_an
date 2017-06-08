@@ -47,39 +47,39 @@ class CountController extends Controller
         //总结余
        
       foreach ($rows as $row) {
+          
             //循环数据   根据类型区分
-            switch ($row->type) {
+            switch ($row['type']) {
                 case 1:
-                    $num1 += $row->num;
+                    $num1 =$row;
                     continue;
                 case 2:
-                    $num2 += $row->num;
+                    
                     continue;
                 case 3:
-                    $num3 += $row->num;
+                   
                     continue;
                 case 4:
-                    $num4 += $row->num;
+                   
                     continue;
                 case 5:
-                    $num5 += $row->num*5;
+                   
                     continue;
                 case 6:
-                    if ($row->coin_type==2){
-                        $num6 += $row->num;
-                    }
+                   
                     continue;
                 case 7:
-                    $num7 += $row->num;
+                  
                     continue;
                 case 8:
-                    $num8 += $row->num;
+                    
                     continue;
                 case 10:
                     $num10+=1*900;
                     break;
             }
         }
+        var_dump($num1);exit;
         $balance = $num6-$num4;
         $data=['balance'=>$balance,'num4'=>$num4,'num5'=>$num5,'num10'=>$num10,'num2'=>$num2,'num1'=>$num1,'num3'=>$num3];
         return $this->render('index', ['search' => $search,'data'=>$data]);
