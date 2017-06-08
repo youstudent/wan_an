@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = '广告管理列表';
             'format' => 'raw',
             'value' =>  function($model){
              if ($model->img){
-                 return  Html::img(Yii::$app->params['img_domain'].$model->img, ['width'=> '40px', 'height'=> '40px']);
+                 return  Html::img($model->img, ['width'=> '40px', 'height'=> '40px']);
              }
                  return '还未上传图片';
                     

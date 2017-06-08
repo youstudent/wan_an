@@ -32,7 +32,7 @@ class Branner extends \yii\db\ActiveRecord
     {
         return [
             [['name','content','status'],'required' ],
-            [['img'], 'file', 'extensions' => 'jpg, png', 'mimeTypes' => 'image/jpeg, image/png',],
+            [['img'], 'file', 'extensions' => 'jpg, png,gif,jpeg', 'mimeTypes' => 'image/jpeg, image/png',],
             [['name'], 'string', 'max' => 30],
             [['img'],'safe']
         ];
