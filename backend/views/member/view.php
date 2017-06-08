@@ -65,7 +65,10 @@ $this->params['breadcrumbs'][] = '奖金详情';
        // 'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
     $columns = [
-        'id',
+        [
+            'attribute' => 'id',
+            'filter'    => false,
+        ],
         [
             'attribute' => 'created_at',
             'label' => '获得时间',
