@@ -232,7 +232,7 @@ class Member extends \yii\db\ActiveRecord
         $member_id = $session['member_id'];
 
         $model = Member::findOne($member_id);
-        $model->out_staus = 2;
+        $model->staus = 2;
         if($model->save()){
             return true;
         }
