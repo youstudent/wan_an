@@ -134,13 +134,12 @@ class MemberController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model1 = new MemberForm();
-        $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            if ($member = $model1->updateMember($id,Yii::$app->request->post())) {
+        $formModel = new MemberForm();
+        $model = new Member();
+        $model = $model->one($id);
+        if ($model->load(Yii::$app->request->post()) && $formModel->updateMember($id,Yii::$app->request->post())) {
                 Yii::$app->session->setFlash('success', '修改成功');
                 return $this->redirect(['index']);
-            }
         }
 
         return $this->render('update', [
