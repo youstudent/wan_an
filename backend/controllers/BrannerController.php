@@ -21,7 +21,6 @@ class BrannerController extends Controller
 
     public function behaviors()
     {
-        return parent::behaviors();
         return [
         'access' => [
                 'class' => \yii\filters\AccessControl::className(),
@@ -94,7 +93,7 @@ class BrannerController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->img = UploadedFile::getInstance($model,'img');
-            $path = 'upload/branner_imgs/';
+            $path = '/upload/branner_imgs/';
             if ($model->img){
                 if (!file_exists($path)){
                     mkdir($path,'0777',true);
@@ -124,7 +123,7 @@ class BrannerController extends Controller
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post())) {
             $model->img = UploadedFile::getInstance($model,'img');
-            $path = 'upload/branner_imgs/';
+            $path = '/upload/branner_imgs/';
             if ($model->img){
                if (!file_exists($path)){
                     mkdir($path,'0777',true);

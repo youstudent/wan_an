@@ -24,20 +24,16 @@ $this->params['breadcrumbs'][] = '财务管理列表';
     <div class="page-header">
     
     </div>
-    
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
-    
-    
+  
     <?php
     $toolbars = [
         ['content' =>
             // Html::a('<i class="glyphicon glyphicon-plus"></i>', ['record/create'], ['type' => 'button', 'title' => '添加数据 ' ,'class' => 'btn btn-success']) . ' ' .
-            // Html::a('<i class="fa fa-file-excel-o"></i>', ['record/parsing'], ['type' => 'button', 'title' => 'Parsing Excel ' . $this->title, 'class' => 'btn btn-danger']) . ' ' .
+            //Html::a('<i class="fa fa-file-excel-o"></i>', ['record/parsing'], ['type' => 'button', 'title' => 'Parsing Excel ' . $this->title, 'class' => 'btn btn-danger']) . ' ' .
              Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['record/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
-
-
+            
          ],
-        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
+       ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
        // '{export}',
     ];
     $panels = [

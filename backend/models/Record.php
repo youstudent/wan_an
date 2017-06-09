@@ -66,7 +66,10 @@ class Record extends \yii\db\ActiveRecord
     }
     
     
-    //记录 通过或拒绝
+    /**
+     * @param $id 传过来的id
+     * @param $ids 通过还是拒绝
+     */
     public static function pass($id,$ids){
         $Helper = new Helper();
         $model=self::findOne(['id'=>$id]);
@@ -84,6 +87,24 @@ class Record extends \yii\db\ActiveRecord
         if ($model->save() && $ids==1){
              // 申请通过
             $Helper->pool($model->member_id,1,4,$model->coin,$model->charge);
+        }
+    }
+    
+    
+    /**
+     * @param $datas传过来的id
+     * @param $status拒绝值为2
+     * @param $type保存的类型为 9提现返回
+     */
+    public static function batch($datas,$status,$type){
+        foreach ($datas as $data){
+          $result = Record::findOne(['id'=>$data]);
+          $result->status=$status;
+          if ($result->save()){
+              //修改成功  保存数据到流水表
+            $Helper = new Helper();
+            $Helper->pool($result->member_id,1,$type,$result->coin,$result->charge);
+          }
         }
     }
     

@@ -129,7 +129,20 @@ class RecordController extends Controller
     
     
     
-    //批量操作
+    //批量操作 通过
+    public function actionBatch(){
+        //接收数据
+        $data = [1,2,3,4,6];
+        Record::batch($data,1,4);
+    }
+    
+    //批量操作 拒绝
+    public function actionRefuse(){
+        $data = [1,2,3,4,6];
+        Record::batch($data,2,9);
+        
+    }
+    
     
     
 
