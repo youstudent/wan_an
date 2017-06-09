@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['member/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
 
         ],
-        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
+//        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
         //'{export}',
     ];
     $panels = [
@@ -40,14 +40,6 @@ $this->params['breadcrumbs'][] = '会员管理列表';
 //        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
                     'id',
         'mobile',
-        [
-            'attribute' => 'name',
-            'filter'    => false,
-        ],
-        [
-            'attribute' => 'parent_id',
-            'filter'    => false,
-        ],
         [
             'attribute' => 'created_at',
             'label' => '注册时间',
@@ -62,8 +54,18 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                     'locale' => ['format' => 'Y-m-d'],
                 ],
             ]),
-        ],
 
+        ],
+        [
+            'attribute' => 'name',
+            'filter'    => false,
+            'mergeHeader'=>true,
+        ],
+        [
+            'attribute' => 'parent_id',
+            'filter'    => false,
+            'mergeHeader'=>true,
+        ],
         [
             'attribute' => 'a_coin',
             'label' => '金果数',
@@ -71,6 +73,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                 return $model->getBonus(1, $model->id);
             },
             'filter'    => false,
+            'mergeHeader'=>true,
         ],
         [
             'attribute' => 'b_coin',
@@ -79,6 +82,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                 return $model->getBonus(2, $model->id);
             },
             'filter'    => false,
+            'mergeHeader'=>true,
         ],
         [
             'attribute' => 'group_num',
@@ -87,6 +91,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                 return $model->getChild(2, $model->id);
             },
             'filter'    => false,
+            'mergeHeader'=>true,
         ],
         [
             'attribute' => 'child',
@@ -95,6 +100,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                 return $model->getChild(3, $model->id);
             },
             'filter'    => false,
+            'mergeHeader'=>true,
         ],
         [
             'attribute' => 'last_login_time',
@@ -103,6 +109,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                 return date('Y-m-d H:i:s', $model->created_at);
             },
             'filter'    => false,
+            'mergeHeader'=>true,
         ],
         [
             'attribute' => 'status',
@@ -123,15 +130,12 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                 }
             },
             'filter'    => false,
+            'mergeHeader'=>true,
 //            'filter' => [
 //                0 => '已冻结',
 //                1 => '正常',
 //                2 => '已退网'
 //            ]
-            'class' => 'kartik\grid\DataColumn',
-            'filterType' => 0,
-            'noWrap' => false,
-            'vAlign' => 'middle',
         ],
         [
             'class' => 'kartik\grid\ActionColumn',
@@ -163,7 +167,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             ]
         ],
         [
-            'class' => 'kartik\grid\CheckboxColumn',
+//            'class' => 'kartik\grid\CheckboxColumn',
         ],
     ];
 

@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = '退网管理列表';
         ['content' =>
             Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['outline/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
         ],
-        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
+//        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
         //'{export}',
     ];
     $panels = [
@@ -51,6 +51,15 @@ $this->params['breadcrumbs'][] = '退网管理列表';
                 'convertFormat' => true,
 
             ]),
+        ],
+
+        [
+            'attribute' => 'updated_at',
+            'label' => '注册时间',
+            'value' => function ($model) {
+                return date('Y-m-d H:i:s', $model->updated_at);
+            },
+            'filter'    => false,
         ],
 
         /*[

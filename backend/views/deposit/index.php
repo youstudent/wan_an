@@ -24,15 +24,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
             
         ],
-        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
-        '{export}',
+//        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
+//        '{export}',
     ];
     $panels = [
         'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-book"></i>  ' . $this->title . '</h3>',
 //        'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
     $columns = [
-        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
+//        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
             'member_id',
         [
             'attribute' => 'created_at',
@@ -74,6 +74,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 return $model->num;
             },
             'filter'    => false,
+            'mergeHeader'=>true,
         ],
         [
             'attribute' => 'operation',
@@ -88,10 +89,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         break;
                 }
             },
-            'filter' => [
-                1 => '充值',
-                2 => '扣除'
-            ]
+//            'filter' => [
+//                1 => '充值',
+//                2 => '扣除'
+//            ]
+            'mergeHeader'=>true,
         ],
     ];
     

@@ -26,7 +26,6 @@ class ApiController extends Controller
             'timestamp' => $time,
             'message' => $message,
             'data' => $data,
-            'title'=>$title,
         ];
     }
 
