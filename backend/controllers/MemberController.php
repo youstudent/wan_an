@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\District;
 use Yii;
 use backend\models\form\MemberForm;
 use backend\models\Member;
@@ -313,5 +314,22 @@ class MemberController extends Controller
                 print_r($er);
             }
         }
+    }
+
+    /**
+     * 后台系谱图
+     * @return \yii\web\Response
+     */
+    public function actionTree()
+    {
+        $model = new District();
+        $json = [ 'code'=> 0, 'data' => [], 'message'=> 'error'];
+        if($data = $model->getFullTree(Yii::$app->request->getQueryParam('vip_number')))
+        {
+            $json = [ 'code'=> 1, 'data' => $data, 'message'=> 'success'];
+            return $this->asJson($json);
+        }
+        $json = [ 'code'=> 0, 'data' => [], 'message'=> $model->getFirstErrors()];
+        return $this->asJson($json);
     }
 }

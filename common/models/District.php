@@ -2,6 +2,7 @@
 
 namespace common\models;
 
+use backend\models\Member;
 use Symfony\Component\Debug\Tests\Fixtures\DeprecatedInterface;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -91,6 +92,34 @@ class District extends \yii\db\ActiveRecord
     }
 
     /**
+     * 获取完成的区。第三层有bug，先不修复了
+     * @param $vip_number
+     * @return array
+     */
+    public function getFullTree($vip_number)
+    {
+        //找到这个vip的 base 区
+        $district = $this->getMemberDistrict($vip_number);
+        //找到这个区的所有会员
+        $members = $this->getDistrictAllMember($district['district'], 'vip_number,seat');
+        //这里要根据座位号来排序了
+        foreach($members as &$val){
+            $val['pid'] = Tree::$structure[$val['seat']]['node'];
+        }
+
+        //return $members;
+        $tree = [];
+        foreach($members as $member){
+            if(isset($members[$member['pid']])){
+                $members[$member['pid']]['child'][] = &$members[$member['seat']];
+            }else{
+                $tree[] = &$members[$member['seat']];
+            }
+        }
+
+        return $tree;
+    }
+    /**
      * 查询单个会员的信息
      * @param $vip_number
      * @return array|null|\yii\db\ActiveRecord
@@ -99,6 +128,7 @@ class District extends \yii\db\ActiveRecord
     {
         return (new \yii\db\Query())->from(self::tableName() . ' d')->where(['vip_number'=>$vip_number, 'seat'=>1])->innerJoin('{{%member}} m', 'm.id = d.member_id')->select('m.vip_number,d.*')->one();
     }
+
 
     /**
      * 找到指定区域指定的座位数据
@@ -109,7 +139,17 @@ class District extends \yii\db\ActiveRecord
      */
     public function getDistrictMember($district, $select = 'm.vip_number,d.*', $seat = [1,2,3,4])
     {
-        return (new \yii\db\Query())->from(self::tableName() . ' d')->where(['seat'=>$seat, 'district'=>$district])->innerJoin('{{%member}} m', 'm.id = d.member_id')->select($select)->orderBy('seat')->all();
+        return (new \yii\db\Query())->from(self::tableName() . ' d')->where(['seat'=>$seat, 'district'=>$district])->innerJoin('{{%member}} m', 'm.id = d.member_id')->select($select)->orderBy(['seat'=>SORT_ASC])->all();
+    }
+
+    /**
+     * 获取指定区域的所有会员
+     * @param $district
+     * @param string $select
+     * @return array
+     */
+    public function getDistrictAllMember($district, $select = 'm.vip_number,d.*'){
+        return (new \yii\db\Query())->from(self::tableName() . ' d')->where(['district'=>$district])->innerJoin('{{%member}} m', 'm.id = d.member_id')->select($select)->orderBy(['seat'=>SORT_ASC])->indexBy('seat')->all();
     }
 
     /**
