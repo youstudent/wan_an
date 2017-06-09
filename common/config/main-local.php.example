@@ -17,5 +17,13 @@ return [
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
+        'user'    => [
+            'enableAutoLogin' => true,
+            'identityCookie'  => ['name' => '_identity', 'httpOnly' => true, 'domain' => '.wantu3.ypxl', 'path' => '/',],
+        ],
+        'session' => [
+            'cookieParams' => ['domain' => '.wantu3.ypxl', 'lifetime' => 0, 'path' => '/',],
+            'timeout'      => 3600,
+        ],
     ],
 ];
