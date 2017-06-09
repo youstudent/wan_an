@@ -31,6 +31,7 @@ class Member extends \yii\db\ActiveRecord
     public $state;
     public $group_num;
     public $child;
+    public $parent_vip;
 
     /**
      * @inheritdoc
@@ -46,12 +47,11 @@ class Member extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num'], 'integer'],
+            [['parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num', 'vip_number','out_status'], 'integer'],
             [['vip_number', 'a_coin', 'b_coin', 'child_num'], 'required'],
             [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255]
         ];
     }
-
     /**
      * @inheritdoc
      */
@@ -76,6 +76,7 @@ class Member extends \yii\db\ActiveRecord
             'child_num' => '直推数量',
             'group_num' => '区数量',
             'child' => '区数量',
+            'parent_vip' => '直推会员卡号',
         ];
     }
 
@@ -213,5 +214,23 @@ class Member extends \yii\db\ActiveRecord
         }
 
         return $num;
+    }
+    public function one($id){
+        if (($model = Member::findOne($id)) !== null) {
+            $model->getVip();
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+    /**
+     * 获取parent卡号
+     */
+    public function getVip()
+    {
+        $parent = Member::findOne(['id' => $this->parent_id]);
+
+        return $this->parent_vip = $parent['vip_number'];
+
     }
 }

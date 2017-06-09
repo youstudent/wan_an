@@ -23,7 +23,7 @@ use kartik\widgets\SwitchInput;
             <div class="row">
         <div class="col-md-6">
         
-            <?= $form->field($model, 'parent_id')->textInput() ?>
+            <?= $form->field($model, 'parent_vip')->textInput(['readonly'=>'true']) ?>
 
             <?= $form->field($model, 'mobile')->textInput(['maxlength' => 255]) ?>
 
@@ -33,6 +33,8 @@ use kartik\widgets\SwitchInput;
         </div>
 
         <div class="col-md-6">
+
+            <?= $form->field($model, 'vip_number')->textInput(['readonly'=>'true']) ?>
 
             <?= $form->field($model, 'name')->textInput(['maxlength' => 255]) ?>
 

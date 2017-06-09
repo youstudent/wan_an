@@ -20,7 +20,8 @@ class OutlineSearch extends Outline
     public function rules()
     {
         return [
-            [['id', 'member_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['id', 'member_id', 'status', 'updated_at'], 'integer'],
+            [['created_at'], 'safe'],
         ];
     }
 
@@ -52,15 +53,25 @@ class OutlineSearch extends Outline
             return $dataProvider;
         }
 
+        $start='';
+        $end = '';
+        //格式化时间
+        if ($this->created_at){
+            $start_date = substr($this->created_at,0,10);
+            $start = strtotime($start_date);
+            $end_date =  substr($this->created_at,12);
+            $end = strtotime($end_date);
+        }
+
         $query->andFilterWhere([
             'id' => $this->id,
             'member_id' => $this->member_id,
             'member.name' => $this->name,
             'member.mobile' => $this->mobile,
             'status' => $this->status,
-            'created_at' => $this->created_at,
+//            'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-        ]);
+        ])->andFilterWhere(['>=','created_at',$start])->andFilterWhere(['<=','created_at',$end]);
 
         return $dataProvider;
     }

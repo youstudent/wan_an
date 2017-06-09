@@ -48,6 +48,7 @@ class Outline extends \yii\db\ActiveRecord
             'status' => '账号状态',
             'created_at' => '退网时间',
             'updated_at' => '注册时间',
+            'member.created_at' => '注册时间'
         ];
     }
     
