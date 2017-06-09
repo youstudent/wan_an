@@ -38,15 +38,21 @@ $this->params['breadcrumbs'][] = '财务管理列表';
 
          ],
         ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
-        //'{export}',
+       // '{export}',
     ];
     $panels = [
         'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>'." &nbsp; 财务管理列表". '</h3>',
     
     ];
     $columns = [
-        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
-        
+        //['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
+        /*[
+            'class'=>\kartik\grid\CheckboxColumn::className(),
+            'name'=>'id',  //设置每行数据的复选框属性
+            'headerOptions' => ['width'=>'40'],
+            'footer' => '<button href="#" class="btn btn-default btn-xs btn-delete ">批量通过</button>',
+            'footerOptions' => ['colspan' => 10],  //设置删除按钮垮列显示；
+        ],*/
         'member_id',
         [
             'label' => '会员名',
@@ -109,7 +115,7 @@ $this->params['breadcrumbs'][] = '财务管理列表';
         
         ['class' => 'kartik\grid\ActionColumn',
             //'dropdown' => false,
-            //'vAlign' => 'middle',
+            'vAlign' => 'middle',
             //'viewOptions' => ['title' => '查看', 'data-toggle' => 'tooltip'],
             //'updateOptions' => ['title' => '通过'],
             //'deleteOptions' => ['title' => '拒绝'],
@@ -120,7 +126,10 @@ $this->params['breadcrumbs'][] = '财务管理列表';
                     $options = [
                         'title' => Yii::t('yii', '通过'),
                         'aria-label' => Yii::t('yii', '通过'),
-                        'data-pjax' => '0',
+                        'data-pjax' => '1',
+                        'class'=>'a-post',
+                        'post=msg'=>'你确定要启用吗?',
+                        'post_url'=>1,
                     ];
                     if ($model->status == 0) {
                         return Html::a('通过', $url, $options);
@@ -131,7 +140,7 @@ $this->params['breadcrumbs'][] = '财务管理列表';
                     $options = [
                         'title' => Yii::t('yii', '拒绝'),
                         'aria-label' => Yii::t('yii', '拒绝'),
-                        'data-pjax' => '0',
+                        'data-pjax' => '2',
                     ];
                     if ($model->status == 0) {
                         return Html::a('拒绝', $url, $options);
@@ -145,7 +154,7 @@ $this->params['breadcrumbs'][] = '财务管理列表';
         ],
         
         [
-            //'class' => 'kartik\grid\CheckboxColumn',
+           'class' => 'kartik\grid\CheckboxColumn',
         ],
     ];
     
@@ -168,7 +177,39 @@ $this->params['breadcrumbs'][] = '财务管理列表';
         ],
         'options' => ['id' => 'Record' . Yii::$app->user->identity->id] // a unique identifier is important
     ]);
-    
     DynaGrid::end();
+
     ?>
 </div>
+
+<script>
+    //a标签post提交
+    $('.kv-row-checkbox').click(function() {
+       alert(1111);
+        $("#myModal").remove();
+        var url = $(this).attr('post-url');
+        var msg = $(this).attr('post-msg');
+        var HTML = '<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">' +
+            '<div class="modal-dialog" role="document">' +
+            ' <div class="modal-content">' +
+            '  <div class="modal-header">' +
+            '   <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>' +
+            '  <h4 class="modal-title" id="myModalLabel">提示</h4>' +
+            '</div>' +
+            '<div class="modal-body">' +
+            msg +
+            '</div>' +
+            '<div class="modal-footer">' +
+            ' <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>' +
+            '<button type="button" class="btn btn-primary" id="sure_That">确定</button>' +
+            ' </div>' +
+            ' </div>' +
+            '</div>' +
+            '</div>';
+        if(msg) {
+            $("body").append(HTML)
+        };
+        
+</script>
+
+
