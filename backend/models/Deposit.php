@@ -101,10 +101,10 @@ class Deposit extends \yii\db\ActiveRecord
                 $type = $data['Deposit']['operation'] ==1 ? 6 : 7;
                 if ($data['Deposit']['operation'] ==1) {
                     $data['Deposit']['type']==1?$result->a_coin += $data['Deposit']['num']:$result->b_coin += $data['Deposit']['num'];
-                    $result->save();
+                    $result->save(false);
                 } else {
                     $data['Deposit']['type']==1?$result->a_coin -= $data['Deposit']['num']:$result->b_coin -= $data['Deposit']['num'];
-                    $result->save();
+                    $result->save(false);
                 }
 
                 $Helper= new Helper();

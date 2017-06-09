@@ -291,8 +291,8 @@ class AnnouncementsController extends Controller
                 'class' => 'common\widgets\ueditor\UeditorAction',
                 'config'=>[
                     //上传图片配置
-                    'imageUrlPrefix' => "", /* 图片访问路径前缀 */
-                    'imagePathFormat' => "/image/{yyyy}{mm}{dd}/{time}{rand:6}", /* 上传保存路径,可以自定义保存路径和文件名格式 */
+                    'imageUrlPrefix' => Yii::$app->params['img_domain'], /* 图片访问路径前缀 */
+                    'imagePathFormat' => "public/upload/", /* 上传保存路径,可以自定义保存路径和文件名格式 */
                 ]
             ]
         ];

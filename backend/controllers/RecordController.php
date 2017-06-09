@@ -126,6 +126,12 @@ class RecordController extends Controller
         Record::pass($id,2);
         return $this->redirect(['index',['status'=>0]]);
     }
+    
+    
+    
+    //批量操作
+    
+    
 
     /**
      * Finds the Record model based on its primary key value.
