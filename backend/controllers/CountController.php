@@ -16,10 +16,47 @@ use backend\models\searchs\CountSearch;
 use Codeception\Module\REST;
 use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use function PHPSTORM_META\type;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 
 class CountController extends Controller
 {
+    public function behaviors()
+    {
+        return parent::behaviors();
+        return [
+            'access' => [
+                'class' => \yii\filters\AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'actions' => ['index','view','sample','parsing-log'],
+                        'roles' => ['viewer']
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['update','create','parsing'],
+                        'roles' => ['editor']
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['delete'],
+                        'roles' => ['admin']
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['admin']
+                    ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['post'],
+                ],
+            ],
+        ];
+    }
     //后台统计中心
     public function actionIndex()
     {
@@ -34,7 +71,7 @@ class CountController extends Controller
         $seed = Bonus::find()->select("sum(num),type,coin_type");
         $search->search($seed);
         $num_seed = $seed->andWhere(['coin_type'=>2,'type'=>6])->asArray()->all();
-        
+         //查询 注册人的金种子    总业绩=  注册人数x900(注册成功会扣除400的金果和500的金种子)
         $b_coin = Bonus::find()->select("sum(num),type,coin_type");
         $search->search($b_coin);
         $coin  = $b_coin->andWhere(['coin_type'=>2,'type'=>10])->asArray()->all();
@@ -88,8 +125,6 @@ class CountController extends Controller
         $data=['total_money'=>$total_money,'num4'=>$num4,'num5'=>$num5,'num10'=>$coin,'num2'=>$num2,'num1'=>$num1,'num3'=>$num3];
         return $this->render('index', ['search' => $search,'data'=>$data]);
     }
-    
-    
     
     
 }

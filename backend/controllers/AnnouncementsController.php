@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use backend\fixtures\AccessFilter;
 use Yii;
 use backend\models\Announcements;
 use yii\data\ActiveDataProvider;
@@ -21,7 +22,6 @@ class AnnouncementsController extends Controller
 
     public function behaviors()
     {
-        return parent::behaviors();
         return [
         'access' => [
                 'class' => \yii\filters\AccessControl::className(),
@@ -55,7 +55,9 @@ class AnnouncementsController extends Controller
             ],
         ];
     }
-
+ 
+    
+    
     /**
      * Lists all Announcements models.
      * @return mixed
@@ -292,9 +294,10 @@ class AnnouncementsController extends Controller
                 'config'=>[
                     //上传图片配置
                     'imageUrlPrefix' => Yii::$app->params['img_domain'], /* 图片访问路径前缀 */
-                    'imagePathFormat' => "public/upload/", /* 上传保存路径,可以自定义保存路径和文件名格式 */
+                    'imagePathFormat' => "/public/upload/branner_imgs/", /* 上传保存路径,可以自定义保存路径和文件名格式 */
                 ]
             ]
         ];
     }
+    
 }
