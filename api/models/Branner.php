@@ -67,9 +67,20 @@ class Branner extends \yii\db\ActiveRecord
         $member_id = $session['member_id'];
 
         $query = (new \yii\db\Query());
-        $out_status = $query->select('out_status')->from(Member::tableName())->where(['vip_number' => $member_id])->one();
+        $outNum = $query->select('out_status')->from(Member::tableName())->where(['vip_number' => $member_id])->scalar();
+        $out_status = 0;
+        if ($outNum == 1) {
+            $out_status = 1;
+        }
 
-        $model = ['adv'=>$model, 'title'=>$title, 'out_status'=>$out_status];
+        $memberModel = new Member();
+        $son = $memberModel->son($member_id);
+        $child = $memberModel->child($member_id);
+        $void_status = 0;
+        if ($son = 0 && $child >= 3) {
+            $void_status = 1;
+        }
+        $model = ['adv' => $model, 'title' => $title, 'out_status' => $out_status, 'void_status' => $void_status];
 
         return $model;
 

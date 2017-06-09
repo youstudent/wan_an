@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = '果树管理列表';
 
             
         ],
-        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
+//        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
        // '{export}',
     ];
     $panels = [
@@ -84,9 +84,9 @@ $this->params['breadcrumbs'][] = '果树管理列表';
                 },
             ]
         ],
-        [
-            'class' => 'kartik\grid\CheckboxColumn',
-        ],
+//        [
+//            'class' => 'kartik\grid\CheckboxColumn',
+//        ],
     ];
     
     $dynagrid = DynaGrid::begin([
