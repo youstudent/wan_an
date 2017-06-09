@@ -307,6 +307,7 @@ CREATE TABLE `wa_member` (
   `a_coin` int(11) NOT NULL COMMENT '金果数',
   `b_coin` int(11) NOT NULL COMMENT '金种子数',
   `child_num` int(11) NOT NULL COMMENT '直推数量',
+  `out_status` int(10) NOT NULL DEFAULT 0 COMMENT "是否可以退网 0:否 1:是",
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='会员信息表';
 

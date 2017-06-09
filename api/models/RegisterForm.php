@@ -269,9 +269,9 @@ class RegisterForm extends Member
         //TODO:: 1 检查换位条件 2. 给根会员添加有一个区数量保存 3.判断顶级会员的直推人的区数量。并执行直推区奖励
 
         //判断根会员是否要被换位
-        $district_info = $this->byDistrictsGetMemberId($district);
+        $member_ids = $this->byDistrictsGetAllMemberId($district);
         //获取这个根会员的基本信息
-        $member = Member::findOne(['id'=>$district_info['member_id']]);
+        $member = Member::findAll(['member_id'=> $member_ids]);
         if(!isset($member)){
             $this->errorMsg = '满区逻辑-未查询到当前区拥有这';
             return false;
@@ -284,13 +284,14 @@ class RegisterForm extends Member
         //这里要添加直推区，就在这里判断一下直推区吧
         $referrer = Member::findOne(['id'=>$member->parent_id]);
 
+
         //给会员的推荐人添加一个直推区记录
         return true;
 
 
     }
     /**
-     * 从区域id和座位找到指定的会员id
+     * 从区域id和座位找到指定的会员的信息
      * @param $districts
      * @param int $seat
      * @return array|null|\yii\db\ActiveRecord
@@ -300,6 +301,16 @@ class RegisterForm extends Member
         return District::find()->where(['district' => $districts, 'seat' => $seat])->one();
     }
 
+    /**
+     * 从区域id获取指定会员的member_id
+     * @param $districts
+     * @param array $seat
+     * @return array
+     */
+    public function byDistrictsGetAllMemberId($districts, $seat = [2,3,4])
+    {
+        return District::find()->where(['district' => $districts, 'seat' => $seat])->select('member_id')->column();
+    }
     /**
      * 根据人 member_id 获取所有区，并查询这个区的人数。再返回人数未满的第一个区
      * @param $member_id

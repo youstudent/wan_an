@@ -315,20 +315,9 @@ class MemberController extends Controller
         }
     }
 
-    /**
-     * 后台系谱图
-     * @return \yii\web\Response
-     */
-    public function actionTree()
+
+    public function actionTreePage()
     {
-        $model = new District();
-        $json = [ 'code'=> 0, 'data' => [], 'message'=> 'error'];
-        if($data = $model->getFullTree(Yii::$app->request->getQueryParam('vip_number')))
-        {
-            $json = [ 'code'=> 1, 'data' => $data, 'message'=> 'success'];
-            return $this->asJson($json);
-        }
-        $json = [ 'code'=> 0, 'data' => [], 'message'=> $model->getFirstErrors()];
-        return $this->asJson($json);
+        return $this->render('tree_page');
     }
 }
