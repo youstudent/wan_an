@@ -232,8 +232,9 @@ class Member extends \yii\db\ActiveRecord
         $member_id = $session['member_id'];
 
         $model = Member::findOne($member_id);
-        $model->staus = 2;
-        if($model->save()){
+        $model->status = 2;
+
+        if($model->save(false)){
             return true;
         }
         return false;

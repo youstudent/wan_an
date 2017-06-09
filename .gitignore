@@ -33,3 +33,7 @@ phpunit.phar
 
 # vagrant runtime
 /.vagrant
+
+
+# 图片路径
+/backend/web/public/upload
