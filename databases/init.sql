@@ -391,6 +391,14 @@ CREATE TABLE `wa_member_district` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员直推区表';
 
+CREATE TABLE `wa_share_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `referrer_id` int(11) NOT NULL COMMENT '分享人member_id',
+  `member_id` int(11) NOT NULL COMMENT '生成会员id',
+  `created_at` int(11) NOT NULL DEFAULT '0' COMMENT '生成时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COMMENT='推荐会员记录表'
+
 
 #插入数据
 insert into `wa_adminuser` ( `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `status`, `created_at`, `updated_at`) values ( 'admin', 'JAbY85Q5ozahz1h2hddB-uy5MWfcU-Wy', '$2y$13$vknBz7miG4O.W.mlPBLFE.0vcKiqHvMcz1xKCoZTyTPRVfEBCvvHG', null, 'a@a.com', '10', '1495553266', '1495553266');

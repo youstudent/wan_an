@@ -10,6 +10,8 @@ namespace api\models;
 
 use common\components\Helper;
 use common\models\District;
+use common\models\MemberDistrict;
+use common\models\ShareLog;
 use common\models\Tree;
 use Yii;
 use yii\db\Exception;
@@ -98,6 +100,7 @@ class RegisterForm extends Member
             return false;
         }
         $this->member_id = $result->id;
+        Helper::shareMemberLog($this->referrer_id, $this->member_id);
 
 
 
@@ -204,9 +207,8 @@ class RegisterForm extends Member
      */
     public function addDistrictSeat($referrer_id)
     {
-        //根据推荐人 member_id 获取到推荐人的所有区，并查询这个区的人数。再返回人数未满的第一个区
-        $affiliated_node = $this->getMemberDistrictSeatCount($referrer_id);
 
+        $affiliated_node = $this->getAbleDistrict($referrer_id);
 
         //获取会员的摆放区域
         $base_district = $affiliated_node['district'];
@@ -236,6 +238,7 @@ class RegisterForm extends Member
 
             $node[] = $seat_node;
             $result = $this->addNode($this->member_id, $seat_node['district'], $seat_node['seat'] + 1);
+
             if ($result == false) {
                 return false;
             }
@@ -250,6 +253,7 @@ class RegisterForm extends Member
             }
             $i++;
         }
+        $affiliated_node['num'] =40;
         //添加这个会员，然后就区满的情况，要进行满区逻辑
         if($affiliated_node['num'] = 40){
             $result = $this->actionFullDistrict($base_district);
@@ -261,34 +265,96 @@ class RegisterForm extends Member
 
         return true;
     }
-
+    public function getAbleDistrict($referrer_id)
+    {
+        //根据推荐人 member_id 获取到推荐人的所有区，并查询这个区的人数。再返回人数未满的第一个区
+        $affiliated_node = $this->getMemberDistrictSeatCount($referrer_id);
+        while(is_null($affiliated_node)){
+            //找到这会员的可用下级
+        }
+        return $affiliated_node;
+    }
 
     //满区逻辑
     public function actionFullDistrict($district)
     {
         //TODO:: 1 检查换位条件 2. 给根会员添加有一个区数量保存 3.判断顶级会员的直推人的区数量。并执行直推区奖励
 
-        //判断根会员是否要被换位
+        //添加直推区
+        $this->addReferrerChildDistrict($district);
+
+        //判断 2.3.4位置的要不要被换位
         $member_ids = $this->byDistrictsGetAllMemberId($district);
         //获取这个根会员的基本信息
-        $member = Member::findAll(['member_id'=> $member_ids]);
+        $members = Member::findAll(['id'=> $member_ids]);
         if(!isset($member)){
             $this->errorMsg = '满区逻辑-未查询到当前区拥有这';
             return false;
         }
         //满足无直推会员，进行换位逻辑
-        if($member->child_num == 0){
-            //TODO::换位
+        foreach($members as $member){
+            if($member->child_num == 0){
+                //会员换位
+
+            }
         }
 
-        //这里要添加直推区，就在这里判断一下直推区吧
-        $referrer = Member::findOne(['id'=>$member->parent_id]);
-
-
-        //给会员的推荐人添加一个直推区记录
         return true;
 
 
+    }
+
+    /**
+     * 给刚生成40人的区的拥有人的推荐人添加一个区记录
+     * @param $district
+     * @return bool
+     */
+    public function addReferrerChildDistrict($district)
+    {
+        $root_member = $this->byDistrictsGetMemberId($district, [1]);
+        echo '<Pre>';
+        print_r($root_member);die;
+
+
+        $root_member_info = Member::findOne(['id'=>$root_member['member_id']]);
+
+        if($root_member_info->parent_id != 0){
+            //判断是当前会员是这个爹的几个会员
+            $is_extra = 0;
+            $share_logs = ShareLog::find()->where(['referrer_id'=>$root_member_info->id])->orderBy(['created_at'=> SORT_ASC]);
+            foreach($share_logs as $key => $val)
+            {
+                if($val['member_id'] == $root_member_info->id && $key > 2){
+                    $is_extra = 1;
+                    break;
+                }
+            }
+            Helper::memberDistrictLog($root_member_info->id, $district, $is_extra);
+            //执行额外分享逻辑
+            if($is_extra){
+                $this->addReferrerDistrictBonus($root_member_info->id);
+            }
+        }
+        return true;
+
+    }
+
+    /**
+     * 添加额外分享奖励
+     * @param $member_id
+     * @return \common\models\Bonus|null
+     */
+    public function addReferrerDistrictBonus($member_id)
+    {
+        $count = MemberDistrict::find()->where(['referrer_id'=>$member_id, 'is_extra'=>1])->count();
+        if($count == 1){
+            return Helper::saveBonusLog($member_id, 2, 3, 300, 0, ['note'=> '额外分享第4个区']);
+        }
+        if($count == 2){
+            return Helper::saveBonusLog($member_id, 2, 3, 600, 0, ['note'=> '额外分享第5个区']);
+        }else{
+            return Helper::saveBonusLog($member_id, 2, 3, 900, 0, ['note'=> '额外分享6个区,几6个区以上']);
+        }
     }
     /**
      * 从区域id和座位找到指定的会员的信息
