@@ -334,7 +334,7 @@ CREATE TABLE `wa_menu` (
 DROP TABLE IF EXISTS `wa_migration`;
 CREATE TABLE `wa_migration` (
   `version` varchar(180) NOT NULL,
-  `apply_time` int(11) DEFAULT NULL,
+  `apply_time` int(11) DEFAULT NULL, 
   PRIMARY KEY (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

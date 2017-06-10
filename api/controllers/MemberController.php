@@ -203,7 +203,7 @@ class MemberController extends ApiController
     {
         $model = new District();
         $json = [ 'code'=> 0, 'data' => [], 'message'=> 'error'];
-        if($data = $model->getFullTree(Yii::$app->request->getQueryParam('vip_number')))
+        if($data = $model->getFullTree(Yii::$app->request->post()))
         {
             $json = [ 'code'=> 1, 'data' => $data, 'message'=> 'success'];
             return $this->asJson($json);
