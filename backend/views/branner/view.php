@@ -41,7 +41,7 @@ $this->params['breadcrumbs'][] = '详情';
             'format' => 'raw',
             'value' =>  function($model){
                 if ($model->img){
-                    return  Html::img($model->http.'/'.$model->img, ['width'=> '100px', 'height'=> '100px']);
+                    return  Html::img(Yii::$app->params['img_domain'].$model->img, ['width'=> '100px', 'height'=> '100px']);
                 }
                 return '还未上传图片';
         
