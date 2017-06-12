@@ -10,6 +10,7 @@ namespace api\models;
 
 use common\components\Helper;
 use common\models\District;
+use common\models\DistrictChangeLog;
 use common\models\MemberDistrict;
 use common\models\ShareLog;
 use common\models\Tree;
@@ -73,10 +74,14 @@ class RegisterForm extends Member
 
     public function register($post, $action_member_id)
     {
+        //将推荐的vip_number转换成member_id
+        $post['referrer_id'] = $this->vipNumber2MemberId($post['referrer_id']);
+
         if(!$this->load($post, '') || !$this->validate()){
             $this->errorMsg = current($this->getFirstErrors());
             return false;
         }
+
 
         if($this->a_coin + $this->b_coin != 900){
             $this->errorMsg = '注入的金豆和金种子和必须等于900';
@@ -91,6 +96,12 @@ class RegisterForm extends Member
         }
         //$transaction = Yii::$app->db->beginTransaction();
 
+        //检查有没有退网的空位
+        $blank_member = $this->getBlankMemberInfo();
+        if(isset($blank_member) && !empty($blank_member)){
+            //这里进行继承会员
+            return $this->inheritanceMember($post, $blank_member);
+        }
 
         //添加会员
         $result = $this->addMember($post);
@@ -106,7 +117,11 @@ class RegisterForm extends Member
 
 
         //给分享人添加区数和奖金记录
-        $this->setIncMemberShare($this->referrer_id);
+        $result = $this->setIncMemberShare($this->referrer_id);
+        if($result == false){
+            $this->errorMsg = '添加分享人区奖金失败';
+            return false;
+        }
 
         //step1 . 判断推荐人是否区满
         $result = $this->step1($this->referrer_id);
@@ -124,6 +139,36 @@ class RegisterForm extends Member
 
     }
 
+    /**
+     * 会员vip_number转换从成id
+     * @param $vip_number
+     * @return int|null
+     */
+    public function vipNumber2MemberId($vip_number)
+    {
+        $member = Member::findOne(['id'=>$vip_number]);
+        return isset($member) ? $member->id : null;
+    }
+    //继承会员逻辑
+    public function inheritanceMember($post, $blank_member)
+    {
+        //更改原先会员资料
+        $blank_member->name = $post['name'];
+        $blank_member->updated_at = time();
+        $blank_member->parent_id = $post['referrer_id'];
+        $blank_member->mobile = $post['mobile'];
+        $blank_member->vip_number = $this->vip_number = Member::find()->max('vip_number') + 1;
+        $blank_member->password = Yii::$app->security->generatePasswordHash($this->password);
+        return $blank_member->save(false) ? $blank_member : null;
+    }
+    /**
+     * 获取一个空白的会员信息
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function getBlankMemberInfo()
+    {
+        return Member::find()->where(['status'=>3])->orderBy(['id'=>SORT_ASC])->one();
+    }
     /**
      * 设置直推数量的递增
      * @param $referrer_id
@@ -158,7 +203,7 @@ class RegisterForm extends Member
        $member->save();
 
         //生成奖励5块钱的流水
-        Helper::saveBonusLog($member_id, 5, 1, 5);
+        Helper::saveBonusLog($member_id, 2, 5, 5);
         //添加消耗记录
         if($this->a_coin){
             Helper::saveBonusLog($member_id, 1, 10, $this->a_coin);
@@ -180,7 +225,7 @@ class RegisterForm extends Member
     {
         //$transaction = Yii::$app->db->beginTransaction();
         //查找推荐人的id
-        //添加自身的区域
+        //添加自身区域。 这里本来想获取一下id区域id的。没找到办法，就用vip_number来客串一下。所有后面的逻辑就要坑好多了
         $district = $this->getMemberDistrict($referrer_id);
         $result = $this->addNode($this->member_id, $this->vip_number, 1);
 
@@ -209,7 +254,6 @@ class RegisterForm extends Member
     {
 
         $affiliated_node = $this->getAbleDistrict($referrer_id);
-
         //获取会员的摆放区域
         $base_district = $affiliated_node['district'];
         //找到这个区域root会员信息
@@ -253,9 +297,8 @@ class RegisterForm extends Member
             }
             $i++;
         }
-        $affiliated_node['num'] =40;
         //添加这个会员，然后就区满的情况，要进行满区逻辑
-        if($affiliated_node['num'] = 40){
+        if($affiliated_node['num'] == 39){
             $result = $this->actionFullDistrict($base_district);
             if($result == false){
                 //TODO::回滚
@@ -265,42 +308,93 @@ class RegisterForm extends Member
 
         return true;
     }
+
+    /**
+     * 根据推荐id。获取一个可用的区域信息
+     * @param $referrer_id
+     * @return null
+     */
     public function getAbleDistrict($referrer_id)
     {
         //根据推荐人 member_id 获取到推荐人的所有区，并查询这个区的人数。再返回人数未满的第一个区
-        $affiliated_node = $this->getMemberDistrictSeatCount($referrer_id);
+        $affiliated_node = null;
         while(is_null($affiliated_node)){
             //找到这会员的可用下级
+            $affiliated_node = $this->getMemberDistrictSeatCount($referrer_id);
+            $referrer_id = $this->getChildRandomDistrictMemberId($referrer_id);
+            if($affiliated_node['num'] == 40){
+                $affiliated_node = null;
+            }
         }
         return $affiliated_node;
     }
 
+    /**
+     * 获取会员下面三个点，随机的一个的会员id
+     * @param $member_id
+     * @return bool|mixed
+     */
+    public function getChildRandomDistrictMemberId($member_id)
+    {
+        $member_district = $this->getMemberRootDistrict($member_id);
+        $ids = $this->byDistrictsGetAllMemberId($member_id);
+        if(!isset($ids) || empty($ids)){
+            return false;
+        }
+        return $ids[array_rand($ids, 1)];
+
+    }
     //满区逻辑
     public function actionFullDistrict($district)
     {
         //TODO:: 1 检查换位条件 2. 给根会员添加有一个区数量保存 3.判断顶级会员的直推人的区数量。并执行直推区奖励
 
         //添加直推区
-        $this->addReferrerChildDistrict($district);
+        $result = $this->addReferrerChildDistrict($district);
+        if($result == false){
+            $this->errorMsg = '添加直推区失败';
+            return false;
+        }
 
         //判断 2.3.4位置的要不要被换位
         $member_ids = $this->byDistrictsGetAllMemberId($district);
         //获取这个根会员的基本信息
-        $members = Member::findAll(['id'=> $member_ids]);
-        if(!isset($member)){
+        $members = Member::find()->where(['id'=> $member_ids])->all();
+        if(!isset($members)){
             $this->errorMsg = '满区逻辑-未查询到当前区拥有这';
             return false;
         }
         //满足无直推会员，进行换位逻辑
-        foreach($members as $member){
-            if($member->child_num == 0){
-                //会员换位
+        foreach($members as $member) {
+            if ($member->child_num == 0) {
+                //检查换位条件.找到自己这个区有条件换位的会员
+                $new_member_id = $this->getMemberDistrictMaxReferrerMember($member->id);
+                if ($new_member_id !== false) {
+                    //开始执行换位逻辑
+                    //step1 对换区表中的位置
+                    $district_model = new District();
+                    $result = $district_model->changeDistrict($member->id, $new_member_id);
+                    if ($result == false) {
+                        $this->errorMsg = '交换区失败';
 
+                        return false;
+                    }
+                    $result = $district_model->modifyBonus($member->id, $new_member_id);
+                    if ($result == false) {
+                        $this->errorMsg = '继承奖金失败';
+
+                        return false;
+                    }
+                    if(DistrictChangeLog::addLog($member->id, $new_member_id) == false){
+                        $this->errorMsg = '添加交换记录失败';
+
+                        return false;
+                    }
+                }
             }
         }
 
         return true;
-
 
     }
 
@@ -312,21 +406,20 @@ class RegisterForm extends Member
     public function addReferrerChildDistrict($district)
     {
         $root_member = $this->byDistrictsGetMemberId($district, [1]);
-        echo '<Pre>';
-        print_r($root_member);die;
-
 
         $root_member_info = Member::findOne(['id'=>$root_member['member_id']]);
 
-        if($root_member_info->parent_id != 0){
+        if(isset($root_member_info) && !empty($root_member_info)){
             //判断是当前会员是这个爹的几个会员
             $is_extra = 0;
-            $share_logs = ShareLog::find()->where(['referrer_id'=>$root_member_info->id])->orderBy(['created_at'=> SORT_ASC]);
-            foreach($share_logs as $key => $val)
-            {
-                if($val['member_id'] == $root_member_info->id && $key > 2){
-                    $is_extra = 1;
-                    break;
+            $share_logs = ShareLog::find()->where(['referrer_id'=>$root_member_info->id])->orderBy(['created_at'=> SORT_ASC])->all();
+            if(isset($share_logs) && !empty($share_logs)){
+                foreach($share_logs as $key => $val)
+                {
+                    if($val['member_id'] == $root_member_info->id && $key > 2){
+                        $is_extra = 1;
+                        break;
+                    }
                 }
             }
             Helper::memberDistrictLog($root_member_info->id, $district, $is_extra);
@@ -334,11 +427,40 @@ class RegisterForm extends Member
             if($is_extra){
                 $this->addReferrerDistrictBonus($root_member_info->id);
             }
+            return true;
         }
-        return true;
+        $this->errorMsg = '查找根会员失败';
+        return false;
 
     }
 
+    /**
+     * 获取满足换位的会员
+     * @param $member_id
+     * @return bool|mixed
+     */
+    public function getMemberDistrictMaxReferrerMember($member_id)
+    {
+        $root_district = $this->getMemberRootDistrict($member_id);
+        $ids = $this->byDistrictsGetAllMemberId($root_district, range(2,13));
+        return $this->getMemberMaxReferrerMember($ids);
+    }
+
+    /**
+     * 获取指定member_ids中。绩效最高的那位
+     * @param $member_ids
+     * @return bool|mixed
+     */
+    public function getMemberMaxReferrerMember($member_ids)
+    {
+        $member = Member::find()->where(['id'=>$member_ids])->orderBy(['child_num'=>SORT_DESC, 'created_at'=>SORT_ASC])->one();
+        if(isset($member) && !empty($member)){
+            if($member->child_num > 0){
+                return $member->id;
+            }
+        }
+        return false;
+    }
     /**
      * 添加额外分享奖励
      * @param $member_id

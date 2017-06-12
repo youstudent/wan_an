@@ -1,24 +1,22 @@
 /*
- Navicat Premium Data Transfer
+Navicat MySQL Data Transfer
 
- Source Server         : 127.0.0.1
- Source Server Type    : MySQL
- Source Server Version : 50542
- Source Host           : localhost
- Source Database       : wan_an
+Source Server         : 127.0.0.1
+Source Server Version : 50553
+Source Host           : localhost:3306
+Source Database       : wan_an
 
- Target Server Type    : MySQL
- Target Server Version : 50542
- File Encoding         : utf-8
+Target Server Type    : MYSQL
+Target Server Version : 50553
+File Encoding         : 65001
 
- Date: 06/10/2017 14:25:46 PM
+Date: 2017-06-12 17:19:48
 */
 
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
+SET FOREIGN_KEY_CHECKS=0;
 
 -- ----------------------------
---  Table structure for `log_upload`
+-- Table structure for log_upload
 -- ----------------------------
 DROP TABLE IF EXISTS `log_upload`;
 CREATE TABLE `log_upload` (
@@ -37,10 +35,14 @@ CREATE TABLE `log_upload` (
   `updateDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='grid扩展的表';
 
 -- ----------------------------
---  Table structure for `tbl_dynagrid`
+-- Records of log_upload
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for tbl_dynagrid
 -- ----------------------------
 DROP TABLE IF EXISTS `tbl_dynagrid`;
 CREATE TABLE `tbl_dynagrid` (
@@ -53,10 +55,14 @@ CREATE TABLE `tbl_dynagrid` (
   KEY `tbl_dynagrid_FK2` (`sort_id`),
   CONSTRAINT `tbl_dynagrid_FK1` FOREIGN KEY (`filter_id`) REFERENCES `tbl_dynagrid_dtl` (`id`),
   CONSTRAINT `tbl_dynagrid_FK2` FOREIGN KEY (`sort_id`) REFERENCES `tbl_dynagrid_dtl` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='grid扩展的表';
 
 -- ----------------------------
---  Table structure for `tbl_dynagrid_dtl`
+-- Records of tbl_dynagrid
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for tbl_dynagrid_dtl
 -- ----------------------------
 DROP TABLE IF EXISTS `tbl_dynagrid_dtl`;
 CREATE TABLE `tbl_dynagrid_dtl` (
@@ -67,19 +73,23 @@ CREATE TABLE `tbl_dynagrid_dtl` (
   `dynagrid_id` varchar(100) NOT NULL COMMENT 'Related dynagrid identifier',
   PRIMARY KEY (`id`),
   UNIQUE KEY `tbl_dynagrid_dtl_UK1` (`name`,`category`,`dynagrid_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='grid扩展的表';
 
 -- ----------------------------
---  Table structure for `wa_adminuser`
+-- Records of tbl_dynagrid_dtl
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wa_adminuser
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_adminuser`;
 CREATE TABLE `wa_adminuser` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `auth_key` varchar(32) COLLATE utf8_unicode_ci NOT NULL,
-  `password_hash` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `password_reset_token` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `username` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `auth_key` varchar(32) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `password_hash` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `password_reset_token` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
+  `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `status` smallint(6) NOT NULL DEFAULT '10',
   `created_at` int(11) NOT NULL,
   `updated_at` int(11) NOT NULL,
@@ -87,17 +97,15 @@ CREATE TABLE `wa_adminuser` (
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `password_reset_token` (`password_reset_token`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
 -- ----------------------------
---  Records of `wa_adminuser`
+-- Records of wa_adminuser
 -- ----------------------------
-BEGIN;
 INSERT INTO `wa_adminuser` VALUES ('1', 'admin', 'JAbY85Q5ozahz1h2hddB-uy5MWfcU-Wy', '$2y$13$vknBz7miG4O.W.mlPBLFE.0vcKiqHvMcz1xKCoZTyTPRVfEBCvvHG', null, 'a@a.com', '10', '1495553266', '1495553266');
-COMMIT;
 
 -- ----------------------------
---  Table structure for `wa_announcements`
+-- Table structure for wa_announcements
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_announcements`;
 CREATE TABLE `wa_announcements` (
@@ -111,7 +119,11 @@ CREATE TABLE `wa_announcements` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='公告管理';
 
 -- ----------------------------
---  Table structure for `wa_auth_assignment`
+-- Records of wa_announcements
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wa_auth_assignment
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_auth_assignment`;
 CREATE TABLE `wa_auth_assignment` (
@@ -120,17 +132,16 @@ CREATE TABLE `wa_auth_assignment` (
   `created_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`item_name`,`user_id`),
   CONSTRAINT `wa_auth_assignment_ibfk_1` FOREIGN KEY (`item_name`) REFERENCES `wa_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='RBAC权限栏目';
 
 -- ----------------------------
---  Records of `wa_auth_assignment`
+-- Records of wa_auth_assignment
 -- ----------------------------
-BEGIN;
-INSERT INTO `wa_auth_assignment` VALUES ('RBAC管理', '1', '1495557448'), ('管理员', '1', '1495555351');
-COMMIT;
+INSERT INTO `wa_auth_assignment` VALUES ('RBAC管理', '1', '1495557448');
+INSERT INTO `wa_auth_assignment` VALUES ('管理员', '1', '1495555351');
 
 -- ----------------------------
---  Table structure for `wa_auth_item`
+-- Table structure for wa_auth_item
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_auth_item`;
 CREATE TABLE `wa_auth_item` (
@@ -145,17 +156,142 @@ CREATE TABLE `wa_auth_item` (
   KEY `rule_name` (`rule_name`),
   KEY `idx-auth_item-type` (`type`),
   CONSTRAINT `wa_auth_item_ibfk_1` FOREIGN KEY (`rule_name`) REFERENCES `wa_auth_rule` (`name`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='RBAC权限栏目';
 
 -- ----------------------------
---  Records of `wa_auth_item`
+-- Records of wa_auth_item
 -- ----------------------------
-BEGIN;
-INSERT INTO `wa_auth_item` VALUES ('/admin/*', '2', null, null, null, '1495553461', '1495553461'), ('/admin/assignment/*', '2', null, null, null, '1495553461', '1495553461'), ('/admin/assignment/assign', '2', null, null, null, '1495553461', '1495553461'), ('/admin/assignment/index', '2', null, null, null, '1495553461', '1495553461'), ('/admin/assignment/revoke', '2', null, null, null, '1495553461', '1495553461'), ('/admin/assignment/view', '2', null, null, null, '1495553461', '1495553461'), ('/admin/default/*', '2', null, null, null, '1495553461', '1495553461'), ('/admin/default/index', '2', null, null, null, '1495553461', '1495553461'), ('/admin/menu/*', '2', null, null, null, '1495553461', '1495553461'), ('/admin/menu/create', '2', null, null, null, '1495553461', '1495553461'), ('/admin/menu/delete', '2', null, null, null, '1495553461', '1495553461'), ('/admin/menu/index', '2', null, null, null, '1495553461', '1495553461'), ('/admin/menu/update', '2', null, null, null, '1495553461', '1495553461'), ('/admin/menu/view', '2', null, null, null, '1495553461', '1495553461'), ('/admin/permission/*', '2', null, null, null, '1495553461', '1495553461'), ('/admin/permission/assign', '2', null, null, null, '1495553461', '1495553461'), ('/admin/permission/create', '2', null, null, null, '1495553461', '1495553461'), ('/admin/permission/delete', '2', null, null, null, '1495553461', '1495553461'), ('/admin/permission/index', '2', null, null, null, '1495553461', '1495553461'), ('/admin/permission/remove', '2', null, null, null, '1495553461', '1495553461'), ('/admin/permission/update', '2', null, null, null, '1495553461', '1495553461'), ('/admin/permission/view', '2', null, null, null, '1495553461', '1495553461'), ('/admin/role/*', '2', null, null, null, '1495553461', '1495553461'), ('/admin/role/assign', '2', null, null, null, '1495553461', '1495553461'), ('/admin/role/create', '2', null, null, null, '1495553461', '1495553461'), ('/admin/role/delete', '2', null, null, null, '1495553461', '1495553461'), ('/admin/role/index', '2', null, null, null, '1495553461', '1495553461'), ('/admin/role/remove', '2', null, null, null, '1495553461', '1495553461'), ('/admin/role/update', '2', null, null, null, '1495553461', '1495553461'), ('/admin/role/view', '2', null, null, null, '1495553461', '1495553461'), ('/admin/route/*', '2', null, null, null, '1495553461', '1495553461'), ('/admin/route/assign', '2', null, null, null, '1495553461', '1495553461'), ('/admin/route/create', '2', null, null, null, '1495553461', '1495553461'), ('/admin/route/index', '2', null, null, null, '1495553461', '1495553461'), ('/admin/route/refresh', '2', null, null, null, '1495553461', '1495553461'), ('/admin/route/remove', '2', null, null, null, '1495553461', '1495553461'), ('/admin/rule/*', '2', null, null, null, '1495553461', '1495553461'), ('/admin/rule/create', '2', null, null, null, '1495553461', '1495553461'), ('/admin/rule/delete', '2', null, null, null, '1495553461', '1495553461'), ('/admin/rule/index', '2', null, null, null, '1495553461', '1495553461'), ('/admin/rule/update', '2', null, null, null, '1495553461', '1495553461'), ('/admin/rule/view', '2', null, null, null, '1495553461', '1495553461'), ('/admin/user/*', '2', null, null, null, '1495553461', '1495553461'), ('/admin/user/activate', '2', null, null, null, '1495553461', '1495553461'), ('/admin/user/change-password', '2', null, null, null, '1495553461', '1495553461'), ('/admin/user/delete', '2', null, null, null, '1495553461', '1495553461'), ('/admin/user/index', '2', null, null, null, '1495553461', '1495553461'), ('/admin/user/logout', '2', null, null, null, '1495553461', '1495553461'), ('/admin/user/request-password-reset', '2', null, null, null, '1495553461', '1495553461'), ('/admin/user/reset-password', '2', null, null, null, '1495553461', '1495553461'), ('/admin/user/signup', '2', null, null, null, '1495553461', '1495553461'), ('/admin/user/view', '2', null, null, null, '1495553461', '1495553461'), ('/announcements/*', '2', null, null, null, '1495766911', '1495766911'), ('/announcements/create', '2', null, null, null, '1495766974', '1495766974'), ('/announcements/delete', '2', null, null, null, '1495766974', '1495766974'), ('/announcements/index', '2', null, null, null, '1495766973', '1495766973'), ('/announcements/parsing', '2', null, null, null, '1495766974', '1495766974'), ('/announcements/parsing-log', '2', null, null, null, '1495766974', '1495766974'), ('/announcements/sample', '2', null, null, null, '1495766974', '1495766974'), ('/announcements/update', '2', null, null, null, '1495766974', '1495766974'), ('/announcements/view', '2', null, null, null, '1495766974', '1495766974'), ('/bonus/*', '2', null, null, null, '1496223270', '1496223270'), ('/bonus/index', '2', null, null, null, '1496223278', '1496223278'), ('/branner/*', '2', null, null, null, '1495777806', '1495777806'), ('/branner/create', '2', null, null, null, '1495777806', '1495777806'), ('/branner/delete', '2', null, null, null, '1495777806', '1495777806'), ('/branner/index', '2', null, null, null, '1495777805', '1495777805'), ('/branner/parsing', '2', null, null, null, '1495777806', '1495777806'), ('/branner/parsing-log', '2', null, null, null, '1495777806', '1495777806'), ('/branner/sample', '2', null, null, null, '1495777806', '1495777806'), ('/branner/update', '2', null, null, null, '1495777806', '1495777806'), ('/branner/view', '2', null, null, null, '1495777806', '1495777806'), ('/count/*', '2', null, null, null, '1496283400', '1496283400'), ('/count/index', '2', null, null, null, '1496283404', '1496283404'), ('/debug/*', '2', null, null, null, '1495553461', '1495553461'), ('/debug/default/*', '2', null, null, null, '1495553461', '1495553461'), ('/debug/default/db-explain', '2', null, null, null, '1495553461', '1495553461'), ('/debug/default/download-mail', '2', null, null, null, '1495553461', '1495553461'), ('/debug/default/index', '2', null, null, null, '1495553461', '1495553461'), ('/debug/default/toolbar', '2', null, null, null, '1495553461', '1495553461'), ('/debug/default/view', '2', null, null, null, '1495553461', '1495553461'), ('/deposit/*', '2', null, null, null, '1496371433', '1496371433'), ('/deposit/end', '2', null, null, null, '1496371518', '1496371518'), ('/deposit/increase', '2', null, null, null, '1496371602', '1496371602'), ('/deposit/open', '2', null, null, null, '1496371510', '1496371510'), ('/deposit/reduce', '2', null, null, null, '1496371634', '1496371634'), ('/dynagrid/*', '2', null, null, null, '1495553461', '1495553461'), ('/dynagrid/settings/*', '2', null, null, null, '1495553461', '1495553461'), ('/dynagrid/settings/get-config', '2', null, null, null, '1495553461', '1495553461'), ('/fruiter/*', '2', null, null, null, '1496215224', '1496215224'), ('/fruiter/index', '2', null, null, null, '1496215311', '1496215311'), ('/fruiter/update', '2', null, null, null, '1496215338', '1496215338'), ('/give/*', '2', null, null, null, '1496212929', '1496212929'), ('/give/index', '2', null, null, null, '1496213018', '1496213018'), ('/goods/*', '2', null, null, null, '1496284298', '1496284298'), ('/goods/create', '2', null, null, null, '1496284350', '1496284350'), ('/goods/delete', '2', null, null, null, '1496284350', '1496284350'), ('/goods/index', '2', null, null, null, '1496284350', '1496284350'), ('/goods/parsing', '2', null, null, null, '1496284350', '1496284350'), ('/goods/parsing-log', '2', null, null, null, '1496284350', '1496284350'), ('/goods/sample', '2', null, null, null, '1496284350', '1496284350'), ('/goods/update', '2', null, null, null, '1496284350', '1496284350'), ('/goods/view', '2', null, null, null, '1496284350', '1496284350'), ('/gridview/*', '2', null, null, null, '1495553461', '1495553461'), ('/gridview/export/*', '2', null, null, null, '1495553461', '1495553461'), ('/gridview/export/download', '2', null, null, null, '1495553461', '1495553461'), ('/member/*', '2', null, null, null, '1495595775', '1495595775'), ('/member/create', '2', null, null, null, '1495595775', '1495595775'), ('/member/delete', '2', null, null, null, '1495595775', '1495595775'), ('/member/index', '2', null, null, null, '1495595775', '1495595775'), ('/member/outline', '2', null, null, null, '1495696926', '1495696926'), ('/member/parsing', '2', null, null, null, '1495595775', '1495595775'), ('/member/parsing-log', '2', null, null, null, '1495595775', '1495595775'), ('/member/sample', '2', null, null, null, '1495595775', '1495595775'), ('/member/update', '2', null, null, null, '1495595775', '1495595775'), ('/member/view', '2', null, null, null, '1495595775', '1495595775'), ('/outline/*', '2', null, null, null, '1495763702', '1495763702'), ('/outline/index', '2', null, null, null, '1495763725', '1495763725'), ('/record/*', '2', null, null, null, '1495626463', '1495626463'), ('/record/delete', '2', null, null, null, '1495680404', '1495680404'), ('/record/index', '2', null, null, null, '1495680393', '1495680393'), ('/record/parsing', '2', null, null, null, '1495680414', '1495680414'), ('/record/parsing-log', '2', null, null, null, '1495680408', '1495680408'), ('/record/sample', '2', null, null, null, '1495680412', '1495680412'), ('/record/update', '2', null, null, null, '1495680401', '1495680401'), ('RBAC管理', '2', null, null, null, '1495557434', '1495557434'), ('管理员', '1', '具有后台管理员的角色', null, null, '1495553016', '1495767296'), ('财务员', '1', '负责审核提现申请的角色', null, null, '1495553314', '1495553314');
-COMMIT;
+INSERT INTO `wa_auth_item` VALUES ('/admin/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/assignment/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/assignment/assign', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/assignment/index', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/assignment/revoke', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/assignment/view', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/default/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/default/index', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/menu/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/menu/create', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/menu/delete', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/menu/index', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/menu/update', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/menu/view', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/permission/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/permission/assign', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/permission/create', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/permission/delete', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/permission/index', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/permission/remove', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/permission/update', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/permission/view', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/role/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/role/assign', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/role/create', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/role/delete', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/role/index', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/role/remove', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/role/update', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/role/view', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/route/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/route/assign', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/route/create', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/route/index', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/route/refresh', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/route/remove', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/rule/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/rule/create', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/rule/delete', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/rule/index', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/rule/update', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/rule/view', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/user/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/user/activate', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/user/change-password', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/user/delete', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/user/index', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/user/logout', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/user/request-password-reset', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/user/reset-password', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/user/signup', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/admin/user/view', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/announcements/*', '2', null, null, null, '1495766911', '1495766911');
+INSERT INTO `wa_auth_item` VALUES ('/announcements/create', '2', null, null, null, '1495766974', '1495766974');
+INSERT INTO `wa_auth_item` VALUES ('/announcements/delete', '2', null, null, null, '1495766974', '1495766974');
+INSERT INTO `wa_auth_item` VALUES ('/announcements/index', '2', null, null, null, '1495766973', '1495766973');
+INSERT INTO `wa_auth_item` VALUES ('/announcements/parsing', '2', null, null, null, '1495766974', '1495766974');
+INSERT INTO `wa_auth_item` VALUES ('/announcements/parsing-log', '2', null, null, null, '1495766974', '1495766974');
+INSERT INTO `wa_auth_item` VALUES ('/announcements/sample', '2', null, null, null, '1495766974', '1495766974');
+INSERT INTO `wa_auth_item` VALUES ('/announcements/update', '2', null, null, null, '1495766974', '1495766974');
+INSERT INTO `wa_auth_item` VALUES ('/announcements/view', '2', null, null, null, '1495766974', '1495766974');
+INSERT INTO `wa_auth_item` VALUES ('/bonus/*', '2', null, null, null, '1496223270', '1496223270');
+INSERT INTO `wa_auth_item` VALUES ('/bonus/index', '2', null, null, null, '1496223278', '1496223278');
+INSERT INTO `wa_auth_item` VALUES ('/branner/*', '2', null, null, null, '1495777806', '1495777806');
+INSERT INTO `wa_auth_item` VALUES ('/branner/create', '2', null, null, null, '1495777806', '1495777806');
+INSERT INTO `wa_auth_item` VALUES ('/branner/delete', '2', null, null, null, '1495777806', '1495777806');
+INSERT INTO `wa_auth_item` VALUES ('/branner/index', '2', null, null, null, '1495777805', '1495777805');
+INSERT INTO `wa_auth_item` VALUES ('/branner/parsing', '2', null, null, null, '1495777806', '1495777806');
+INSERT INTO `wa_auth_item` VALUES ('/branner/parsing-log', '2', null, null, null, '1495777806', '1495777806');
+INSERT INTO `wa_auth_item` VALUES ('/branner/sample', '2', null, null, null, '1495777806', '1495777806');
+INSERT INTO `wa_auth_item` VALUES ('/branner/update', '2', null, null, null, '1495777806', '1495777806');
+INSERT INTO `wa_auth_item` VALUES ('/branner/view', '2', null, null, null, '1495777806', '1495777806');
+INSERT INTO `wa_auth_item` VALUES ('/count/*', '2', null, null, null, '1496283400', '1496283400');
+INSERT INTO `wa_auth_item` VALUES ('/count/index', '2', null, null, null, '1496283404', '1496283404');
+INSERT INTO `wa_auth_item` VALUES ('/debug/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/debug/default/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/debug/default/db-explain', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/debug/default/download-mail', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/debug/default/index', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/debug/default/toolbar', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/debug/default/view', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/deposit/*', '2', null, null, null, '1496371433', '1496371433');
+INSERT INTO `wa_auth_item` VALUES ('/deposit/end', '2', null, null, null, '1496371518', '1496371518');
+INSERT INTO `wa_auth_item` VALUES ('/deposit/increase', '2', null, null, null, '1496371602', '1496371602');
+INSERT INTO `wa_auth_item` VALUES ('/deposit/open', '2', null, null, null, '1496371510', '1496371510');
+INSERT INTO `wa_auth_item` VALUES ('/deposit/reduce', '2', null, null, null, '1496371634', '1496371634');
+INSERT INTO `wa_auth_item` VALUES ('/dynagrid/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/dynagrid/settings/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/dynagrid/settings/get-config', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/fruiter/*', '2', null, null, null, '1496215224', '1496215224');
+INSERT INTO `wa_auth_item` VALUES ('/fruiter/index', '2', null, null, null, '1496215311', '1496215311');
+INSERT INTO `wa_auth_item` VALUES ('/fruiter/update', '2', null, null, null, '1496215338', '1496215338');
+INSERT INTO `wa_auth_item` VALUES ('/give/*', '2', null, null, null, '1496212929', '1496212929');
+INSERT INTO `wa_auth_item` VALUES ('/give/index', '2', null, null, null, '1496213018', '1496213018');
+INSERT INTO `wa_auth_item` VALUES ('/goods/*', '2', null, null, null, '1496284298', '1496284298');
+INSERT INTO `wa_auth_item` VALUES ('/goods/create', '2', null, null, null, '1496284350', '1496284350');
+INSERT INTO `wa_auth_item` VALUES ('/goods/delete', '2', null, null, null, '1496284350', '1496284350');
+INSERT INTO `wa_auth_item` VALUES ('/goods/index', '2', null, null, null, '1496284350', '1496284350');
+INSERT INTO `wa_auth_item` VALUES ('/goods/parsing', '2', null, null, null, '1496284350', '1496284350');
+INSERT INTO `wa_auth_item` VALUES ('/goods/parsing-log', '2', null, null, null, '1496284350', '1496284350');
+INSERT INTO `wa_auth_item` VALUES ('/goods/sample', '2', null, null, null, '1496284350', '1496284350');
+INSERT INTO `wa_auth_item` VALUES ('/goods/update', '2', null, null, null, '1496284350', '1496284350');
+INSERT INTO `wa_auth_item` VALUES ('/goods/view', '2', null, null, null, '1496284350', '1496284350');
+INSERT INTO `wa_auth_item` VALUES ('/gridview/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/gridview/export/*', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/gridview/export/download', '2', null, null, null, '1495553461', '1495553461');
+INSERT INTO `wa_auth_item` VALUES ('/member/*', '2', null, null, null, '1495595775', '1495595775');
+INSERT INTO `wa_auth_item` VALUES ('/member/create', '2', null, null, null, '1495595775', '1495595775');
+INSERT INTO `wa_auth_item` VALUES ('/member/delete', '2', null, null, null, '1495595775', '1495595775');
+INSERT INTO `wa_auth_item` VALUES ('/member/index', '2', null, null, null, '1495595775', '1495595775');
+INSERT INTO `wa_auth_item` VALUES ('/member/outline', '2', null, null, null, '1495696926', '1495696926');
+INSERT INTO `wa_auth_item` VALUES ('/member/parsing', '2', null, null, null, '1495595775', '1495595775');
+INSERT INTO `wa_auth_item` VALUES ('/member/parsing-log', '2', null, null, null, '1495595775', '1495595775');
+INSERT INTO `wa_auth_item` VALUES ('/member/sample', '2', null, null, null, '1495595775', '1495595775');
+INSERT INTO `wa_auth_item` VALUES ('/member/update', '2', null, null, null, '1495595775', '1495595775');
+INSERT INTO `wa_auth_item` VALUES ('/member/view', '2', null, null, null, '1495595775', '1495595775');
+INSERT INTO `wa_auth_item` VALUES ('/outline/*', '2', null, null, null, '1495763702', '1495763702');
+INSERT INTO `wa_auth_item` VALUES ('/outline/index', '2', null, null, null, '1495763725', '1495763725');
+INSERT INTO `wa_auth_item` VALUES ('/record/*', '2', null, null, null, '1495626463', '1495626463');
+INSERT INTO `wa_auth_item` VALUES ('/record/delete', '2', null, null, null, '1495680404', '1495680404');
+INSERT INTO `wa_auth_item` VALUES ('/record/index', '2', null, null, null, '1495680393', '1495680393');
+INSERT INTO `wa_auth_item` VALUES ('/record/parsing', '2', null, null, null, '1495680414', '1495680414');
+INSERT INTO `wa_auth_item` VALUES ('/record/parsing-log', '2', null, null, null, '1495680408', '1495680408');
+INSERT INTO `wa_auth_item` VALUES ('/record/sample', '2', null, null, null, '1495680412', '1495680412');
+INSERT INTO `wa_auth_item` VALUES ('/record/update', '2', null, null, null, '1495680401', '1495680401');
+INSERT INTO `wa_auth_item` VALUES ('RBAC管理', '2', null, null, null, '1495557434', '1495557434');
+INSERT INTO `wa_auth_item` VALUES ('管理员', '1', '具有后台管理员的角色', null, null, '1495553016', '1495767296');
+INSERT INTO `wa_auth_item` VALUES ('财务员', '1', '负责审核提现申请的角色', null, null, '1495553314', '1495553314');
 
 -- ----------------------------
---  Table structure for `wa_auth_item_child`
+-- Table structure for wa_auth_item_child
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_auth_item_child`;
 CREATE TABLE `wa_auth_item_child` (
@@ -165,17 +301,98 @@ CREATE TABLE `wa_auth_item_child` (
   KEY `child` (`child`),
   CONSTRAINT `wa_auth_item_child_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `wa_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `wa_auth_item_child_ibfk_2` FOREIGN KEY (`child`) REFERENCES `wa_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='RBAC权限栏目';
 
 -- ----------------------------
---  Records of `wa_auth_item_child`
+-- Records of wa_auth_item_child
 -- ----------------------------
-BEGIN;
-INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/*'), ('RBAC管理', '/admin/assignment/*'), ('RBAC管理', '/admin/assignment/assign'), ('RBAC管理', '/admin/assignment/index'), ('RBAC管理', '/admin/assignment/revoke'), ('RBAC管理', '/admin/assignment/view'), ('RBAC管理', '/admin/default/*'), ('RBAC管理', '/admin/default/index'), ('RBAC管理', '/admin/menu/*'), ('RBAC管理', '/admin/menu/create'), ('RBAC管理', '/admin/menu/delete'), ('RBAC管理', '/admin/menu/index'), ('RBAC管理', '/admin/menu/update'), ('RBAC管理', '/admin/menu/view'), ('RBAC管理', '/admin/permission/*'), ('RBAC管理', '/admin/permission/assign'), ('RBAC管理', '/admin/permission/create'), ('RBAC管理', '/admin/permission/delete'), ('RBAC管理', '/admin/permission/index'), ('RBAC管理', '/admin/permission/remove'), ('RBAC管理', '/admin/permission/update'), ('RBAC管理', '/admin/permission/view'), ('RBAC管理', '/admin/role/*'), ('RBAC管理', '/admin/role/assign'), ('RBAC管理', '/admin/role/create'), ('RBAC管理', '/admin/role/delete'), ('RBAC管理', '/admin/role/index'), ('RBAC管理', '/admin/role/remove'), ('RBAC管理', '/admin/role/update'), ('RBAC管理', '/admin/role/view'), ('RBAC管理', '/admin/route/*'), ('RBAC管理', '/admin/route/assign'), ('RBAC管理', '/admin/route/create'), ('RBAC管理', '/admin/route/index'), ('RBAC管理', '/admin/route/refresh'), ('RBAC管理', '/admin/route/remove'), ('RBAC管理', '/admin/rule/*'), ('RBAC管理', '/admin/rule/create'), ('RBAC管理', '/admin/rule/delete'), ('RBAC管理', '/admin/rule/index'), ('RBAC管理', '/admin/rule/update'), ('RBAC管理', '/admin/rule/view'), ('RBAC管理', '/admin/user/*'), ('RBAC管理', '/admin/user/activate'), ('RBAC管理', '/admin/user/change-password'), ('RBAC管理', '/admin/user/delete'), ('RBAC管理', '/admin/user/index'), ('RBAC管理', '/admin/user/logout'), ('RBAC管理', '/admin/user/request-password-reset'), ('RBAC管理', '/admin/user/reset-password'), ('RBAC管理', '/admin/user/signup'), ('RBAC管理', '/admin/user/view'), ('管理员', '/announcements/*'), ('管理员', '/bonus/*'), ('管理员', '/bonus/index'), ('管理员', '/branner/*'), ('管理员', '/count/*'), ('管理员', '/count/index'), ('RBAC管理', '/debug/*'), ('RBAC管理', '/debug/default/*'), ('RBAC管理', '/debug/default/db-explain'), ('RBAC管理', '/debug/default/download-mail'), ('RBAC管理', '/debug/default/index'), ('RBAC管理', '/debug/default/toolbar'), ('RBAC管理', '/debug/default/view'), ('管理员', '/deposit/*'), ('管理员', '/deposit/end'), ('管理员', '/deposit/open'), ('RBAC管理', '/dynagrid/*'), ('RBAC管理', '/dynagrid/settings/*'), ('RBAC管理', '/dynagrid/settings/get-config'), ('管理员', '/fruiter/*'), ('管理员', '/fruiter/index'), ('管理员', '/give/*'), ('管理员', '/give/index'), ('管理员', '/goods/*'), ('RBAC管理', '/gridview/*'), ('RBAC管理', '/gridview/export/*'), ('RBAC管理', '/gridview/export/download'), ('管理员', '/member/*'), ('管理员', '/outline/*'), ('管理员', '/record/*'), ('管理员', '/record/delete'), ('管理员', 'RBAC管理');
-COMMIT;
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/assignment/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/assignment/assign');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/assignment/index');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/assignment/revoke');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/assignment/view');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/default/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/default/index');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/menu/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/menu/create');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/menu/delete');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/menu/index');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/menu/update');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/menu/view');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/permission/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/permission/assign');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/permission/create');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/permission/delete');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/permission/index');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/permission/remove');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/permission/update');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/permission/view');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/role/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/role/assign');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/role/create');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/role/delete');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/role/index');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/role/remove');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/role/update');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/role/view');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/route/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/route/assign');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/route/create');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/route/index');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/route/refresh');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/route/remove');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/rule/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/rule/create');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/rule/delete');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/rule/index');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/rule/update');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/rule/view');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/user/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/user/activate');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/user/change-password');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/user/delete');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/user/index');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/user/logout');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/user/request-password-reset');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/user/reset-password');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/user/signup');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/admin/user/view');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/announcements/*');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/bonus/*');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/bonus/index');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/branner/*');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/count/*');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/count/index');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/debug/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/debug/default/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/debug/default/db-explain');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/debug/default/download-mail');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/debug/default/index');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/debug/default/toolbar');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/debug/default/view');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/deposit/*');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/deposit/end');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/deposit/open');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/dynagrid/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/dynagrid/settings/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/dynagrid/settings/get-config');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/fruiter/*');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/fruiter/index');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/give/*');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/give/index');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/goods/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/gridview/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/gridview/export/*');
+INSERT INTO `wa_auth_item_child` VALUES ('RBAC管理', '/gridview/export/download');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/member/*');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/outline/*');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/record/*');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/record/delete');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', 'RBAC管理');
 
 -- ----------------------------
---  Table structure for `wa_auth_rule`
+-- Table structure for wa_auth_rule
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_auth_rule`;
 CREATE TABLE `wa_auth_rule` (
@@ -184,10 +401,14 @@ CREATE TABLE `wa_auth_rule` (
   `created_at` int(11) DEFAULT NULL,
   `updated_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='RBAC权限规则表';
 
 -- ----------------------------
---  Table structure for `wa_bonus`
+-- Records of wa_auth_rule
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wa_bonus
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_bonus`;
 CREATE TABLE `wa_bonus` (
@@ -201,17 +422,189 @@ CREATE TABLE `wa_bonus` (
   `poundage` int(11) DEFAULT NULL COMMENT '手续费',
   `ext_data` varchar(255) DEFAULT NULL COMMENT '扩展',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=190 DEFAULT CHARSET=utf8 COMMENT='资产流水表';
+) ENGINE=InnoDB AUTO_INCREMENT=176 DEFAULT CHARSET=utf8 COMMENT='资产流水表';
 
 -- ----------------------------
---  Records of `wa_bonus`
+-- Records of wa_bonus
 -- ----------------------------
-BEGIN;
-INSERT INTO `wa_bonus` VALUES ('1', '1', '5', '1', '5', '1496905423', '1496905423', '0', '[]'), ('2', '1', '1', '10', '500', '1496905423', '1496905423', '0', '[]'), ('3', '1', '2', '10', '400', '1496905423', '1496905423', '0', '[]'), ('4', '1', '1', '2', '300', '1496905427', '1496905427', '0', '[]'), ('5', '1', '5', '1', '5', '1496905432', '1496905432', '0', '[]'), ('6', '1', '1', '10', '500', '1496905432', '1496905432', '0', '[]'), ('7', '1', '2', '10', '400', '1496905432', '1496905432', '0', '[]'), ('8', '1', '1', '2', '300', '1496905434', '1496905434', '0', '[]'), ('9', '1', '5', '1', '5', '1496905435', '1496905435', '0', '[]'), ('10', '1', '1', '10', '500', '1496905435', '1496905435', '0', '[]'), ('11', '1', '2', '10', '400', '1496905435', '1496905435', '0', '[]'), ('12', '1', '1', '2', '300', '1496905437', '1496905437', '0', '[]'), ('13', '1', '5', '1', '5', '1496905610', '1496905610', '0', '[]'), ('14', '1', '1', '10', '500', '1496905610', '1496905610', '0', '[]'), ('15', '1', '2', '10', '400', '1496905610', '1496905610', '0', '[]'), ('16', '2', '1', '1', '150', '1496905612', '1496905612', '0', '[]'), ('17', '1', '1', '1', '150', '1496905612', '1496905612', '0', '[]'), ('18', '1', '5', '1', '5', '1496905634', '1496905634', '0', '[]'), ('19', '1', '1', '10', '500', '1496905634', '1496905634', '0', '[]'), ('20', '1', '2', '10', '400', '1496905634', '1496905634', '0', '[]'), ('21', '3', '1', '1', '150', '1496905636', '1496905636', '0', '[]'), ('22', '1', '1', '1', '150', '1496905636', '1496905636', '0', '[]'), ('23', '1', '5', '1', '5', '1496905665', '1496905665', '0', '[]'), ('24', '1', '1', '10', '500', '1496905665', '1496905665', '0', '[]'), ('25', '1', '2', '10', '400', '1496905665', '1496905665', '0', '[]'), ('26', '4', '1', '1', '150', '1496905667', '1496905667', '0', '[]'), ('27', '1', '1', '1', '150', '1496905667', '1496905667', '0', '[]'), ('28', '1', '5', '1', '5', '1496905672', '1496905672', '0', '[]'), ('29', '1', '1', '10', '500', '1496905672', '1496905672', '0', '[]'), ('30', '1', '2', '10', '400', '1496905672', '1496905672', '0', '[]'), ('31', '2', '1', '1', '150', '1496905674', '1496905674', '0', '[]'), ('32', '1', '1', '1', '150', '1496905674', '1496905674', '0', '[]'), ('33', '1', '5', '1', '5', '1496905687', '1496905687', '0', '[]'), ('34', '1', '1', '10', '500', '1496905687', '1496905687', '0', '[]'), ('35', '1', '2', '10', '400', '1496905687', '1496905687', '0', '[]'), ('36', '3', '1', '1', '150', '1496905689', '1496905689', '0', '[]'), ('37', '1', '1', '1', '150', '1496905689', '1496905689', '0', '[]'), ('38', '1', '5', '1', '5', '1496905690', '1496905690', '0', '[]'), ('39', '1', '1', '10', '500', '1496905690', '1496905690', '0', '[]'), ('40', '1', '2', '10', '400', '1496905690', '1496905690', '0', '[]'), ('41', '4', '1', '1', '150', '1496905692', '1496905692', '0', '[]'), ('42', '1', '1', '1', '150', '1496905692', '1496905692', '0', '[]'), ('43', '1', '5', '1', '5', '1496905770', '1496905770', '0', '[]'), ('44', '1', '1', '10', '500', '1496905770', '1496905770', '0', '[]'), ('45', '1', '2', '10', '400', '1496905770', '1496905770', '0', '[]'), ('46', '2', '1', '1', '150', '1496905772', '1496905772', '0', '[]'), ('47', '1', '1', '1', '150', '1496905772', '1496905772', '0', '[]'), ('48', '1', '5', '1', '5', '1496907722', '1496907722', '0', '[]'), ('49', '1', '1', '10', '400', '1496907722', '1496907722', '0', '[]'), ('50', '1', '2', '10', '500', '1496907722', '1496907722', '0', '[]'), ('51', '3', '1', '1', '150', '1496907724', '1496907724', '0', '[]'), ('52', '1', '1', '1', '150', '1496907724', '1496907724', '0', '[]'), ('53', '1', '5', '1', '5', '1496997079', '1496997079', '0', '[]'), ('54', '1', '1', '10', '500', '1496997079', '1496997079', '0', '[]'), ('55', '1', '2', '10', '400', '1496997079', '1496997079', '0', '[]'), ('56', '4', '1', '1', '150', '1496997081', '1496997081', '0', '[]'), ('57', '1', '1', '1', '150', '1496997081', '1496997081', '0', '[]'), ('58', '1', '5', '1', '5', '1497010430', '1497010430', '0', '[]'), ('59', '1', '1', '10', '500', '1497010430', '1497010430', '0', '[]'), ('60', '1', '2', '10', '400', '1497010430', '1497010430', '0', '[]'), ('61', '5', '1', '1', '150', '1497010432', '1497010432', '0', '[]'), ('62', '2', '1', '1', '150', '1497010432', '1497010432', '0', '[]'), ('63', '1', '1', '1', '150', '1497010432', '1497010432', '0', '[]'), ('64', '1', '5', '1', '5', '1497010434', '1497010434', '0', '[]'), ('65', '1', '1', '10', '500', '1497010434', '1497010434', '0', '[]'), ('66', '1', '2', '10', '400', '1497010434', '1497010434', '0', '[]'), ('67', '6', '1', '1', '150', '1497010436', '1497010436', '0', '[]'), ('68', '3', '1', '1', '150', '1497010436', '1497010436', '0', '[]'), ('69', '1', '1', '1', '150', '1497010436', '1497010436', '0', '[]'), ('70', '1', '5', '1', '5', '1497010489', '1497010489', '0', '[]'), ('71', '1', '1', '10', '500', '1497010489', '1497010489', '0', '[]'), ('72', '1', '2', '10', '400', '1497010489', '1497010489', '0', '[]'), ('73', '7', '1', '1', '150', '1497010491', '1497010491', '0', '[]'), ('74', '4', '1', '1', '150', '1497010491', '1497010491', '0', '[]'), ('75', '1', '1', '1', '150', '1497010491', '1497010491', '0', '[]'), ('76', '1', '5', '1', '5', '1497010495', '1497010495', '0', '[]'), ('77', '1', '1', '10', '500', '1497010495', '1497010495', '0', '[]'), ('78', '1', '2', '10', '400', '1497010495', '1497010495', '0', '[]'), ('79', '8', '1', '1', '150', '1497010497', '1497010497', '0', '[]'), ('80', '2', '1', '1', '150', '1497010497', '1497010497', '0', '[]'), ('81', '1', '1', '1', '150', '1497010497', '1497010497', '0', '[]'), ('82', '1', '5', '1', '5', '1497010501', '1497010501', '0', '[]'), ('83', '1', '1', '10', '500', '1497010501', '1497010501', '0', '[]'), ('84', '1', '2', '10', '400', '1497010501', '1497010501', '0', '[]'), ('85', '9', '1', '1', '150', '1497010503', '1497010503', '0', '[]'), ('86', '3', '1', '1', '150', '1497010503', '1497010503', '0', '[]'), ('87', '1', '1', '1', '150', '1497010503', '1497010503', '0', '[]'), ('88', '1', '5', '1', '5', '1497010583', '1497010583', '0', '[]'), ('89', '1', '1', '10', '500', '1497010583', '1497010583', '0', '[]'), ('90', '1', '2', '10', '400', '1497010583', '1497010583', '0', '[]'), ('91', '10', '1', '1', '150', '1497010585', '1497010585', '0', '[]'), ('92', '4', '1', '1', '150', '1497010585', '1497010585', '0', '[]'), ('93', '1', '1', '1', '150', '1497010585', '1497010585', '0', '[]'), ('94', '1', '5', '1', '5', '1497010585', '1497010585', '0', '[]'), ('95', '1', '1', '10', '500', '1497010585', '1497010585', '0', '[]'), ('96', '1', '2', '10', '400', '1497010585', '1497010585', '0', '[]'), ('97', '11', '1', '1', '150', '1497010587', '1497010587', '0', '[]'), ('98', '2', '1', '1', '150', '1497010587', '1497010587', '0', '[]'), ('99', '1', '1', '1', '150', '1497010587', '1497010587', '0', '[]'), ('100', '1', '5', '1', '5', '1497010589', '1497010589', '0', '[]'), ('101', '1', '1', '10', '500', '1497010589', '1497010589', '0', '[]'), ('102', '1', '2', '10', '400', '1497010589', '1497010589', '0', '[]'), ('103', '12', '1', '1', '150', '1497010591', '1497010591', '0', '[]'), ('104', '3', '1', '1', '150', '1497010591', '1497010591', '0', '[]'), ('105', '1', '1', '1', '150', '1497010591', '1497010591', '0', '[]'), ('106', '1', '5', '1', '5', '1497010592', '1497010592', '0', '[]'), ('107', '1', '1', '10', '500', '1497010592', '1497010592', '0', '[]'), ('108', '1', '2', '10', '400', '1497010592', '1497010592', '0', '[]'), ('109', '13', '1', '1', '150', '1497010594', '1497010594', '0', '[]'), ('110', '4', '1', '1', '150', '1497010594', '1497010594', '0', '[]'), ('111', '1', '1', '1', '150', '1497010594', '1497010594', '0', '[]'), ('112', '1', '5', '1', '5', '1497010595', '1497010595', '0', '[]'), ('113', '1', '1', '10', '500', '1497010595', '1497010595', '0', '[]'), ('114', '1', '2', '10', '400', '1497010595', '1497010595', '0', '[]'), ('115', '5', '1', '1', '150', '1497010597', '1497010597', '0', '[]'), ('116', '2', '1', '1', '150', '1497010597', '1497010597', '0', '[]'), ('117', '1', '1', '1', '150', '1497010597', '1497010597', '0', '[]'), ('118', '1', '5', '1', '5', '1497010597', '1497010597', '0', '[]'), ('119', '1', '1', '10', '500', '1497010597', '1497010597', '0', '[]'), ('120', '1', '2', '10', '400', '1497010597', '1497010597', '0', '[]'), ('121', '6', '1', '1', '150', '1497010599', '1497010599', '0', '[]'), ('122', '3', '1', '1', '150', '1497010599', '1497010599', '0', '[]'), ('123', '1', '1', '1', '150', '1497010599', '1497010599', '0', '[]'), ('124', '1', '5', '1', '5', '1497010600', '1497010600', '0', '[]'), ('125', '1', '1', '10', '500', '1497010600', '1497010600', '0', '[]'), ('126', '1', '2', '10', '400', '1497010600', '1497010600', '0', '[]'), ('127', '7', '1', '1', '150', '1497010602', '1497010602', '0', '[]'), ('128', '4', '1', '1', '150', '1497010602', '1497010602', '0', '[]'), ('129', '1', '1', '1', '150', '1497010602', '1497010602', '0', '[]'), ('130', '1', '5', '1', '5', '1497011008', '1497011008', '0', '[]'), ('131', '1', '1', '10', '500', '1497011008', '1497011008', '0', '[]'), ('132', '1', '2', '10', '400', '1497011008', '1497011008', '0', '[]'), ('133', '8', '1', '1', '150', '1497011010', '1497011010', '0', '[]'), ('134', '2', '1', '1', '150', '1497011010', '1497011010', '0', '[]'), ('135', '1', '1', '1', '150', '1497011010', '1497011010', '0', '[]'), ('136', '1', '5', '1', '5', '1497011011', '1497011011', '0', '[]'), ('137', '1', '1', '10', '500', '1497011011', '1497011011', '0', '[]'), ('138', '1', '2', '10', '400', '1497011011', '1497011011', '0', '[]'), ('139', '9', '1', '1', '150', '1497011013', '1497011013', '0', '[]'), ('140', '3', '1', '1', '150', '1497011013', '1497011013', '0', '[]'), ('141', '1', '1', '1', '150', '1497011013', '1497011013', '0', '[]'), ('142', '1', '5', '1', '5', '1497011014', '1497011014', '0', '[]'), ('143', '1', '1', '10', '500', '1497011014', '1497011014', '0', '[]'), ('144', '1', '2', '10', '400', '1497011014', '1497011014', '0', '[]'), ('145', '10', '1', '1', '150', '1497011016', '1497011016', '0', '[]'), ('146', '4', '1', '1', '150', '1497011016', '1497011016', '0', '[]'), ('147', '1', '1', '1', '150', '1497011016', '1497011016', '0', '[]'), ('148', '1', '5', '1', '5', '1497011017', '1497011017', '0', '[]'), ('149', '1', '1', '10', '500', '1497011017', '1497011017', '0', '[]'), ('150', '1', '2', '10', '400', '1497011017', '1497011017', '0', '[]'), ('151', '11', '1', '1', '150', '1497011018', '1497011018', '0', '[]'), ('152', '2', '1', '1', '150', '1497011018', '1497011018', '0', '[]'), ('153', '1', '1', '1', '150', '1497011018', '1497011018', '0', '[]'), ('154', '1', '5', '1', '5', '1497011019', '1497011019', '0', '[]'), ('155', '1', '1', '10', '500', '1497011019', '1497011019', '0', '[]'), ('156', '1', '2', '10', '400', '1497011019', '1497011019', '0', '[]'), ('157', '12', '1', '1', '150', '1497011021', '1497011021', '0', '[]'), ('158', '3', '1', '1', '150', '1497011021', '1497011021', '0', '[]'), ('159', '1', '1', '1', '150', '1497011021', '1497011021', '0', '[]'), ('160', '1', '5', '1', '5', '1497011022', '1497011022', '0', '[]'), ('161', '1', '1', '10', '500', '1497011022', '1497011022', '0', '[]'), ('162', '1', '2', '10', '400', '1497011022', '1497011022', '0', '[]'), ('163', '13', '1', '1', '150', '1497011024', '1497011024', '0', '[]'), ('164', '4', '1', '1', '150', '1497011024', '1497011024', '0', '[]'), ('165', '1', '1', '1', '150', '1497011024', '1497011024', '0', '[]'), ('166', '1', '5', '1', '5', '1497011024', '1497011024', '0', '[]'), ('167', '1', '1', '10', '500', '1497011024', '1497011024', '0', '[]'), ('168', '1', '2', '10', '400', '1497011024', '1497011024', '0', '[]'), ('169', '5', '1', '1', '150', '1497011026', '1497011026', '0', '[]'), ('170', '2', '1', '1', '150', '1497011026', '1497011026', '0', '[]'), ('171', '1', '1', '1', '150', '1497011026', '1497011026', '0', '[]'), ('172', '1', '5', '1', '5', '1497011027', '1497011027', '0', '[]'), ('173', '1', '1', '10', '500', '1497011027', '1497011027', '0', '[]'), ('174', '1', '2', '10', '400', '1497011027', '1497011027', '0', '[]'), ('175', '6', '1', '1', '150', '1497011029', '1497011029', '0', '[]'), ('176', '3', '1', '1', '150', '1497011029', '1497011029', '0', '[]'), ('177', '1', '1', '1', '150', '1497011029', '1497011029', '0', '[]'), ('178', '1', '5', '1', '5', '1497011030', '1497011030', '0', '[]'), ('179', '1', '1', '10', '500', '1497011030', '1497011030', '0', '[]'), ('180', '1', '2', '10', '400', '1497011030', '1497011030', '0', '[]'), ('181', '7', '1', '1', '150', '1497011032', '1497011032', '0', '[]'), ('182', '4', '1', '1', '150', '1497011032', '1497011032', '0', '[]'), ('183', '1', '1', '1', '150', '1497011032', '1497011032', '0', '[]'), ('184', '1', '5', '1', '5', '1497074910', '1497074910', '0', '[]'), ('185', '1', '1', '10', '500', '1497074910', '1497074910', '0', '[]'), ('186', '1', '2', '10', '400', '1497074910', '1497074910', '0', '[]'), ('187', '8', '1', '1', '150', '1497074912', '1497074912', '0', '[]'), ('188', '2', '1', '1', '150', '1497074912', '1497074912', '0', '[]'), ('189', '1', '1', '1', '150', '1497074912', '1497074912', '0', '[]');
-COMMIT;
+INSERT INTO `wa_bonus` VALUES ('1', '1', '5', '1', '5', '1497258492', '1497258492', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('2', '1', '2', '10', '900', '1497258492', '1497258492', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('3', '1', '1', '2', '300', '1497258493', '1497258493', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('4', '1', '5', '1', '5', '1497258495', '1497258495', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('5', '1', '2', '10', '900', '1497258495', '1497258495', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('6', '1', '1', '2', '300', '1497258496', '1497258496', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('7', '1', '5', '1', '5', '1497258497', '1497258497', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('8', '1', '2', '10', '900', '1497258497', '1497258497', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('9', '1', '1', '2', '300', '1497258498', '1497258498', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('10', '1', '5', '1', '5', '1497258499', '1497258499', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('11', '1', '2', '10', '900', '1497258499', '1497258499', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('12', '2', '1', '1', '150', '1497258499', '1497258499', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('13', '1', '1', '1', '150', '1497258499', '1497258499', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('14', '1', '5', '1', '5', '1497258500', '1497258500', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('15', '1', '2', '10', '900', '1497258500', '1497258500', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('16', '3', '1', '1', '150', '1497258501', '1497258501', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('17', '1', '1', '1', '150', '1497258501', '1497258501', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('18', '1', '5', '1', '5', '1497258502', '1497258502', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('19', '1', '2', '10', '900', '1497258502', '1497258502', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('20', '4', '1', '1', '150', '1497258503', '1497258503', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('21', '1', '1', '1', '150', '1497258503', '1497258503', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('22', '1', '5', '1', '5', '1497258504', '1497258504', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('23', '1', '2', '10', '900', '1497258504', '1497258504', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('24', '2', '1', '1', '150', '1497258504', '1497258504', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('25', '1', '1', '1', '150', '1497258504', '1497258504', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('26', '1', '5', '1', '5', '1497258505', '1497258505', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('27', '1', '2', '10', '900', '1497258505', '1497258505', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('28', '3', '1', '1', '150', '1497258506', '1497258506', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('29', '1', '1', '1', '150', '1497258506', '1497258506', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('30', '1', '5', '1', '5', '1497258507', '1497258507', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('31', '1', '2', '10', '900', '1497258507', '1497258507', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('32', '4', '1', '1', '150', '1497258507', '1497258507', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('33', '1', '1', '1', '150', '1497258507', '1497258507', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('34', '1', '5', '1', '5', '1497258508', '1497258508', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('35', '1', '2', '10', '900', '1497258508', '1497258508', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('36', '2', '1', '1', '150', '1497258509', '1497258509', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('37', '1', '1', '1', '150', '1497258509', '1497258509', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('38', '1', '5', '1', '5', '1497258510', '1497258510', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('39', '1', '2', '10', '900', '1497258510', '1497258510', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('40', '3', '1', '1', '150', '1497258511', '1497258511', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('41', '1', '1', '1', '150', '1497258511', '1497258511', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('42', '1', '5', '1', '5', '1497258511', '1497258511', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('43', '1', '2', '10', '900', '1497258511', '1497258511', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('44', '4', '1', '1', '150', '1497258512', '1497258512', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('45', '1', '1', '1', '150', '1497258512', '1497258512', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('46', '1', '5', '1', '5', '1497258513', '1497258513', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('47', '1', '2', '10', '900', '1497258513', '1497258513', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('48', '5', '1', '1', '150', '1497258514', '1497258514', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('49', '2', '1', '1', '150', '1497258514', '1497258514', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('50', '1', '1', '1', '150', '1497258514', '1497258514', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('51', '1', '5', '1', '5', '1497258514', '1497258514', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('52', '1', '2', '10', '900', '1497258514', '1497258514', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('53', '6', '1', '1', '150', '1497258515', '1497258515', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('54', '3', '1', '1', '150', '1497258515', '1497258515', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('55', '1', '1', '1', '150', '1497258515', '1497258515', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('56', '1', '5', '1', '5', '1497258516', '1497258516', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('57', '1', '2', '10', '900', '1497258516', '1497258516', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('58', '7', '1', '1', '150', '1497258517', '1497258517', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('59', '4', '1', '1', '150', '1497258517', '1497258517', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('60', '1', '1', '1', '150', '1497258517', '1497258517', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('61', '1', '5', '1', '5', '1497258517', '1497258517', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('62', '1', '2', '10', '900', '1497258517', '1497258517', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('63', '8', '1', '1', '150', '1497258518', '1497258518', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('64', '2', '1', '1', '150', '1497258518', '1497258518', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('65', '1', '1', '1', '150', '1497258518', '1497258518', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('66', '1', '5', '1', '5', '1497258519', '1497258519', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('67', '1', '2', '10', '900', '1497258519', '1497258519', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('68', '9', '1', '1', '150', '1497258520', '1497258520', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('69', '3', '1', '1', '150', '1497258520', '1497258520', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('70', '1', '1', '1', '150', '1497258520', '1497258520', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('71', '1', '5', '1', '5', '1497258521', '1497258521', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('72', '1', '2', '10', '900', '1497258521', '1497258521', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('73', '10', '1', '1', '150', '1497258521', '1497258521', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('74', '4', '1', '1', '150', '1497258521', '1497258521', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('75', '1', '1', '1', '150', '1497258521', '1497258521', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('76', '1', '5', '1', '5', '1497258522', '1497258522', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('77', '1', '2', '10', '900', '1497258522', '1497258522', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('78', '11', '1', '1', '150', '1497258523', '1497258523', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('79', '2', '1', '1', '150', '1497258523', '1497258523', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('80', '1', '1', '1', '150', '1497258523', '1497258523', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('81', '1', '5', '1', '5', '1497258524', '1497258524', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('82', '1', '2', '10', '900', '1497258524', '1497258524', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('83', '12', '1', '1', '150', '1497258525', '1497258525', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('84', '3', '1', '1', '150', '1497258525', '1497258525', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('85', '1', '1', '1', '150', '1497258525', '1497258525', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('86', '1', '5', '1', '5', '1497258526', '1497258526', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('87', '1', '2', '10', '900', '1497258526', '1497258526', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('88', '13', '1', '1', '150', '1497258527', '1497258527', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('89', '4', '1', '1', '150', '1497258527', '1497258527', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('90', '1', '1', '1', '150', '1497258527', '1497258527', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('91', '1', '5', '1', '5', '1497258527', '1497258527', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('92', '1', '2', '10', '900', '1497258527', '1497258527', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('93', '5', '1', '1', '150', '1497258528', '1497258528', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('94', '2', '1', '1', '150', '1497258528', '1497258528', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('95', '1', '1', '1', '150', '1497258528', '1497258528', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('96', '1', '5', '1', '5', '1497258529', '1497258529', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('97', '1', '2', '10', '900', '1497258529', '1497258529', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('98', '6', '1', '1', '150', '1497258530', '1497258530', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('99', '3', '1', '1', '150', '1497258530', '1497258530', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('100', '1', '1', '1', '150', '1497258530', '1497258530', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('101', '1', '5', '1', '5', '1497258531', '1497258531', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('102', '1', '2', '10', '900', '1497258531', '1497258531', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('103', '7', '1', '1', '150', '1497258531', '1497258531', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('104', '4', '1', '1', '150', '1497258531', '1497258531', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('105', '1', '1', '1', '150', '1497258532', '1497258532', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('106', '1', '5', '1', '5', '1497258532', '1497258532', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('107', '1', '2', '10', '900', '1497258532', '1497258532', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('108', '8', '1', '1', '150', '1497258533', '1497258533', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('109', '2', '1', '1', '150', '1497258533', '1497258533', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('110', '1', '1', '1', '150', '1497258533', '1497258533', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('111', '1', '5', '1', '5', '1497258534', '1497258534', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('112', '1', '2', '10', '900', '1497258534', '1497258534', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('113', '9', '1', '1', '150', '1497258535', '1497258535', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('114', '3', '1', '1', '150', '1497258535', '1497258535', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('115', '1', '1', '1', '150', '1497258535', '1497258535', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('116', '1', '5', '1', '5', '1497258535', '1497258535', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('117', '1', '2', '10', '900', '1497258535', '1497258535', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('118', '10', '1', '1', '150', '1497258536', '1497258536', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('119', '4', '1', '1', '150', '1497258536', '1497258536', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('120', '1', '1', '1', '150', '1497258536', '1497258536', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('121', '1', '5', '1', '5', '1497258537', '1497258537', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('122', '1', '2', '10', '900', '1497258537', '1497258537', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('123', '11', '1', '1', '150', '1497258538', '1497258538', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('124', '2', '1', '1', '150', '1497258538', '1497258538', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('125', '1', '1', '1', '150', '1497258538', '1497258538', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('126', '1', '5', '1', '5', '1497258539', '1497258539', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('127', '1', '2', '10', '900', '1497258539', '1497258539', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('128', '12', '1', '1', '150', '1497258539', '1497258539', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('129', '3', '1', '1', '150', '1497258539', '1497258539', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('130', '1', '1', '1', '150', '1497258539', '1497258539', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('131', '1', '5', '1', '5', '1497258540', '1497258540', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('132', '1', '2', '10', '900', '1497258540', '1497258540', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('133', '13', '1', '1', '150', '1497258541', '1497258541', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('134', '4', '1', '1', '150', '1497258541', '1497258541', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('135', '1', '1', '1', '150', '1497258541', '1497258541', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('136', '1', '5', '1', '5', '1497258542', '1497258542', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('137', '1', '2', '10', '900', '1497258542', '1497258542', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('138', '5', '1', '1', '150', '1497258543', '1497258543', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('139', '2', '1', '1', '150', '1497258543', '1497258543', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('140', '1', '1', '1', '150', '1497258543', '1497258543', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('141', '1', '5', '1', '5', '1497258543', '1497258543', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('142', '1', '2', '10', '900', '1497258543', '1497258543', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('143', '6', '1', '1', '150', '1497258544', '1497258544', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('144', '3', '1', '1', '150', '1497258544', '1497258544', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('145', '1', '1', '1', '150', '1497258544', '1497258544', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('146', '1', '5', '1', '5', '1497258545', '1497258545', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('147', '1', '2', '10', '900', '1497258545', '1497258545', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('148', '7', '1', '1', '150', '1497258546', '1497258546', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('149', '4', '1', '1', '150', '1497258546', '1497258546', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('150', '1', '1', '1', '150', '1497258546', '1497258546', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('151', '1', '5', '1', '5', '1497258547', '1497258547', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('152', '1', '2', '10', '900', '1497258547', '1497258547', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('153', '8', '1', '1', '150', '1497258547', '1497258547', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('154', '2', '1', '1', '150', '1497258547', '1497258547', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('155', '1', '1', '1', '150', '1497258548', '1497258548', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('156', '1', '5', '1', '5', '1497258548', '1497258548', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('157', '1', '2', '10', '900', '1497258548', '1497258548', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('158', '9', '1', '1', '150', '1497258549', '1497258549', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('159', '3', '1', '1', '150', '1497258549', '1497258549', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('160', '1', '1', '1', '150', '1497258549', '1497258549', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('161', '1', '5', '1', '5', '1497258550', '1497258550', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('162', '1', '2', '10', '900', '1497258550', '1497258550', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('163', '10', '1', '1', '150', '1497258551', '1497258551', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('164', '4', '1', '1', '150', '1497258551', '1497258551', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('165', '1', '1', '1', '150', '1497258551', '1497258551', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('166', '1', '5', '1', '5', '1497258551', '1497258551', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('167', '1', '2', '10', '900', '1497258552', '1497258552', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('168', '11', '1', '1', '150', '1497258552', '1497258552', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('169', '2', '1', '1', '150', '1497258552', '1497258552', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('170', '1', '1', '1', '150', '1497258552', '1497258552', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('171', '1', '5', '1', '5', '1497258553', '1497258553', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('172', '1', '2', '10', '900', '1497258553', '1497258553', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('173', '12', '1', '1', '150', '1497258554', '1497258554', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('174', '3', '1', '1', '150', '1497258554', '1497258554', '0', '[]');
+INSERT INTO `wa_bonus` VALUES ('175', '1', '1', '1', '150', '1497258554', '1497258554', '0', '[]');
 
 -- ----------------------------
---  Table structure for `wa_branner`
+-- Table structure for wa_branner
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_branner`;
 CREATE TABLE `wa_branner` (
@@ -224,7 +617,11 @@ CREATE TABLE `wa_branner` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='轮播图管理';
 
 -- ----------------------------
---  Table structure for `wa_deposit`
+-- Records of wa_branner
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wa_deposit
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_deposit`;
 CREATE TABLE `wa_deposit` (
@@ -240,7 +637,11 @@ CREATE TABLE `wa_deposit` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='充值和扣除记录表';
 
 -- ----------------------------
---  Table structure for `wa_district`
+-- Records of wa_deposit
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wa_district
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_district`;
 CREATE TABLE `wa_district` (
@@ -250,17 +651,152 @@ CREATE TABLE `wa_district` (
   `seat` int(11) DEFAULT NULL COMMENT '座位id',
   `created_at` int(11) DEFAULT NULL COMMENT '添加时间',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=123 DEFAULT CHARSET=utf8mb4 COMMENT='座位区域表';
+) ENGINE=InnoDB AUTO_INCREMENT=139 DEFAULT CHARSET=utf8mb4 COMMENT='座位区域表';
 
 -- ----------------------------
---  Records of `wa_district`
+-- Records of wa_district
 -- ----------------------------
-BEGIN;
-INSERT INTO `wa_district` VALUES ('1', '1', '1', '1', '1496630244'), ('2', '2', '2', '1', '1496905425'), ('3', '2', '1', '2', '1496905427'), ('4', '3', '3', '1', '1496905434'), ('5', '3', '1', '3', '1496905434'), ('6', '4', '4', '1', '1496905437'), ('7', '4', '1', '4', '1496905437'), ('8', '5', '5', '1', '1496905612'), ('9', '5', '2', '2', '1496905612'), ('10', '5', '1', '5', '1496905612'), ('11', '6', '6', '1', '1496905636'), ('12', '6', '3', '2', '1496905636'), ('13', '6', '1', '6', '1496905636'), ('14', '7', '7', '1', '1496905667'), ('15', '7', '4', '2', '1496905667'), ('16', '7', '1', '7', '1496905667'), ('17', '8', '8', '1', '1496905674'), ('18', '8', '2', '3', '1496905674'), ('19', '8', '1', '8', '1496905674'), ('20', '9', '9', '1', '1496905689'), ('21', '9', '3', '3', '1496905689'), ('22', '9', '1', '9', '1496905689'), ('23', '10', '10', '1', '1496905692'), ('24', '10', '4', '3', '1496905692'), ('25', '10', '1', '10', '1496905692'), ('26', '11', '11', '1', '1496905772'), ('27', '11', '2', '4', '1496905772'), ('28', '11', '1', '11', '1496905772'), ('29', '12', '12', '1', '1496907724'), ('30', '12', '3', '4', '1496907724'), ('31', '12', '1', '12', '1496907724'), ('32', '13', '13', '1', '1496997081'), ('33', '13', '4', '4', '1496997081'), ('34', '13', '1', '13', '1496997081'), ('35', '14', '14', '1', '1497010432'), ('36', '14', '5', '2', '1497010432'), ('37', '14', '2', '5', '1497010432'), ('38', '14', '1', '14', '1497010432'), ('39', '15', '15', '1', '1497010436'), ('40', '15', '6', '2', '1497010436'), ('41', '15', '3', '5', '1497010436'), ('42', '15', '1', '15', '1497010436'), ('43', '16', '16', '1', '1497010491'), ('44', '16', '7', '2', '1497010491'), ('45', '16', '4', '5', '1497010491'), ('46', '16', '1', '16', '1497010491'), ('47', '17', '17', '1', '1497010497'), ('48', '17', '8', '2', '1497010497'), ('49', '17', '2', '6', '1497010497'), ('50', '17', '1', '17', '1497010497'), ('51', '18', '18', '1', '1497010503'), ('52', '18', '9', '2', '1497010503'), ('53', '18', '3', '6', '1497010503'), ('54', '18', '1', '18', '1497010503'), ('55', '19', '19', '1', '1497010585'), ('56', '19', '10', '2', '1497010585'), ('57', '19', '4', '6', '1497010585'), ('58', '19', '1', '19', '1497010585'), ('59', '20', '20', '1', '1497010587'), ('60', '20', '11', '2', '1497010587'), ('61', '20', '2', '7', '1497010587'), ('62', '20', '1', '20', '1497010587'), ('63', '21', '21', '1', '1497010591'), ('64', '21', '12', '2', '1497010591'), ('65', '21', '3', '7', '1497010591'), ('66', '21', '1', '21', '1497010591'), ('67', '22', '22', '1', '1497010594'), ('68', '22', '13', '2', '1497010594'), ('69', '22', '4', '7', '1497010594'), ('70', '22', '1', '22', '1497010594'), ('71', '23', '23', '1', '1497010597'), ('72', '23', '5', '3', '1497010597'), ('73', '23', '2', '8', '1497010597'), ('74', '23', '1', '23', '1497010597'), ('75', '24', '24', '1', '1497010599'), ('76', '24', '6', '3', '1497010599'), ('77', '24', '3', '8', '1497010599'), ('78', '24', '1', '24', '1497010599'), ('79', '25', '25', '1', '1497010602'), ('80', '25', '7', '3', '1497010602'), ('81', '25', '4', '8', '1497010602'), ('82', '25', '1', '25', '1497010602'), ('83', '26', '26', '1', '1497011010'), ('84', '26', '8', '3', '1497011010'), ('85', '26', '2', '9', '1497011010'), ('86', '26', '1', '26', '1497011010'), ('87', '27', '27', '1', '1497011013'), ('88', '27', '9', '3', '1497011013'), ('89', '27', '3', '9', '1497011013'), ('90', '27', '1', '27', '1497011013'), ('91', '28', '28', '1', '1497011016'), ('92', '28', '10', '3', '1497011016'), ('93', '28', '4', '9', '1497011016'), ('94', '28', '1', '28', '1497011016'), ('95', '29', '29', '1', '1497011018'), ('96', '29', '11', '3', '1497011018'), ('97', '29', '2', '10', '1497011018'), ('98', '29', '1', '29', '1497011018'), ('99', '30', '30', '1', '1497011021'), ('100', '30', '12', '3', '1497011021'), ('101', '30', '3', '10', '1497011021'), ('102', '30', '1', '30', '1497011021'), ('103', '31', '31', '1', '1497011024'), ('104', '31', '13', '3', '1497011024'), ('105', '31', '4', '10', '1497011024'), ('106', '31', '1', '31', '1497011024'), ('107', '32', '32', '1', '1497011026'), ('108', '32', '5', '4', '1497011026'), ('109', '32', '2', '11', '1497011026'), ('110', '32', '1', '32', '1497011026'), ('111', '33', '33', '1', '1497011029'), ('112', '33', '6', '4', '1497011029'), ('113', '33', '3', '11', '1497011029'), ('114', '33', '1', '33', '1497011029'), ('115', '34', '34', '1', '1497011032'), ('116', '34', '7', '4', '1497011032'), ('117', '34', '4', '11', '1497011032'), ('118', '34', '1', '34', '1497011032'), ('119', '35', '35', '1', '1497074912'), ('120', '35', '8', '4', '1497074912'), ('121', '35', '2', '12', '1497074912'), ('122', '35', '1', '35', '1497074912');
-COMMIT;
+INSERT INTO `wa_district` VALUES ('1', '1', '1', '1', '1496630244');
+INSERT INTO `wa_district` VALUES ('2', '2', '2', '1', '1497258493');
+INSERT INTO `wa_district` VALUES ('3', '2', '1', '2', '1497258493');
+INSERT INTO `wa_district` VALUES ('4', '3', '3', '1', '1497258496');
+INSERT INTO `wa_district` VALUES ('5', '3', '1', '3', '1497258496');
+INSERT INTO `wa_district` VALUES ('6', '4', '4', '1', '1497258498');
+INSERT INTO `wa_district` VALUES ('7', '4', '1', '4', '1497258498');
+INSERT INTO `wa_district` VALUES ('8', '5', '5', '1', '1497258499');
+INSERT INTO `wa_district` VALUES ('9', '5', '2', '2', '1497258499');
+INSERT INTO `wa_district` VALUES ('10', '5', '1', '5', '1497258499');
+INSERT INTO `wa_district` VALUES ('11', '6', '6', '1', '1497258501');
+INSERT INTO `wa_district` VALUES ('12', '6', '3', '2', '1497258501');
+INSERT INTO `wa_district` VALUES ('13', '6', '1', '6', '1497258501');
+INSERT INTO `wa_district` VALUES ('14', '7', '7', '1', '1497258503');
+INSERT INTO `wa_district` VALUES ('15', '7', '4', '2', '1497258503');
+INSERT INTO `wa_district` VALUES ('16', '7', '1', '7', '1497258503');
+INSERT INTO `wa_district` VALUES ('17', '8', '8', '1', '1497258504');
+INSERT INTO `wa_district` VALUES ('18', '8', '2', '3', '1497258504');
+INSERT INTO `wa_district` VALUES ('19', '8', '1', '8', '1497258504');
+INSERT INTO `wa_district` VALUES ('20', '9', '9', '1', '1497258506');
+INSERT INTO `wa_district` VALUES ('21', '9', '3', '3', '1497258506');
+INSERT INTO `wa_district` VALUES ('22', '9', '1', '9', '1497258506');
+INSERT INTO `wa_district` VALUES ('23', '10', '10', '1', '1497258507');
+INSERT INTO `wa_district` VALUES ('24', '10', '4', '3', '1497258507');
+INSERT INTO `wa_district` VALUES ('25', '10', '1', '10', '1497258507');
+INSERT INTO `wa_district` VALUES ('26', '11', '11', '1', '1497258509');
+INSERT INTO `wa_district` VALUES ('27', '11', '2', '4', '1497258509');
+INSERT INTO `wa_district` VALUES ('28', '11', '1', '11', '1497258509');
+INSERT INTO `wa_district` VALUES ('29', '12', '12', '1', '1497258511');
+INSERT INTO `wa_district` VALUES ('30', '12', '3', '4', '1497258511');
+INSERT INTO `wa_district` VALUES ('31', '12', '1', '12', '1497258511');
+INSERT INTO `wa_district` VALUES ('32', '13', '13', '1', '1497258512');
+INSERT INTO `wa_district` VALUES ('33', '13', '4', '4', '1497258512');
+INSERT INTO `wa_district` VALUES ('34', '13', '1', '13', '1497258512');
+INSERT INTO `wa_district` VALUES ('35', '14', '14', '1', '1497258513');
+INSERT INTO `wa_district` VALUES ('36', '14', '5', '2', '1497258513');
+INSERT INTO `wa_district` VALUES ('37', '14', '2', '5', '1497258514');
+INSERT INTO `wa_district` VALUES ('38', '14', '1', '14', '1497258514');
+INSERT INTO `wa_district` VALUES ('39', '15', '15', '1', '1497258515');
+INSERT INTO `wa_district` VALUES ('40', '15', '6', '2', '1497258515');
+INSERT INTO `wa_district` VALUES ('41', '15', '3', '5', '1497258515');
+INSERT INTO `wa_district` VALUES ('42', '15', '1', '15', '1497258515');
+INSERT INTO `wa_district` VALUES ('43', '16', '16', '1', '1497258516');
+INSERT INTO `wa_district` VALUES ('44', '16', '7', '2', '1497258517');
+INSERT INTO `wa_district` VALUES ('45', '16', '4', '5', '1497258517');
+INSERT INTO `wa_district` VALUES ('46', '16', '1', '16', '1497258517');
+INSERT INTO `wa_district` VALUES ('47', '17', '17', '1', '1497258518');
+INSERT INTO `wa_district` VALUES ('48', '17', '8', '2', '1497258518');
+INSERT INTO `wa_district` VALUES ('49', '17', '2', '6', '1497258518');
+INSERT INTO `wa_district` VALUES ('50', '17', '1', '17', '1497258518');
+INSERT INTO `wa_district` VALUES ('51', '18', '18', '1', '1497258520');
+INSERT INTO `wa_district` VALUES ('52', '18', '9', '2', '1497258520');
+INSERT INTO `wa_district` VALUES ('53', '18', '3', '6', '1497258520');
+INSERT INTO `wa_district` VALUES ('54', '18', '1', '18', '1497258520');
+INSERT INTO `wa_district` VALUES ('55', '19', '19', '1', '1497258521');
+INSERT INTO `wa_district` VALUES ('56', '19', '10', '2', '1497258521');
+INSERT INTO `wa_district` VALUES ('57', '19', '4', '6', '1497258521');
+INSERT INTO `wa_district` VALUES ('58', '19', '1', '19', '1497258521');
+INSERT INTO `wa_district` VALUES ('59', '20', '20', '1', '1497258523');
+INSERT INTO `wa_district` VALUES ('60', '20', '11', '2', '1497258523');
+INSERT INTO `wa_district` VALUES ('61', '20', '2', '7', '1497258523');
+INSERT INTO `wa_district` VALUES ('62', '20', '1', '20', '1497258523');
+INSERT INTO `wa_district` VALUES ('63', '21', '21', '1', '1497258525');
+INSERT INTO `wa_district` VALUES ('64', '21', '12', '2', '1497258525');
+INSERT INTO `wa_district` VALUES ('65', '21', '3', '7', '1497258525');
+INSERT INTO `wa_district` VALUES ('66', '21', '1', '21', '1497258525');
+INSERT INTO `wa_district` VALUES ('67', '22', '22', '1', '1497258527');
+INSERT INTO `wa_district` VALUES ('68', '22', '13', '2', '1497258527');
+INSERT INTO `wa_district` VALUES ('69', '22', '4', '7', '1497258527');
+INSERT INTO `wa_district` VALUES ('70', '22', '1', '22', '1497258527');
+INSERT INTO `wa_district` VALUES ('71', '23', '23', '1', '1497258528');
+INSERT INTO `wa_district` VALUES ('72', '23', '5', '3', '1497258528');
+INSERT INTO `wa_district` VALUES ('73', '23', '2', '8', '1497258528');
+INSERT INTO `wa_district` VALUES ('74', '23', '1', '23', '1497258528');
+INSERT INTO `wa_district` VALUES ('75', '24', '24', '1', '1497258530');
+INSERT INTO `wa_district` VALUES ('76', '24', '6', '3', '1497258530');
+INSERT INTO `wa_district` VALUES ('77', '24', '3', '8', '1497258530');
+INSERT INTO `wa_district` VALUES ('78', '24', '1', '24', '1497258530');
+INSERT INTO `wa_district` VALUES ('79', '25', '25', '1', '1497258531');
+INSERT INTO `wa_district` VALUES ('80', '25', '7', '3', '1497258531');
+INSERT INTO `wa_district` VALUES ('81', '25', '4', '8', '1497258531');
+INSERT INTO `wa_district` VALUES ('82', '25', '1', '25', '1497258532');
+INSERT INTO `wa_district` VALUES ('83', '26', '26', '1', '1497258533');
+INSERT INTO `wa_district` VALUES ('84', '26', '8', '3', '1497258533');
+INSERT INTO `wa_district` VALUES ('85', '26', '2', '9', '1497258533');
+INSERT INTO `wa_district` VALUES ('86', '26', '1', '26', '1497258533');
+INSERT INTO `wa_district` VALUES ('87', '27', '27', '1', '1497258535');
+INSERT INTO `wa_district` VALUES ('88', '27', '9', '3', '1497258535');
+INSERT INTO `wa_district` VALUES ('89', '27', '3', '9', '1497258535');
+INSERT INTO `wa_district` VALUES ('90', '27', '1', '27', '1497258535');
+INSERT INTO `wa_district` VALUES ('91', '28', '28', '1', '1497258536');
+INSERT INTO `wa_district` VALUES ('92', '28', '10', '3', '1497258536');
+INSERT INTO `wa_district` VALUES ('93', '28', '4', '9', '1497258536');
+INSERT INTO `wa_district` VALUES ('94', '28', '1', '28', '1497258536');
+INSERT INTO `wa_district` VALUES ('95', '29', '29', '1', '1497258538');
+INSERT INTO `wa_district` VALUES ('96', '29', '11', '3', '1497258538');
+INSERT INTO `wa_district` VALUES ('97', '29', '2', '10', '1497258538');
+INSERT INTO `wa_district` VALUES ('98', '29', '1', '29', '1497258538');
+INSERT INTO `wa_district` VALUES ('99', '30', '30', '1', '1497258539');
+INSERT INTO `wa_district` VALUES ('100', '30', '12', '3', '1497258539');
+INSERT INTO `wa_district` VALUES ('101', '30', '3', '10', '1497258539');
+INSERT INTO `wa_district` VALUES ('102', '30', '1', '30', '1497258539');
+INSERT INTO `wa_district` VALUES ('103', '31', '31', '1', '1497258541');
+INSERT INTO `wa_district` VALUES ('104', '31', '13', '3', '1497258541');
+INSERT INTO `wa_district` VALUES ('105', '31', '4', '10', '1497258541');
+INSERT INTO `wa_district` VALUES ('106', '31', '1', '31', '1497258541');
+INSERT INTO `wa_district` VALUES ('107', '32', '32', '1', '1497258543');
+INSERT INTO `wa_district` VALUES ('108', '32', '5', '4', '1497258543');
+INSERT INTO `wa_district` VALUES ('109', '32', '2', '11', '1497258543');
+INSERT INTO `wa_district` VALUES ('110', '32', '1', '32', '1497258543');
+INSERT INTO `wa_district` VALUES ('111', '33', '33', '1', '1497258544');
+INSERT INTO `wa_district` VALUES ('112', '33', '6', '4', '1497258544');
+INSERT INTO `wa_district` VALUES ('113', '33', '3', '11', '1497258544');
+INSERT INTO `wa_district` VALUES ('114', '33', '1', '33', '1497258544');
+INSERT INTO `wa_district` VALUES ('115', '34', '34', '1', '1497258546');
+INSERT INTO `wa_district` VALUES ('116', '34', '7', '4', '1497258546');
+INSERT INTO `wa_district` VALUES ('117', '34', '4', '11', '1497258546');
+INSERT INTO `wa_district` VALUES ('118', '34', '1', '34', '1497258546');
+INSERT INTO `wa_district` VALUES ('119', '35', '35', '1', '1497258547');
+INSERT INTO `wa_district` VALUES ('120', '35', '8', '4', '1497258547');
+INSERT INTO `wa_district` VALUES ('121', '35', '2', '12', '1497258547');
+INSERT INTO `wa_district` VALUES ('122', '35', '1', '35', '1497258548');
+INSERT INTO `wa_district` VALUES ('123', '36', '36', '1', '1497258549');
+INSERT INTO `wa_district` VALUES ('124', '36', '9', '4', '1497258549');
+INSERT INTO `wa_district` VALUES ('125', '36', '3', '12', '1497258549');
+INSERT INTO `wa_district` VALUES ('126', '36', '1', '36', '1497258549');
+INSERT INTO `wa_district` VALUES ('127', '37', '37', '1', '1497258551');
+INSERT INTO `wa_district` VALUES ('128', '37', '10', '4', '1497258551');
+INSERT INTO `wa_district` VALUES ('129', '37', '4', '12', '1497258551');
+INSERT INTO `wa_district` VALUES ('130', '37', '1', '37', '1497258551');
+INSERT INTO `wa_district` VALUES ('131', '38', '38', '1', '1497258552');
+INSERT INTO `wa_district` VALUES ('132', '38', '11', '4', '1497258552');
+INSERT INTO `wa_district` VALUES ('133', '38', '2', '13', '1497258552');
+INSERT INTO `wa_district` VALUES ('134', '38', '1', '38', '1497258552');
+INSERT INTO `wa_district` VALUES ('135', '39', '39', '1', '1497258554');
+INSERT INTO `wa_district` VALUES ('136', '39', '12', '4', '1497258554');
+INSERT INTO `wa_district` VALUES ('137', '39', '3', '13', '1497258554');
+INSERT INTO `wa_district` VALUES ('138', '39', '1', '39', '1497258554');
 
 -- ----------------------------
---  Table structure for `wa_fruiter`
+-- Table structure for wa_fruiter
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_fruiter`;
 CREATE TABLE `wa_fruiter` (
@@ -276,7 +812,11 @@ CREATE TABLE `wa_fruiter` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='果树管理表';
 
 -- ----------------------------
---  Table structure for `wa_fruiter_img`
+-- Records of wa_fruiter
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wa_fruiter_img
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_fruiter_img`;
 CREATE TABLE `wa_fruiter_img` (
@@ -287,7 +827,11 @@ CREATE TABLE `wa_fruiter_img` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='果树图片表';
 
 -- ----------------------------
---  Table structure for `wa_give`
+-- Records of wa_fruiter_img
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wa_give
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_give`;
 CREATE TABLE `wa_give` (
@@ -301,7 +845,11 @@ CREATE TABLE `wa_give` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Table structure for `wa_goods`
+-- Records of wa_give
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wa_goods
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_goods`;
 CREATE TABLE `wa_goods` (
@@ -311,17 +859,14 @@ CREATE TABLE `wa_goods` (
   `price` int(11) DEFAULT NULL COMMENT '商品价格',
   `describe` text COMMENT '商品描述',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COMMENT='商品管理';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='商品管理';
 
 -- ----------------------------
---  Records of `wa_goods`
+-- Records of wa_goods
 -- ----------------------------
-BEGIN;
-INSERT INTO `wa_goods` VALUES ('2', '100', null, '1', '11'), ('3', '1', null, '100', '100');
-COMMIT;
 
 -- ----------------------------
---  Table structure for `wa_goods_img`
+-- Table structure for wa_goods_img
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_goods_img`;
 CREATE TABLE `wa_goods_img` (
@@ -329,17 +874,14 @@ CREATE TABLE `wa_goods_img` (
   `goods_id` int(11) NOT NULL DEFAULT '0' COMMENT '模型名',
   `img_path` varchar(255) NOT NULL COMMENT '存放路径',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COMMENT='商品图片表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='商品图片表';
 
 -- ----------------------------
---  Records of `wa_goods_img`
+-- Records of wa_goods_img
 -- ----------------------------
-BEGIN;
-INSERT INTO `wa_goods_img` VALUES ('3', '3', '/upload/goods_imgs/2017-06-08/bbcb95aa7ced4d0098283366c2b85090fd8fdf80.gif');
-COMMIT;
 
 -- ----------------------------
---  Table structure for `wa_member`
+-- Table structure for wa_member
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_member`;
 CREATE TABLE `wa_member` (
@@ -361,17 +903,53 @@ CREATE TABLE `wa_member` (
   `child_num` int(11) NOT NULL COMMENT '直推数量',
   `out_status` int(10) NOT NULL DEFAULT '0' COMMENT '是否可以退网 0:否 1:是',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8 COMMENT='会员信息表';
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COMMENT='会员信息表';
 
 -- ----------------------------
---  Records of `wa_member`
+-- Records of wa_member
 -- ----------------------------
-BEGIN;
-INSERT INTO `wa_member` VALUES ('1', '1', 'member1', '$2y$13$gu094onaVGc9v5Juiz6SD.Tcoxio8IANlYRZjgd7mlFEDjS1OtIVK', '13219890986', '成都银行', '62284848822113464', '环球中心', '1496629517', '1', '0', '1496629900', '1', '99994949', '2147479647', '34', '0'), ('2', '1', '测试注册', '$2y$13$JvTH0Bp41fN6H8tRlQtJwOvJGkE5aDLvgzoxmZwdSzLS/Um/TJ/F.', '13812345678', '', '', '', '0', '1', '1496905423', '1496905423', '2', '0', '0', '0', '0'), ('3', '1', '测试注册', '$2y$13$mcl8mMSVI.EF6t9cUHmz8Odlv2b2S9qyOYvvHumUXWRnbJSlMAnqC', '13812345678', '', '', '', '0', '1', '1496905432', '1496905432', '3', '0', '0', '0', '0'), ('4', '1', '测试注册', '$2y$13$Uf66/GJ6aV1U5UTf7t1KDefWhcTAUXR1H2xg3Clpe.bQKOQDfnJv.', '13812345678', '', '', '', '0', '1', '1496905435', '1496905435', '4', '0', '0', '0', '0'), ('5', '1', '测试注册', '$2y$13$NpzVKcrffoHop/AreTfv9eKSqt7dCjIHGFVGjzbpxkwToLi7226kC', '13812345678', '', '', '', '0', '1', '1496905610', '1496905610', '5', '0', '0', '0', '0'), ('6', '1', '测试注册', '$2y$13$Oknr5ozzK8vU4doJSgI1dOK36SjN4oCCm2/NenC3T1oLNQ4dOiD0W', '13812345678', '', '', '', '0', '1', '1496905634', '1496905634', '6', '0', '0', '0', '0'), ('7', '1', '测试注册', '$2y$13$P3Owxtj.rm/7/d3PKH4KQe6hoWaPCZ5vyCBERga8x.rJVQbDWSd4y', '13812345678', '', '', '', '0', '1', '1496905665', '1496905665', '7', '0', '0', '0', '0'), ('8', '1', '测试注册', '$2y$13$bLpdoQdp5ryEwPNEIoZsv.izhIMcpj.fMR3m1RA0GSbMdmrKZWUeK', '13812345678', '', '', '', '0', '1', '1496905672', '1496905672', '8', '0', '0', '0', '0'), ('9', '1', '测试注册', '$2y$13$sXVgPeWUZLDPE7sPGbTQc.tZRgUXvfltcpBXgbDUCNBluC3fl6Zaa', '13812345678', '', '', '', '0', '1', '1496905687', '1496905687', '9', '0', '0', '0', '0'), ('10', '1', '测试注册', '$2y$13$LpYWtNdkqL1YUIU4IoxN8uEeT.4bEK22BuTSob43BuYfdEFgVPUBm', '13812345678', '', '', '', '0', '1', '1496905690', '1496905690', '10', '0', '0', '0', '0'), ('11', '1', '测试注册', '$2y$13$g/KdOUaffD.Jgr46WPMfj.7Iuq6hDBECrf9iSYZAtORMYkMvoMz/e', '13812345678', '', '', '', '0', '1', '1496905770', '1496905770', '11', '0', '0', '0', '0'), ('12', '1', '123', '$2y$13$EI6x9ReAvFXE28NlaG5Uxu8jZGXLMnQ.CeLyrmVm4AiitCADjFGOq', '13161672102', '', '', '', '0', '1', '1496907722', '1496907722', '12', '0', '0', '0', '0'), ('13', '1', '测试注册', '$2y$13$1HDXJ8VzyMnfOPsT1SaBUegGh6fL9Yp14iv.bz0wFlMl3eYSZGyQO', '13812345678', '', '', '', '0', '1', '1496997079', '1496997079', '13', '0', '0', '0', '0'), ('14', '1', '测试注册', '$2y$13$xUJZv3vdXddS7vr0ruXh4O.jCfqdX8KvQausn1JqXKgPSwUyb8ChS', '13812345678', '', '', '', '0', '1', '1497010430', '1497010430', '14', '0', '0', '0', '0'), ('15', '1', '测试注册', '$2y$13$RicKtTR40E2q8K8fqcJKgecKhI7VYJyX.oP9PfPGiO9nVqSvz6D9S', '13812345678', '', '', '', '0', '1', '1497010434', '1497010434', '15', '0', '0', '0', '0'), ('16', '1', '测试注册', '$2y$13$jWtEzCSXdMpqAi0y4s8enuk1C3dqMBC33YD4Dm7iFTqWbxECFzJpC', '13812345678', '', '', '', '0', '1', '1497010489', '1497010489', '16', '0', '0', '0', '0'), ('17', '1', '测试注册', '$2y$13$1D2uiLppBr/2p3WpSKpVrOGI1TYKXLa0vmZI2UJ7t4A/DzRarpDKS', '13812345678', '', '', '', '0', '1', '1497010495', '1497010495', '17', '0', '0', '0', '0'), ('18', '1', '测试注册', '$2y$13$oh7QvN0ojEmS8RmGpYXwPOSZR5Lr0f6NbVMREWlE8VpExDiD1XIAG', '13812345678', '', '', '', '0', '1', '1497010501', '1497010501', '18', '0', '0', '0', '0'), ('19', '1', '测试注册', '$2y$13$XjpPw8cSHAtShwfm62g9M.24MqE4fq/lr.1a9.HCWgKnR10aTD7OG', '13812345678', '', '', '', '0', '1', '1497010583', '1497010583', '19', '0', '0', '0', '0'), ('20', '1', '测试注册', '$2y$13$7gn5VJRlu0Fn/YYC56ZX9ehijMEwUSK0S.ND3d7ysfi3A38EyZC/S', '13812345678', '', '', '', '0', '1', '1497010585', '1497010585', '20', '0', '0', '0', '0'), ('21', '1', '测试注册', '$2y$13$AYcpF0cc1hT3UAFIgbfJfuJRe18uYDDMWl3ln9jHRTuMzeMlhsntS', '13812345678', '', '', '', '0', '1', '1497010589', '1497010589', '21', '0', '0', '0', '0'), ('22', '1', '测试注册', '$2y$13$onQuv82HvwhN3dkYRr1dhO0gzzQAHkGbt8feHZQEn/qJqusG9bjrq', '13812345678', '', '', '', '0', '1', '1497010592', '1497010592', '22', '0', '0', '0', '0'), ('23', '1', '测试注册', '$2y$13$POZ5.LCToajCohmYfZHeqerLRNKgVhpUfbPvQnvZLD8OqaCxogftW', '13812345678', '', '', '', '0', '1', '1497010595', '1497010595', '23', '0', '0', '0', '0'), ('24', '1', '测试注册', '$2y$13$GIXhmvmfZpffQuWZwE5yLu01iQ0VeWocDOmPUvWJp2LYldDDcEp16', '13812345678', '', '', '', '0', '1', '1497010597', '1497010597', '24', '0', '0', '0', '0'), ('25', '1', '测试注册', '$2y$13$hANt0MZUcj2lpMK5THaFs.jg3NmDQeOS34pTzsP.wUbd.c6Gl42Ia', '13812345678', '', '', '', '0', '1', '1497010600', '1497010600', '25', '0', '0', '0', '0'), ('26', '1', '测试注册', '$2y$13$2qtyUEHUX0QdyIYbq4F1SOJ9MaS19Vxaf0kQLM7V/JhQaBHc/3wu6', '13812345678', '', '', '', '0', '1', '1497011008', '1497011008', '26', '0', '0', '0', '0'), ('27', '1', '测试注册', '$2y$13$XqnDw.PNr3WwhthjoMMq/u45qaBw/FQ8JI4v6uYrH18mNXQizdiIu', '13812345678', '', '', '', '0', '1', '1497011011', '1497011011', '27', '0', '0', '0', '0'), ('28', '1', '测试注册', '$2y$13$1BVLSyPpicS9WiyCl//UF.9rj7PdyoAajCKKYnNqCs5xxRneddEK2', '13812345678', '', '', '', '0', '1', '1497011014', '1497011014', '28', '0', '0', '0', '0'), ('29', '1', '测试注册', '$2y$13$c4XczkBLZopS.zTqwCq0uuTlOX2TO63TlWnuYVj/WG7xi7z/AgZrK', '13812345678', '', '', '', '0', '1', '1497011017', '1497011017', '29', '0', '0', '0', '0'), ('30', '1', '测试注册', '$2y$13$1zNx.rvx6OKt73qIKporEOkz70G5qwIeaAGox5gi6aJGG3P2896ka', '13812345678', '', '', '', '0', '1', '1497011019', '1497011019', '30', '0', '0', '0', '0'), ('31', '1', '测试注册', '$2y$13$7/XyRzmjyMTcUApMG03f3uOTU/0Hw4klef2r.IZPhQYO9ObMVcaBa', '13812345678', '', '', '', '0', '1', '1497011022', '1497011022', '31', '0', '0', '0', '0'), ('32', '1', '测试注册', '$2y$13$y0B3u8Kpmn9TK5eO8gnTAetSLujk/eThKIMEp2AJ5eB3HW5M38ECS', '13812345678', '', '', '', '0', '1', '1497011024', '1497011024', '32', '0', '0', '0', '0'), ('33', '1', '测试注册', '$2y$13$YUNXY7pokfJlfqfnV6O1BOK7Kkso.yizoNrcZsivIi7mi6iFByHj.', '13812345678', '', '', '', '0', '1', '1497011027', '1497011027', '33', '0', '0', '0', '0'), ('34', '1', '测试注册', '$2y$13$mVdaQ8CglsDXbdG44Soq2OavsAK1SHj0IfYpQsQAwjM3flQuz5RTe', '13812345678', '', '', '', '0', '1', '1497011030', '1497011030', '34', '0', '0', '0', '0'), ('35', '1', '测试注册', '$2y$13$jbpkxAf7GjkwF0tKOrdCp.6wRvnGdnbFlXpPSv6MSzhG3HlHlP8tq', '13812345678', '', '', '', '0', '1', '1497074910', '1497074910', '35', '0', '0', '0', '0');
-COMMIT;
+INSERT INTO `wa_member` VALUES ('1', '0', 'member1', '$2y$13$gu094onaVGc9v5Juiz6SD.Tcoxio8IANlYRZjgd7mlFEDjS1OtIVK', '13219890986', '成都银行', '62284848822113464', '环球中心', '1496629517', '1', '0', '1496629900', '1', '99994949', '2147479647', '38', '0');
+INSERT INTO `wa_member` VALUES ('2', '1', '小强', '$2y$13$rnh5SXBS/IYzPXfZs2H/j.O38MnC2BY6zKDOJSPF6lLkLF3MPFj9.', '13812345678', '', '', '', '0', '1', '1497258492', '1497258492', '2', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('3', '1', '小强', '$2y$13$ZrOHfW.x9U5qbeogqateIu3cIwJurioadF1XFB0QeTAfYly7A73k.', '13812345678', '', '', '', '0', '1', '1497258495', '1497258495', '3', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('4', '1', '小强', '$2y$13$LBHTidx4z74GT5riP63fsu.eK1FcwXh/wOO4t59B5T1jbfVrZWcsK', '13812345678', '', '', '', '0', '1', '1497258497', '1497258497', '4', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('5', '1', '小强', '$2y$13$3ZAMkAjSULKmYG.RHEqcJu/wO41hs7smI3VVkv9S3aJRWvB0gTqAS', '13812345678', '', '', '', '0', '1', '1497258499', '1497258499', '5', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('6', '1', '小强', '$2y$13$..SeuS.YiAoc9M9xs01ZwuMRBrhgJAKprdHSiDlKikT6h8RTi5V02', '13812345678', '', '', '', '0', '1', '1497258500', '1497258500', '6', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('7', '1', '小强', '$2y$13$AldZmA8CrSRA4gDTdVaXxeTQ95fdgI8AMzY3cfA6ptErsTuxArjX.', '13812345678', '', '', '', '0', '1', '1497258502', '1497258502', '7', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('8', '1', '小强', '$2y$13$4MJ40f71uVVSw6Q7N2qwRuixkt3J5e5QJQVliJTyP2jbLOCHKPw4a', '13812345678', '', '', '', '0', '1', '1497258504', '1497258504', '8', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('9', '1', '小强', '$2y$13$xkRGa3nVClil7faqnTdl8OWoX.fHFz.YrOQ5VWawbmis9tiO6MdSK', '13812345678', '', '', '', '0', '1', '1497258505', '1497258505', '9', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('10', '1', '小强', '$2y$13$cGtzE2bXmO4r/nTb5uUav./9wgo6Ab/ClZD4XIZ4dWrxojdtAabqC', '13812345678', '', '', '', '0', '1', '1497258507', '1497258507', '10', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('11', '1', '小强', '$2y$13$ekoAsgCF1grBu2Ybd//G7u2orP1gTXfius/EREY41vr.9Kx9qLlzG', '13812345678', '', '', '', '0', '1', '1497258508', '1497258508', '11', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('12', '1', '小强', '$2y$13$Jo5hcm9NPdYJOuAU7pxu7e3OP4lJIJMQv92aDZNDkKdIvxR4dsV0a', '13812345678', '', '', '', '0', '1', '1497258510', '1497258510', '12', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('13', '1', '小强', '$2y$13$RPpidtt1YgWMbewkOzftJ.RHr47c/BAAhckyZQGJa9xFg9lCABJI.', '13812345678', '', '', '', '0', '1', '1497258511', '1497258511', '13', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('14', '1', '小强', '$2y$13$WHsuyY7c99hMVqMm5Z1eUe2icbLQM57xXlpx9wVqlIsStoFWU7bjq', '13812345678', '', '', '', '0', '1', '1497258513', '1497258513', '14', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('15', '1', '小强', '$2y$13$vdOKY4U5gtdyUbaCkWmcy.8AUrwKUg0PCdJC918Y.GV5f.vF7ZqqG', '13812345678', '', '', '', '0', '1', '1497258514', '1497258514', '15', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('16', '1', '小强', '$2y$13$tgKT6kigZGi0rbIKE8ujSevayseyLYpNzv5jjDkOwH/LOr4vs2l8e', '13812345678', '', '', '', '0', '1', '1497258516', '1497258516', '16', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('17', '1', '小强', '$2y$13$NbeRSupc1haXJg9uUL2PyeN7yzRfLuyD9nkaVj865ulX9I4qugyJu', '13812345678', '', '', '', '0', '1', '1497258517', '1497258517', '17', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('18', '1', '小强', '$2y$13$DV.2wTovdZF5qnk9o3uTlOxx.sL9EzdP11mtzSj4KBA9QQtjBoMeS', '13812345678', '', '', '', '0', '1', '1497258519', '1497258519', '18', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('19', '1', '小强', '$2y$13$IPtw04EzhBoRUklyNTv5SerUNgguklns5vlGncNpKd5DYsl08L4uG', '13812345678', '', '', '', '0', '1', '1497258521', '1497258521', '19', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('20', '1', '小强', '$2y$13$5mExifToVgHLj.CIzUWR5eIzb2ysZxsusexP0j87r7BaBZtsb/22S', '13812345678', '', '', '', '0', '1', '1497258522', '1497258522', '20', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('21', '1', '小强', '$2y$13$SXsxhyNvG9qWp7qh.ylbSOQSrcs8BG5LRoMJvTczVijvoAm8fA3UK', '13812345678', '', '', '', '0', '1', '1497258524', '1497258524', '21', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('22', '1', '小强', '$2y$13$IDArSQU0unhRjMYlVCznquxcxLBUai01MsdRWTkVww8WYkeZm.TYG', '13812345678', '', '', '', '0', '1', '1497258526', '1497258526', '22', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('23', '1', '小强', '$2y$13$d4qUxDjZcjzgneSAkVGQ9.CBc5WOdcnlRqe4wxSz5U65lof26tGfq', '13812345678', '', '', '', '0', '1', '1497258527', '1497258527', '23', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('24', '1', '小强', '$2y$13$HWDrUOc3XRbd.s9gxptl9.biwCSnAmB70WXJIVDEsly.pYF7/3Bc.', '13812345678', '', '', '', '0', '1', '1497258529', '1497258529', '24', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('25', '1', '小强', '$2y$13$L.ozHhNFN2E3g8dGuqufBePYcA6uMsYp/x9xf1EDHw/OCWeo9i8.W', '13812345678', '', '', '', '0', '1', '1497258531', '1497258531', '25', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('26', '1', '小强', '$2y$13$IVy3v55lDZHmO6wEwO.sPemn5Z6pysyY/vKl6GKrHFq2cMrUd.l3S', '13812345678', '', '', '', '0', '1', '1497258532', '1497258532', '26', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('27', '1', '小强', '$2y$13$g2yvvd7K/yAEIMWltXAMAeub59QPdedAyfwfYH7cFYUF/VX.O1o4S', '13812345678', '', '', '', '0', '1', '1497258534', '1497258534', '27', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('28', '1', '小强', '$2y$13$6rbFa/a4rjty.h.2gCVwAO9vzZUxSuwrdxAsTsjtjqKQabf7rF0aO', '13812345678', '', '', '', '0', '1', '1497258535', '1497258535', '28', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('29', '1', '小强', '$2y$13$YYPML2tBkKqfEgPd/etLXe.sHLdWsNFHoIlikizJyTmJP5PDHitNy', '13812345678', '', '', '', '0', '1', '1497258537', '1497258537', '29', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('30', '1', '小强', '$2y$13$bbT6eplPy.OHSBNNu0RCVugu1EM5RWLZPaFN8MdslA.v8GlPezs8i', '13812345678', '', '', '', '0', '1', '1497258539', '1497258539', '30', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('31', '1', '小强', '$2y$13$K3AtkYzUj3mCV/ko8bEXS.1gzEcRD0LPsaZsAi2xcbXlwT9eUrq5G', '13812345678', '', '', '', '0', '1', '1497258540', '1497258540', '31', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('32', '1', '小强', '$2y$13$19PEVToNfNkvaxc.VmfAXOPVLwVUnl8OHLPowboHt/UG0gSt6G5Iy', '13812345678', '', '', '', '0', '1', '1497258542', '1497258542', '32', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('33', '1', '小强', '$2y$13$bk6fHrOpw.gy4nCfcyrFF.4ZDC1xOVbkl/8qLolLdBW0U3ziEipMq', '13812345678', '', '', '', '0', '1', '1497258544', '1497258544', '33', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('34', '1', '小强', '$2y$13$98j3qBXIZz.V/LOUGW2jeO5rbaylgSIXwnIwxVT1OZjm5wuNR/yfy', '13812345678', '', '', '', '0', '1', '1497258545', '1497258545', '34', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('35', '1', '小强', '$2y$13$44wMjapJLVPoqkepEijhHOzUcbjm3nu0PnjZ6nptRMKp0jFigUCDe', '13812345678', '', '', '', '0', '1', '1497258547', '1497258547', '35', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('36', '1', '小强', '$2y$13$fKIOjjK22VNjmBc1EgrPfuTIanQQ.yPNIgWrb9.bbswVEWIVZwaKm', '13812345678', '', '', '', '0', '1', '1497258548', '1497258548', '36', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('37', '1', '小强', '$2y$13$StRJtnpzZtnUyvsuNuT8kecgBrDTtSGxKynPPX8ncskfldHOXbVmi', '13812345678', '', '', '', '0', '1', '1497258550', '1497258550', '37', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('38', '1', '小强', '$2y$13$yHT8EMeQkbZ2vIOt0Gk8YOXveYHkKb3LOIzBd9/6i0B1DcoPAgflS', '13812345678', '', '', '', '0', '1', '1497258552', '1497258552', '38', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('39', '1', '小强', '$2y$13$Mc1Z07JsX/XMhSl.XCK6W.DkPbBthxYSYW9rfkvIvqEHP6YjEIIde', '13812345678', '', '', '', '0', '1', '1497258553', '1497258553', '39', '0', '0', '0', '0');
 
 -- ----------------------------
---  Table structure for `wa_member_district`
+-- Table structure for wa_member_district
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_member_district`;
 CREATE TABLE `wa_member_district` (
@@ -383,7 +961,26 @@ CREATE TABLE `wa_member_district` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员直推区表';
 
 -- ----------------------------
---  Table structure for `wa_menu`
+-- Records of wa_member_district
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wa_member_status
+-- ----------------------------
+DROP TABLE IF EXISTS `wa_member_status`;
+CREATE TABLE `wa_member_status` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '状态',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT '状态名',
+  `value` int(11) NOT NULL DEFAULT '1' COMMENT '状态值',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户状态表';
+
+-- ----------------------------
+-- Records of wa_member_status
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wa_menu
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_menu`;
 CREATE TABLE `wa_menu` (
@@ -400,14 +997,32 @@ CREATE TABLE `wa_menu` (
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
---  Records of `wa_menu`
+-- Records of wa_menu
 -- ----------------------------
-BEGIN;
-INSERT INTO `wa_menu` VALUES ('1', '权限管理', null, '/admin/user/index', null, 0x66610d0a, ''), ('2', '管理员列表', '1', '/admin/user/index', null, 0x3c6920636c6173733d22666122202f3e, ''), ('3', '分配', '1', '/admin/assignment/index', null, null, ''), ('4', '角色列表', '1', '/admin/role/index', null, null, 'aa'), ('5', '路由列表', '1', '/admin/route/index', null, null, null), ('6', '规则列表', '1', '/admin/rule/index', null, null, null), ('7', '菜单列表', '1', '/admin/menu/index', null, null, null), ('8', '会员管理', null, '/member/index', null, null, null), ('9', '财务管理', null, '/record/index', null, null, null), ('10', '退网记录', '8', '/outline/index', null, null, null), ('11', '会员信息', '8', '/member/index', null, null, null), ('12', '公告管理', null, '/announcements/index', null, null, null), ('13', '广告管理', null, '/branner/index', null, 0xe5898de58fb0e8bdaee692ade59bbee78987e79a84e7aea1e79086, null), ('14', '赠送记录', '8', '/give/index', null, null, null), ('15', '果树管理', null, '/fruiter/index', null, null, null), ('16', '统计中心', null, '/count/index', null, null, null), ('17', '商品管理', null, '/goods/index', null, null, null), ('18', '充值管理', null, '/deposit/index', null, null, null), ('19', '充值', '18', '/deposit/open', null, null, null), ('20', '扣除', '18', '/deposit/end', null, null, null), ('21', '充值记录', '18', '/deposit/index', null, null, null);
-COMMIT;
+INSERT INTO `wa_menu` VALUES ('1', '权限管理', null, '/admin/user/index', null, 0x66610D0A, '');
+INSERT INTO `wa_menu` VALUES ('2', '管理员列表', '1', '/admin/user/index', null, 0x3C6920636C6173733D22666122202F3E, '');
+INSERT INTO `wa_menu` VALUES ('3', '分配', '1', '/admin/assignment/index', null, null, '');
+INSERT INTO `wa_menu` VALUES ('4', '角色列表', '1', '/admin/role/index', null, null, 'aa');
+INSERT INTO `wa_menu` VALUES ('5', '路由列表', '1', '/admin/route/index', null, null, null);
+INSERT INTO `wa_menu` VALUES ('6', '规则列表', '1', '/admin/rule/index', null, null, null);
+INSERT INTO `wa_menu` VALUES ('7', '菜单列表', '1', '/admin/menu/index', null, null, null);
+INSERT INTO `wa_menu` VALUES ('8', '会员管理', null, '/member/index', null, null, null);
+INSERT INTO `wa_menu` VALUES ('9', '财务管理', null, '/record/index', null, null, null);
+INSERT INTO `wa_menu` VALUES ('10', '退网记录', '8', '/outline/index', null, null, null);
+INSERT INTO `wa_menu` VALUES ('11', '会员信息', '8', '/member/index', null, null, null);
+INSERT INTO `wa_menu` VALUES ('12', '公告管理', null, '/announcements/index', null, null, null);
+INSERT INTO `wa_menu` VALUES ('13', '广告管理', null, '/branner/index', null, 0xE5898DE58FB0E8BDAEE692ADE59BBEE78987E79A84E7AEA1E79086, null);
+INSERT INTO `wa_menu` VALUES ('14', '赠送记录', '8', '/give/index', null, null, null);
+INSERT INTO `wa_menu` VALUES ('15', '果树管理', null, '/fruiter/index', null, null, null);
+INSERT INTO `wa_menu` VALUES ('16', '统计中心', null, '/count/index', null, null, null);
+INSERT INTO `wa_menu` VALUES ('17', '商品管理', null, '/goods/index', null, null, null);
+INSERT INTO `wa_menu` VALUES ('18', '充值管理', null, '/deposit/index', null, null, null);
+INSERT INTO `wa_menu` VALUES ('19', '充值', '18', '/deposit/open', null, null, null);
+INSERT INTO `wa_menu` VALUES ('20', '扣除', '18', '/deposit/end', null, null, null);
+INSERT INTO `wa_menu` VALUES ('21', '充值记录', '18', '/deposit/index', null, null, null);
 
 -- ----------------------------
---  Table structure for `wa_migration`
+-- Table structure for wa_migration
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_migration`;
 CREATE TABLE `wa_migration` (
@@ -417,7 +1032,11 @@ CREATE TABLE `wa_migration` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- ----------------------------
---  Table structure for `wa_order`
+-- Records of wa_migration
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wa_order
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_order`;
 CREATE TABLE `wa_order` (
@@ -432,7 +1051,11 @@ CREATE TABLE `wa_order` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='订单管理';
 
 -- ----------------------------
---  Table structure for `wa_outline`
+-- Records of wa_order
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wa_outline
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_outline`;
 CREATE TABLE `wa_outline` (
@@ -445,7 +1068,11 @@ CREATE TABLE `wa_outline` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='退网表';
 
 -- ----------------------------
---  Table structure for `wa_record`
+-- Records of wa_outline
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wa_record
 -- ----------------------------
 DROP TABLE IF EXISTS `wa_record`;
 CREATE TABLE `wa_record` (
@@ -461,4 +1088,60 @@ CREATE TABLE `wa_record` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='提现记录表';
 
-SET FOREIGN_KEY_CHECKS = 1;
+-- ----------------------------
+-- Records of wa_record
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for wa_share_log
+-- ----------------------------
+DROP TABLE IF EXISTS `wa_share_log`;
+CREATE TABLE `wa_share_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `referrer_id` int(11) NOT NULL COMMENT '分享人member_id',
+  `member_id` int(11) NOT NULL COMMENT '生成会员id',
+  `created_at` int(11) NOT NULL DEFAULT '0' COMMENT '生成时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8mb4 COMMENT='推荐会员记录表';
+
+-- ----------------------------
+-- Records of wa_share_log
+-- ----------------------------
+INSERT INTO `wa_share_log` VALUES ('22', '1', '2', '1497258493');
+INSERT INTO `wa_share_log` VALUES ('23', '1', '3', '1497258496');
+INSERT INTO `wa_share_log` VALUES ('24', '1', '4', '1497258498');
+INSERT INTO `wa_share_log` VALUES ('25', '1', '5', '1497258499');
+INSERT INTO `wa_share_log` VALUES ('26', '1', '6', '1497258501');
+INSERT INTO `wa_share_log` VALUES ('27', '1', '7', '1497258503');
+INSERT INTO `wa_share_log` VALUES ('28', '1', '8', '1497258504');
+INSERT INTO `wa_share_log` VALUES ('29', '1', '9', '1497258506');
+INSERT INTO `wa_share_log` VALUES ('30', '1', '10', '1497258507');
+INSERT INTO `wa_share_log` VALUES ('31', '1', '11', '1497258509');
+INSERT INTO `wa_share_log` VALUES ('32', '1', '12', '1497258510');
+INSERT INTO `wa_share_log` VALUES ('33', '1', '13', '1497258512');
+INSERT INTO `wa_share_log` VALUES ('34', '1', '14', '1497258513');
+INSERT INTO `wa_share_log` VALUES ('35', '1', '15', '1497258515');
+INSERT INTO `wa_share_log` VALUES ('36', '1', '16', '1497258516');
+INSERT INTO `wa_share_log` VALUES ('37', '1', '17', '1497258518');
+INSERT INTO `wa_share_log` VALUES ('38', '1', '18', '1497258520');
+INSERT INTO `wa_share_log` VALUES ('39', '1', '19', '1497258521');
+INSERT INTO `wa_share_log` VALUES ('40', '1', '20', '1497258523');
+INSERT INTO `wa_share_log` VALUES ('41', '1', '21', '1497258525');
+INSERT INTO `wa_share_log` VALUES ('42', '1', '22', '1497258527');
+INSERT INTO `wa_share_log` VALUES ('43', '1', '23', '1497258528');
+INSERT INTO `wa_share_log` VALUES ('44', '1', '24', '1497258530');
+INSERT INTO `wa_share_log` VALUES ('45', '1', '25', '1497258531');
+INSERT INTO `wa_share_log` VALUES ('46', '1', '26', '1497258533');
+INSERT INTO `wa_share_log` VALUES ('47', '1', '27', '1497258535');
+INSERT INTO `wa_share_log` VALUES ('48', '1', '28', '1497258536');
+INSERT INTO `wa_share_log` VALUES ('49', '1', '29', '1497258538');
+INSERT INTO `wa_share_log` VALUES ('50', '1', '30', '1497258539');
+INSERT INTO `wa_share_log` VALUES ('51', '1', '31', '1497258541');
+INSERT INTO `wa_share_log` VALUES ('52', '1', '32', '1497258542');
+INSERT INTO `wa_share_log` VALUES ('53', '1', '33', '1497258544');
+INSERT INTO `wa_share_log` VALUES ('54', '1', '34', '1497258546');
+INSERT INTO `wa_share_log` VALUES ('55', '1', '35', '1497258547');
+INSERT INTO `wa_share_log` VALUES ('56', '1', '36', '1497258549');
+INSERT INTO `wa_share_log` VALUES ('57', '1', '37', '1497258550');
+INSERT INTO `wa_share_log` VALUES ('58', '1', '38', '1497258552');
+INSERT INTO `wa_share_log` VALUES ('59', '1', '39', '1497258554');

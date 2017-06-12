@@ -98,7 +98,7 @@ class District extends \yii\db\ActiveRecord
      */
     public function getFullTree($post)
     {
-        $vip_number = ArrayHelper::getValue($post, 'vip_number', null);
+        $vip_number = ArrayHelper::getValue($post, 'vip_number', 1);
         $up =  ArrayHelper::getValue($post, 'up', 0);
         //找到这个vip的 base 区
         if($up){
@@ -127,6 +127,53 @@ class District extends \yii\db\ActiveRecord
         return $tree;
     }
 
+    /**
+     * 更新会员的奖金资料
+     * @param $old_member_id
+     * @param $new_member_id
+     * @return bool
+     */
+    public function modifyBonus($old_member_id, $new_member_id)
+    {
+        $flag = true;
+        //变更用户的奖金记录到新的用户奖金记录下面
+        $b_coin = Bonus::find()->where(['type'=>1, 'member_id'=> $old_member_id])->sum('num');
+
+        $flag = $flag &&  Yii::$app->db->createCommand()->update('{{%bonus}}', ['member_id'=>$new_member_id], ['member_id'=>$old_member_id])->execute();
+
+        //更新两个用户的奖金
+        $oldMember = Member::findOne(['id'=>$old_member_id]);
+        $oldMember->b_coin = $oldMember->b_coin - $b_coin;
+        //更新已被换位标志
+        $oldMember->out_status = 1;
+        $flag = $flag && $oldMember->save(false);
+
+        $newMember = Member::findOne(['id'=>$new_member_id]);
+        $newMember->b_coin += $b_coin;
+        $flag = $flag && $newMember->save(false);
+        return $flag;
+    }
+    /**
+     * 交换两个会员的区位置
+     * @param $old_member_id
+     * @param $new_member_id
+     * @return bool
+     */
+    public function changeDistrict($old_member_id, $new_member_id)
+    {
+        $oldModel = District::find()->where(['member_id' => $old_member_id])->all();
+        $newModel = District::find()->where(['member_id' => $new_member_id])->all();
+        $flag = true;
+        foreach($oldModel as $old_district){
+            $old_district->member_id = $new_member_id;
+            $flag = $flag && $old_district->save(false);
+        }
+        foreach($newModel as $new_district){
+            $new_district->member_id = $old_member_id;
+            $flag = $flag && $new_district->save(false);
+        }
+        return $flag;
+    }
     /**
      * 查询单个会员的信息
      * @param $vip_number

@@ -41,3 +41,5 @@ CREATE TABLE `wa_fruiter` (
 # 会员表增加会员VIPID
 ALTER TABLE `wa_member` ADD `vip_number` int(11) NOT NULL COMMENT '会员卡号';
 
+# 区域表加一个换位时间记录
+ALTER TABLE wa_district ADD updated_at INT(11) DEFAULT NULL COMMENT '更新时间-即换位时间';

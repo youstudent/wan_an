@@ -4,6 +4,7 @@ namespace common\components;
 
 
 use common\models\Bonus;
+use common\models\MemberDistrict;
 use common\models\ShareLog;
 
 class Helper{
@@ -49,7 +50,7 @@ class Helper{
             'created_at' => $time ? $time : time()
         ];
         $model = new ShareLog();
-
+        $model->load($data, '');
         return ($model->load($data, '') && $model->save(false)) ? $model : null;
     }
 
@@ -58,18 +59,16 @@ class Helper{
      * @param $member_id
      * @param $district
      * @param $is_extra
-     * @param null $time
-     * @return ShareLog|null
+     * @return MemberDistrict|null
      */
-    public static function memberDistrictLog($member_id, $district, $is_extra, $time = null)
+    public static function memberDistrictLog($member_id, $district, $is_extra)
     {
         $data = [
             'member_id' => $member_id,
             'district' => $district,
             'is_extra' => $is_extra,
-            'created_at' => $time  ? $time : time()
         ];
-        $model = new ShareLog();
+        $model = new MemberDistrict();
         return ($model->load($data, '') && $model->save(false)) ? $model : null;
     }
 }

@@ -24,6 +24,7 @@ use backend\models\Bonus;
  * @property integer $a_coin
  * @property integer $b_coin
  * @property integer $child_num
+ * @property integer $out_status
  */
 class Member extends \yii\db\ActiveRecord
 {

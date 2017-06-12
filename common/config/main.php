@@ -2,6 +2,7 @@
 
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
+    'language' => 'zh-CN',
     'components' => [
         'cache'       => [
             'class' => 'yii\caching\FileCache',
@@ -9,8 +10,8 @@ return [
         'db'          => [
             'class'       => 'yii\db\Connection',
             'dsn'         => 'mysql:host=localhost;dbname=wan_an',
-            'username'    => 'root',
-            'password'    => '123456',
+            'username'    => 'wananmysql',
+            'password'    => 'Q268fAjFvr',
             'charset'     => 'utf8',
             'tablePrefix' => 'wa_',
         ],
