@@ -29,11 +29,11 @@ $this->params['breadcrumbs'][] = '财务管理列表';
     $toolbars = [
         ['content' =>
             // Html::a('<i class="glyphicon glyphicon-plus"></i>', ['record/create'], ['type' => 'button', 'title' => '添加数据 ' ,'class' => 'btn btn-success']) . ' ' .
-            //Html::a('<i class="fa fa-file-excel-o"></i>', ['record/parsing'], ['type' => 'button', 'title' => 'Parsing Excel ' . $this->title, 'class' => 'btn btn-danger']) . ' ' .
+            // Html::a('<i class="fa fa-file-excel-o"></i>', ['type' => 'button', 'title' => 'Parsing Excel ', 'class' => 'btn btn-danger']) . ' ' .
              Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['record/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
             
          ],
-       ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
+        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
        // '{export}',
     ];
     $panels = [
@@ -42,13 +42,13 @@ $this->params['breadcrumbs'][] = '财务管理列表';
     ];
     $columns = [
         //['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
-        /*[
+        [
             'class'=>\kartik\grid\CheckboxColumn::className(),
             'name'=>'id',  //设置每行数据的复选框属性
             'headerOptions' => ['width'=>'40'],
             'footer' => '<button href="#" class="btn btn-default btn-xs btn-delete ">批量通过</button>',
             'footerOptions' => ['colspan' => 10],  //设置删除按钮垮列显示；
-        ],*/
+        ],
         'member_id',
         [
             'label' => '会员名',
@@ -150,7 +150,7 @@ $this->params['breadcrumbs'][] = '财务管理列表';
         ],
         
         [
-           'class' => 'kartik\grid\CheckboxColumn',
+           //'class' => 'kartik\grid\CheckboxColumn',
         ],
     ];
     
@@ -180,7 +180,7 @@ $this->params['breadcrumbs'][] = '财务管理列表';
 
 <script>
     //a标签post提交
-    $('.kv-row-checkbox').click(function() {
+    $('.btn').click(function() {
        alert(1111);
         $("#myModal").remove();
         var url = $(this).attr('post-url');
