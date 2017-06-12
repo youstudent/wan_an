@@ -21,6 +21,7 @@ class BonusController extends Controller
 
     public function behaviors()
     {
+        return parent::behaviors();
         return [
         'access' => [
                 'class' => \yii\filters\AccessControl::className(),

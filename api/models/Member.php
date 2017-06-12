@@ -234,6 +234,12 @@ class Member extends \yii\db\ActiveRecord
         $model = Member::findOne($member_id);
         $model->status = 2;
 
+        $outModel = new Outline();
+        $outModel->member_id = $model->id;
+        $outModel->created_at = time();
+        $outModel->updated_at = $model->created_at;
+        $outModel->save(false);
+
         if($model->save(false)){
             return true;
         }
@@ -329,4 +335,20 @@ class Member extends \yii\db\ActiveRecord
         return false;
     }
 
+    /**
+     * 时段内禁止登陆
+     * @param
+     * @return bool|array
+     */
+    public function outTime()
+    {
+        if (date('H') == 23 && date('i') >= 50) {
+            return false;
+        }
+        if (date('H') >=0  && date('H') <= 8) {
+            return false;
+        }
+        return true;
+
+    }
 }

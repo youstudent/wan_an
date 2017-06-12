@@ -148,7 +148,7 @@ class Member extends \yii\db\ActiveRecord
         if ($num == 3) {
             $query = (new \yii\db\Query());
             $old = $query->from(Bonus::tableName())->where(['member_id' => $id, 'coin_type' => 1, 'type' => [1,2,3,5]])->sum('num');
-            return $old;
+            return $old?$old:0;
         }
         if ($num == 4) {
             $query = (new \yii\db\Query());

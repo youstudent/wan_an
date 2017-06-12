@@ -57,8 +57,8 @@ $this->params['breadcrumbs'][] = '奖金详情';
 
 
         ],
-        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
-        '{export}',
+//        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
+//        '{export}',
     ];
     $panels = [
         'heading' => '<h3 class="panel-title"><i class="glyphicon glyphicon-folder-open"></i>  &nbsp;' . ' 奖金详情列表' . '</h3>',
@@ -67,7 +67,8 @@ $this->params['breadcrumbs'][] = '奖金详情';
     $columns = [
         [
             'attribute' => 'id',
-            'filter'    => false,
+            'label' => '序号',
+            'mergeHeader'=>true,
         ],
         [
             'attribute' => 'created_at',
@@ -115,7 +116,10 @@ $this->params['breadcrumbs'][] = '奖金详情';
             ]
         ],
         [
-            'class' => 'kartik\grid\CheckboxColumn',
+            'attribute' => 'num',
+            'filter'    => false,
+            'mergeHeader'=>true,
+            'vAlign' => 'middle',
         ],
     ];
 

@@ -142,6 +142,10 @@ class Fruiter extends \yii\db\ActiveRecord
     {
         $imgs = FruiterImg::find()->where(['fruiter_id'=>$fruiter_id])->select('img_path')->orderBy('id')->column();
 
+        foreach($imgs as &$img){
+            $img = Yii::$app->params['img_domain'] . $img;
+        }
+
         return $imgs;
     }
 }
