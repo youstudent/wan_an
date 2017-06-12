@@ -4,6 +4,8 @@ namespace common\components;
 
 
 use common\models\Bonus;
+use common\models\MemberDistrict;
+use common\models\ShareLog;
 
 class Helper{
     /**
@@ -29,8 +31,44 @@ class Helper{
             'ext_data' => json_encode($ext_data, JSON_UNESCAPED_UNICODE)
         ];
         $model = new Bonus();
-        $model->load($data, '');
 
         return $model->load($data, '') && $model->save(false) ? $model : null;
+    }
+
+    /**
+     * 添加分享会员记录 - 算直推区额外奖需要
+     * @param $referrer_id
+     * @param $member_id
+     * @param null $time
+     * @return ShareLog|null
+     */
+    public static function shareMemberLog($referrer_id, $member_id, $time = null)
+    {
+        $data = [
+            'referrer_id' => $referrer_id,
+            'member_id' => $member_id,
+            'created_at' => $time ? $time : time()
+        ];
+        $model = new ShareLog();
+        $model->load($data, '');
+        return ($model->load($data, '') && $model->save(false)) ? $model : null;
+    }
+
+    /**
+     * 添加会员直推区记录
+     * @param $member_id
+     * @param $district
+     * @param $is_extra
+     * @return MemberDistrict|null
+     */
+    public static function memberDistrictLog($member_id, $district, $is_extra)
+    {
+        $data = [
+            'member_id' => $member_id,
+            'district' => $district,
+            'is_extra' => $is_extra,
+        ];
+        $model = new MemberDistrict();
+        return ($model->load($data, '') && $model->save(false)) ? $model : null;
     }
 }

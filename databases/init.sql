@@ -37,11 +37,12 @@ CREATE TABLE `log_upload` (
   `updateDate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `createDate` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='grid扩展的表';
 
 -- ----------------------------
 --  Table structure for `tbl_dynagrid_dtl`
 -- ----------------------------
+DROP TABLE IF EXISTS `tbl_dynagrid`;
 DROP TABLE IF EXISTS `tbl_dynagrid_dtl`;
 CREATE TABLE `tbl_dynagrid_dtl` (
   `id` varchar(100) NOT NULL COMMENT 'Unique dynagrid detail setting identifier',
@@ -51,7 +52,7 @@ CREATE TABLE `tbl_dynagrid_dtl` (
   `dynagrid_id` varchar(100) NOT NULL COMMENT 'Related dynagrid identifier',
   PRIMARY KEY (`id`),
   UNIQUE KEY `tbl_dynagrid_dtl_UK1` (`name`,`category`,`dynagrid_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='grid扩展的表';
 
 -- ----------------------------
 --  Table structure for `tbl_dynagrid`
@@ -67,7 +68,7 @@ CREATE TABLE `tbl_dynagrid` (
   KEY `tbl_dynagrid_FK2` (`sort_id`),
   CONSTRAINT `tbl_dynagrid_FK1` FOREIGN KEY (`filter_id`) REFERENCES `tbl_dynagrid_dtl` (`id`),
   CONSTRAINT `tbl_dynagrid_FK2` FOREIGN KEY (`sort_id`) REFERENCES `tbl_dynagrid_dtl` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='grid扩展的表';
 
 
 -- ----------------------------
@@ -88,7 +89,7 @@ CREATE TABLE `wa_adminuser` (
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `password_reset_token` (`password_reset_token`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='管理员表';
 
 -- ----------------------------
 --  Table structure for `wa_announcements`
@@ -107,6 +108,9 @@ CREATE TABLE `wa_announcements` (
 -- ----------------------------
 --  Table structure for `wa_auth_rule`
 -- ----------------------------
+DROP TABLE IF EXISTS `wa_auth_assignment`;
+DROP TABLE IF EXISTS `wa_auth_item_child`;
+DROP TABLE IF EXISTS `wa_auth_item`;
 DROP TABLE IF EXISTS `wa_auth_rule`;
 CREATE TABLE `wa_auth_rule` (
   `name` varchar(64) COLLATE utf8_unicode_ci NOT NULL,
@@ -114,7 +118,7 @@ CREATE TABLE `wa_auth_rule` (
   `created_at` int(11) DEFAULT NULL,
   `updated_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='RBAC权限规则表';
 
 -- ----------------------------
 --  Table structure for `wa_auth_item`
@@ -132,7 +136,7 @@ CREATE TABLE `wa_auth_item` (
   KEY `rule_name` (`rule_name`),
   KEY `idx-auth_item-type` (`type`),
   CONSTRAINT `wa_auth_item_ibfk_1` FOREIGN KEY (`rule_name`) REFERENCES `wa_auth_rule` (`name`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='RBAC权限栏目';
 
 -- ----------------------------
 --  Table structure for `wa_auth_assignment`
@@ -144,7 +148,7 @@ CREATE TABLE `wa_auth_assignment` (
   `created_at` int(11) DEFAULT NULL,
   PRIMARY KEY (`item_name`,`user_id`),
   CONSTRAINT `wa_auth_assignment_ibfk_1` FOREIGN KEY (`item_name`) REFERENCES `wa_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='RBAC权限栏目';
 
 
 -- ----------------------------
@@ -158,7 +162,7 @@ CREATE TABLE `wa_auth_item_child` (
   KEY `child` (`child`),
   CONSTRAINT `wa_auth_item_child_ibfk_1` FOREIGN KEY (`parent`) REFERENCES `wa_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `wa_auth_item_child_ibfk_2` FOREIGN KEY (`child`) REFERENCES `wa_auth_item` (`name`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='RBAC权限栏目';
 
 
 
@@ -292,6 +296,7 @@ CREATE TABLE `wa_goods_img` (
 DROP TABLE IF EXISTS `wa_member`;
 CREATE TABLE `wa_member` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '会员自增ID',
+  `vip_number` int(11) NOT NULL COMMENT '会员卡号',
   `parent_id` int(10) NOT NULL DEFAULT '1' COMMENT '直推会员id',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '用户姓名',
   `password` varchar(255) NOT NULL DEFAULT '' COMMENT '会员密码',
@@ -303,10 +308,10 @@ CREATE TABLE `wa_member` (
   `status` int(10) NOT NULL DEFAULT '1' COMMENT '状态 0:被冻结 1:正常 2:已退网',
   `created_at` int(11) NOT NULL DEFAULT '0' COMMENT '创建时间 注册时间 入网时间',
   `updated_at` int(11) NOT NULL DEFAULT '0' COMMENT '更新时间 退网时间',
-  `vip_number` int(11) NOT NULL COMMENT '会员卡号',
   `a_coin` int(11) NOT NULL COMMENT '金果数',
   `b_coin` int(11) NOT NULL COMMENT '金种子数',
   `child_num` int(11) NOT NULL COMMENT '直推数量',
+  `out_status` int(10) NOT NULL DEFAULT 0 COMMENT "是否可以退网 0:否 1:是",
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='会员信息表';
 
@@ -333,7 +338,7 @@ CREATE TABLE `wa_menu` (
 DROP TABLE IF EXISTS `wa_migration`;
 CREATE TABLE `wa_migration` (
   `version` varchar(180) NOT NULL,
-  `apply_time` int(11) DEFAULT NULL,
+  `apply_time` int(11) DEFAULT NULL, 
   PRIMARY KEY (`version`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -382,6 +387,7 @@ CREATE TABLE `wa_record` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COMMENT='提现记录表';
 
+DROP TABLE IF EXISTS `wa_member_district`;
 CREATE TABLE `wa_member_district` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `member_id` int(11) DEFAULT NULL COMMENT '会员id',
@@ -390,11 +396,27 @@ CREATE TABLE `wa_member_district` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员直推区表';
 
+DROP TABLE IF EXISTS `wa_share_log`;
+CREATE TABLE `wa_share_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `referrer_id` int(11) NOT NULL COMMENT '分享人member_id',
+  `member_id` int(11) NOT NULL COMMENT '生成会员id',
+  `created_at` int(11) NOT NULL DEFAULT '0' COMMENT '生成时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COMMENT='推荐会员记录表';
+
+DROP TABLE IF EXISTS `wa_district_change_log`;
+CREATE TABLE `wa_district_change_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `old_member_id` int(11) NOT NULL COMMENT '会员id',
+  `new_member_id` int(11) NOT NULL COMMENT '新区',
+  `created_at` int(11) NOT NULL COMMENT '创建时间',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COMMENT='交换区记录';
+
 
 #插入数据
 insert into `wa_adminuser` ( `username`, `auth_key`, `password_hash`, `password_reset_token`, `email`, `status`, `created_at`, `updated_at`) values ( 'admin', 'JAbY85Q5ozahz1h2hddB-uy5MWfcU-Wy', '$2y$13$vknBz7miG4O.W.mlPBLFE.0vcKiqHvMcz1xKCoZTyTPRVfEBCvvHG', null, 'a@a.com', '10', '1495553266', '1495553266');
-
-
 
 insert into `wa_auth_item` ( `name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`) values ( '/admin/*', '2', null, null, null, '1495553461', '1495553461');
 insert into `wa_auth_item` ( `name`, `type`, `description`, `rule_name`, `data`, `created_at`, `updated_at`) values ( '/admin/assignment/*', '2', null, null, null, '1495553461', '1495553461');
@@ -616,7 +638,7 @@ insert into `wa_auth_item_child` ( `parent`, `child`) values ( '管理员', 'RBA
 
 insert into `wa_district` ( `member_id`, `district`, `seat`, `created_at`) values ( '1', '1', '1', '1496630244');
 
-insert into `wa_member` ( `parent_id`, `name`, `password`, `mobile`, `deposit_bank`, `bank_account`, `address`, `last_login_time`, `status`, `created_at`, `updated_at`, `vip_number`, `a_coin`, `b_coin`, `child_num`) values ( '1', 'member1', '$2y$13$gu094onaVGc9v5Juiz6SD.Tcoxio8IANlYRZjgd7mlFEDjS1OtIVK', '13219890986', '成都银行', '62284848822113464', '环球中心', '1496629517', '1', '0', '1496629900', '1', '99994949', '2147479647', '0');
+insert into `wa_member` ( `parent_id`, `name`, `password`, `mobile`, `deposit_bank`, `bank_account`, `address`, `last_login_time`, `status`, `created_at`, `updated_at`, `vip_number`, `a_coin`, `b_coin`, `child_num`) values ( '0', 'member1', '$2y$13$gu094onaVGc9v5Juiz6SD.Tcoxio8IANlYRZjgd7mlFEDjS1OtIVK', '13219890986', '成都银行', '62284848822113464', '环球中心', '1496629517', '1', '0', '1496629900', '1', '99994949', '2147479647', '0');
 
 insert into `wan_an`.`wa_menu` ( `name`, `parent`, `route`, `order`, `data`, `icon`) values ( '权限管理', null, '/admin/user/index', null, 0x66610d0a, '');
 insert into `wan_an`.`wa_menu` ( `name`, `parent`, `route`, `order`, `data`, `icon`) values ( '管理员列表', '1', '/admin/user/index', null, 0x3c6920636c6173733d22666122202f3e, '');

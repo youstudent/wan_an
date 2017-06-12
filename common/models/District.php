@@ -92,19 +92,26 @@ class District extends \yii\db\ActiveRecord
     }
 
     /**
-     * 获取完成的区。第三层有bug，先不修复了
-     * @param $vip_number
+     * 获取完整的40人区
+     * @param $post
      * @return array
      */
-    public function getFullTree($vip_number)
+    public function getFullTree($post)
     {
+        $vip_number = ArrayHelper::getValue($post, 'vip_number', 1);
+        $up =  ArrayHelper::getValue($post, 'up', 0);
         //找到这个vip的 base 区
-        $district = $this->getMemberDistrict($vip_number);
+        if($up){
+            $district = $this->getMemberDistrict($vip_number, [2,3,4]);
+        }else{
+            $district = $this->getMemberDistrict($vip_number);
+        }
         //找到这个区的所有会员
         $members = $this->getDistrictAllMember($district['district'], 'vip_number,seat');
         //这里要根据座位号来排序了
         foreach($members as &$val){
             $val['pid'] = Tree::$structure[$val['seat']]['node'];
+            $val['child'] = [];
         }
 
         //return $members;
@@ -119,14 +126,63 @@ class District extends \yii\db\ActiveRecord
 
         return $tree;
     }
+
+    /**
+     * 更新会员的奖金资料
+     * @param $old_member_id
+     * @param $new_member_id
+     * @return bool
+     */
+    public function modifyBonus($old_member_id, $new_member_id)
+    {
+        $flag = true;
+        //变更用户的奖金记录到新的用户奖金记录下面
+        $b_coin = Bonus::find()->where(['type'=>1, 'member_id'=> $old_member_id])->sum('num');
+
+        $flag = $flag &&  Yii::$app->db->createCommand()->update('{{%bonus}}', ['member_id'=>$new_member_id], ['member_id'=>$old_member_id])->execute();
+
+        //更新两个用户的奖金
+        $oldMember = Member::findOne(['id'=>$old_member_id]);
+        $oldMember->b_coin = $oldMember->b_coin - $b_coin;
+        //更新已被换位标志
+        $oldMember->out_status = 1;
+        $flag = $flag && $oldMember->save(false);
+
+        $newMember = Member::findOne(['id'=>$new_member_id]);
+        $newMember->b_coin += $b_coin;
+        $flag = $flag && $newMember->save(false);
+        return $flag;
+    }
+    /**
+     * 交换两个会员的区位置
+     * @param $old_member_id
+     * @param $new_member_id
+     * @return bool
+     */
+    public function changeDistrict($old_member_id, $new_member_id)
+    {
+        $oldModel = District::find()->where(['member_id' => $old_member_id])->all();
+        $newModel = District::find()->where(['member_id' => $new_member_id])->all();
+        $flag = true;
+        foreach($oldModel as $old_district){
+            $old_district->member_id = $new_member_id;
+            $flag = $flag && $old_district->save(false);
+        }
+        foreach($newModel as $new_district){
+            $new_district->member_id = $old_member_id;
+            $flag = $flag && $new_district->save(false);
+        }
+        return $flag;
+    }
     /**
      * 查询单个会员的信息
      * @param $vip_number
-     * @return array|null|\yii\db\ActiveRecord
+     * @param array $seat
+     * @return array|bool
      */
-    public function getMemberDistrict($vip_number)
+    public function getMemberDistrict($vip_number, $seat = [1])
     {
-        return (new \yii\db\Query())->from(self::tableName() . ' d')->where(['vip_number'=>$vip_number, 'seat'=>1])->innerJoin('{{%member}} m', 'm.id = d.member_id')->select('m.vip_number,d.*')->one();
+        return (new \yii\db\Query())->from(self::tableName() . ' d')->where(['vip_number'=>$vip_number, 'seat'=>$seat])->innerJoin('{{%member}} m', 'm.id = d.member_id')->select('m.vip_number,d.*')->one();
     }
 
 

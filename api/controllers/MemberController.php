@@ -148,7 +148,7 @@ class MemberController extends ApiController
     {
         $model = new RegisterForm();
 
-        if ($model->register(Yii::$app->request->post(), ArrayHelper::getValue(Yii::$app->session->get('member'), 'member_id'))) {
+        if ($model->register(Yii::$app->request->post(), 1)) {
             return $this->jsonReturn(1, 'success', ['vip_number' => $model->vip_number]);
         }
         return $this->jsonReturn(0, $model->errorMsg);
@@ -194,5 +194,21 @@ class MemberController extends ApiController
         }
         //如果返回false 返回错误信息
         return $this->jsonReturn(0, $model->getFirstError('message'));
+    }
+    /**
+     * 后台系谱图
+     * @return \yii\web\Response
+     */
+    public function actionFullTree()
+    {
+        $model = new District();
+        $json = [ 'code'=> 0, 'data' => [], 'message'=> 'error'];
+        if($data = $model->getFullTree(Yii::$app->request->post()))
+        {
+            $json = [ 'code'=> 1, 'data' => $data, 'message'=> 'success'];
+            return $this->asJson($json);
+        }
+        $json = [ 'code'=> 0, 'data' => [], 'message'=> $model->getFirstErrors()];
+        return $this->asJson($json);
     }
 }
