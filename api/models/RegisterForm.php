@@ -75,6 +75,7 @@ class RegisterForm extends Member
 
     public function register($post, $action_member_id)
     {
+        $action_member_id = 1;
         //将推荐的vip_number转换成member_id
         $post['referrer_id'] = $this->vipNumber2MemberId($post['referrer_id']);
 
@@ -166,7 +167,19 @@ class RegisterForm extends Member
         $blank_member->deposit_bank = ArrayHelper::getValue($post, 'deposit_bank', '');
         $blank_member->bank_account = ArrayHelper::getValue($post, 'bank_account', '');
         $blank_member->address = ArrayHelper::getValue($post, 'address', '');
-        return $blank_member->save(false) ? $blank_member : null;
+
+        if(!$blank_member->save(false)){
+            $this->errorMsg = '继承失败';
+            return false;
+        }
+
+        //添加一个推荐人奖励-
+        $result = Helper::addMemberBCoin($this->referrer_id, Yii::$app->params['coin_type_2_money']);
+        if($result == false){
+            $this->errorMsg = '添加分享人奖金失败';
+            return false;
+        }
+        return $this;
     }
     /**
      * 获取一个空白的会员信息
@@ -185,7 +198,11 @@ class RegisterForm extends Member
     {
         $model = Member::findOne(['id'=>$referrer_id]);
         $model->child_num+=1;
-        return $model->save(false);
+        if(!$model->save(false)){
+            $this->errorMsg = '添加直推数量或者直推奖金失败';
+            return false;
+        }
+        return true;
 
     }
     /**
@@ -296,12 +313,22 @@ class RegisterForm extends Member
             //第一次循环就找到爹了。 这个就只用给推荐人发一个直推奖励
             if($i == 1 && $seat_node['member_id'] == $referrer_id){
                 $coin_money = Yii::$app->params['coin_type_2_money'];
-                Helper::saveBonusLog($referrer_id, 1, 2, $coin_money, 0);
+                Helper::saveBonusLog($referrer_id, 2, 2, $coin_money, 0);
+                //给推荐人发放奖金
+                if(!Helper::addMemberBCoin($referrer_id, $coin_money)){
+                    $this->errorMsg = '分享奖金添加失败';
+                    return false;
+                }
             }else{
                 //给这个区所有的上级给见点奖
                 $coin_money = Yii::$app->params['coin_type_1_money'];
-                Helper::saveBonusLog($member_id, 1, 1, $coin_money, 0);
+                Helper::saveBonusLog($member_id, 2, 1, $coin_money, 0);
+                if(!Helper::addMemberBCoin($member_id, $coin_money)){
+                    $this->errorMsg = '绩效奖金添加失败';
+                    return false;
+                }
             }
+
             $i++;
         }
         //添加这个会员，然后就区满的情况，要进行满区逻辑
