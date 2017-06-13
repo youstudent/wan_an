@@ -15,7 +15,10 @@ $this->params['breadcrumbs'][] = '分配';
 
 $columns = [
     ['class' => 'yii\grid\SerialColumn'],
-    $usernameField,
+    [
+        'attribute' => $usernameField,
+        'label' => '用户名'
+    ],
 ];
 if (!empty($extraColumns)) {
     $columns = array_merge($columns, $extraColumns);

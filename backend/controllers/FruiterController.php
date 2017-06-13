@@ -26,30 +26,6 @@ class FruiterController extends Controller
     {
         return parent::behaviors();
         return [
-        'access' => [
-                'class' => \yii\filters\AccessControl::className(),
-                'rules' => [
-                    [
-                        'allow' => true,
-                        'actions' => ['index','view','sample','parsing-log'],
-                        'roles' => ['viewer']
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['update','create','parsing'],
-                        'roles' => ['editor']
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['delete'],
-                        'roles' => ['admin']
-                    ],
-                    [
-                        'allow' => true,
-                        'roles' => ['admin']
-                    ],
-                ],
-            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

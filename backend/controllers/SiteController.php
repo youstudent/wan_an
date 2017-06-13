@@ -18,6 +18,7 @@ class SiteController extends Controller
      */
     public function behaviors()
     {
+        return parent::behaviors();
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -64,12 +65,12 @@ class SiteController extends Controller
     {
 
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->redirect('/count/index');
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->redirect('count/index');
+            return $this->redirect('/count/index');
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -88,6 +89,6 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
-    
+
     
 }

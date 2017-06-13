@@ -16,6 +16,7 @@ use common\models\ShareLog;
 use common\models\Tree;
 use Yii;
 use yii\db\Exception;
+use yii\helpers\ArrayHelper;
 use yii\swiftmailer\Mailer;
 
 class RegisterForm extends Member
@@ -157,8 +158,14 @@ class RegisterForm extends Member
         $blank_member->updated_at = time();
         $blank_member->parent_id = $post['referrer_id'];
         $blank_member->mobile = $post['mobile'];
+        $blank_member->status=1;
         $blank_member->vip_number = $this->vip_number = Member::find()->max('vip_number') + 1;
         $blank_member->password = Yii::$app->security->generatePasswordHash($this->password);
+
+        //更新扩展资料
+        $blank_member->deposit_bank = ArrayHelper::getValue($post, 'deposit_bank', '');
+        $blank_member->bank_account = ArrayHelper::getValue($post, 'bank_account', '');
+        $blank_member->address = ArrayHelper::getValue($post, 'address', '');
         return $blank_member->save(false) ? $blank_member : null;
     }
     /**
