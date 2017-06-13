@@ -27,10 +27,10 @@ return [
         //session 共
         'user'    => [
             'enableAutoLogin' => true,
-            'identityCookie'  => ['name' => '_identity', 'httpOnly' => true, 'domain' => '.wantu3.ypxl', 'path' => '/',],
+            'identityCookie'  => ['name' => '_identity', 'httpOnly' => true, 'domain' => '.wantu3.cn', 'path' => '/',],
         ],
         'session' => [
-            'cookieParams' => ['domain' => '.wantu3.ypxl', 'lifetime' => 0, 'path' => '/',],
+            'cookieParams' => ['domain' => '.wantu3.cn', 'lifetime' => 0, 'path' => '/',],
             'timeout'      => 3600,
         ],
     ],

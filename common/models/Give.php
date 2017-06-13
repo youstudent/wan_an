@@ -111,9 +111,11 @@ class Give extends \yii\db\ActiveRecord
                     $ext_data['type']=8;
                     $new_ext_data = serialize($ext_data);
                     $Helper= new Helper();
-                    if ($Helper->pool($member_id,$data['coinType'],8,$data['give_coin'],null,$new_ext_data)===false){
+                    if ($Helper->pool($member_id,$data['coinType'],8,$data['give_coin'],null,$new_ext_data)===false
+                        || $Helper->pool($give_member,$data['coinType'],11,$data['give_coin'],null,$new_ext_data)===false){
                         return false;
                     }
+
                     return true;
                 }
             }

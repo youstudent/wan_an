@@ -43,6 +43,8 @@ use api\models\User;
       <th>财务总支出</th>
       <th>结余</th>
       <th>总业绩</th>
+      <th>总金果充值</th>
+      <th>总金种子充值</th>
     </tr>
   </thead>
   <tbody>
@@ -54,6 +56,8 @@ use api\models\User;
       <td><?=$data['num4']?></td>
       <td><?=$data['total_money']?></td>
       <td><?=$data['num10']?></td>
+      <td><?=$data['new_a']?></td>
+      <td><?=$data['new_b']?></td>
   </tr>
   <!--
   <tr>

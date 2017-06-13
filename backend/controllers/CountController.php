@@ -67,10 +67,22 @@ class CountController extends Controller
         $search->search($total);
         $num_total = $total->andWhere(['coin_type'=>1])->groupBy('type')->asArray()->all();
         //var_dump($num_total);
-        //查询  充值经金种子的数量
+        //查询  充值金果的数量
+        $seed_a = Bonus::find()->select("sum(num),type,coin_type");
+        $search->search($seed_a);
+        $num_seedA = $seed_a->andWhere(['coin_type'=>1,'type'=>6])->asArray()->all();
+        //查询  扣除金果的数量
+        $seed_b = Bonus::find()->select("sum(num),type,coin_type");
+        $search->search($seed_b);
+        $num_seedB = $seed_b->andWhere(['coin_type'=>1,'type'=>7])->asArray()->all();
+        //查询  充值金种子的数量
         $seed = Bonus::find()->select("sum(num),type,coin_type");
         $search->search($seed);
         $num_seed = $seed->andWhere(['coin_type'=>2,'type'=>6])->asArray()->all();
+        //查询  扣除金种子的数量
+        $seed2 = Bonus::find()->select("sum(num),type,coin_type");
+        $search->search($seed2);
+        $num_seed2 = $seed->andWhere(['coin_type'=>2,'type'=>7])->asArray()->all();
          //查询 注册人的金种子    总业绩=  注册人数x900(注册成功会扣除400的金果和500的金种子)
         $b_coin = Bonus::find()->select("sum(num),type,coin_type");
         $search->search($b_coin);
@@ -104,10 +116,10 @@ class CountController extends Controller
                 case 5:
                     $num5 =$row['sum(num)'];
                     break;
-               /* case 7:
+                case 7:
                     $num7 =$row['sum(num)'];
                     break;
-                case 8:
+                /* case 8:
                     $num8 =$row['sum(num)'];
                     break;*/
                 case 9:
@@ -122,7 +134,20 @@ class CountController extends Controller
         $coin = $num10+$coin[0]['sum(num)'];
         //$total_money   总结余
         $total_money = $num_seed[0]['sum(num)']-$num4;
-        $data=['total_money'=>$total_money,'num4'=>$num4,'num5'=>$num5,'num10'=>$coin,'num2'=>$num2,'num1'=>$num1,'num3'=>$num3];
+        //充值金果总数和充值金种子总数
+        $new_a = $num_seedA[0]['sum(num)'] - $num_seedB[0]['sum(num)'];
+        $new_b = $num_seed[0]['sum(num)'] - $num_seed2[0]['sum(num)'];
+//        $query = (new \yii\db\Query());
+//        $num_a = $query->from(Bonus::tableName())->where([ 'coin_type' => 1, 'type' => 6])->sum('num');
+//        $query = (new \yii\db\Query());
+//        $num_b = $query->from(Bonus::tableName())->where([ 'coin_type' => 2, 'type' => 6])->sum('num');
+//        $query = (new \yii\db\Query());
+//        $numm_a = $query->from(Bonus::tableName())->where([ 'coin_type' => 1, 'type' => 7])->sum('num');
+//        $query = (new \yii\db\Query());
+//        $numm_b = $query->from(Bonus::tableName())->where([ 'coin_type' => 2, 'type' => 7])->sum('num');
+//        $new_a = $num_a-$numm_a;
+//        $new_b = $num_b-$numm_b;
+        $data=['total_money'=>$total_money,'num4'=>$num4,'num5'=>$num5,'num10'=>$coin,'num2'=>$num2,'num1'=>$num1,'num3'=>$num3,'new_a'=>$new_a,'new_b'=>$new_b];
         return $this->render('index', ['search' => $search,'data'=>$data]);
     }
     

@@ -66,6 +66,18 @@ $this->params['breadcrumbs'][] = '广告管理列表';
             'viewOptions' => ['title' => '查看详情', 'data-toggle' => 'tooltip'],
             'updateOptions' => ['title' => '修改', 'data-toggle' => 'tooltip'],
             'deleteOptions' => ['title' => '删除', 'data-toggle' => 'tooltip'],
+            'template'=> '{view} {update} {delete}',
+            'buttons' => [
+                'view' => function ($url, $model, $key) {
+                    return Html::a(Html::tag('span', '查看详情', ['class' => ""]), ['branner/view', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '查看详情']);
+                },
+                'update' => function ($url, $model, $key) {
+                    return Html::a(Html::tag('span', '修改', ['class' => ""]), ['branner/update', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '修改']);
+                },
+                'delete' => function ($url, $model, $key) {
+                    return Html::a(Html::tag('span', '删除', ['class' => ""]), ['branner/delete', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '删除']);
+                },
+            ],
         ],
         [
             'class' => 'kartik\grid\CheckboxColumn',

@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = '奖金详情';
     <?php
     $toolbars = [
         ['content' =>
-            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['member/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
+            Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['member/view', 'id'=>$model->id], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
 
 
         ],

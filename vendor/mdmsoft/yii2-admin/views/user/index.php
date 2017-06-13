@@ -25,28 +25,30 @@ $this->params['breadcrumbs'][] = '管理员列表';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
             [
-                    'attribute' => 'username',
-                    'label' => '用户名',
+                'class' => 'yii\grid\SerialColumn',
             ],
             [
-                    'attribute' => 'email',
-                    'format' => 'email',
-                    'label' => '邮箱',
+                'attribute' => 'username',
+                'label' => '用户名',
             ],
             [
-                    'attribute' => 'created_at',
-                    'format' => 'date',
-                    'label' => '创建时间',
-                    'filter'    => DateRangePicker::widget([
-                        'model'         => $searchModel,
-                        'attribute'     => 'created_at',
-                        'convertFormat' => true,
-                        'pluginOptions' => [
-                            'locale' => ['format' => 'Y-m-d'],
-                        ],
-                    ]),
+                'attribute' => 'email',
+                'format' => 'email',
+                'label' => '邮箱',
+            ],
+            [
+                'attribute' => 'created_at',
+                'format' => 'date',
+                'label' => '创建时间',
+                'filter'    => DateRangePicker::widget([
+                    'model'         => $searchModel,
+                    'attribute'     => 'created_at',
+                    'convertFormat' => true,
+                    'pluginOptions' => [
+                        'locale' => ['format' => 'Y-m-d'],
+                    ],
+                ]),
             ],
             [
                 'attribute' => 'status',
@@ -63,22 +65,15 @@ $this->params['breadcrumbs'][] = '管理员列表';
                 'class' => 'yii\grid\ActionColumn',
                 'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
                 'buttons' => [
-                    'activate' => function($url, $model) {
-                        if ($model->status == 10) {
-                            return '';
-                        }
-                        $options = [
-                            'title' => Yii::t('rbac-admin', 'Activate'),
-                            'aria-label' => Yii::t('rbac-admin', 'Activate'),
-                            'data-confirm' => Yii::t('rbac-admin', 'Are you sure you want to activate this user?'),
-                            'data-method' => 'post',
-                            'data-pjax' => '0',
-                        ];
-                        return Html::a('<span class="glyphicon glyphicon-ok"></span>', $url, $options);
+                    'view' => function ($url, $model, $key) {
+                        return Html::a(Html::tag('span', '查看详情', ['class' => ""]), ['user/view', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '查看详情']);
                     },
-                    ]
+                    'delete' => function ($url, $model, $key) {
+                        return Html::a(Html::tag('span', '删除', ['class' => ""]), ['user/delete', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '删除']);
+                    },
                 ],
             ],
+            ]
         ]);
         ?>
 </div>

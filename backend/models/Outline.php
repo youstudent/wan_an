@@ -32,6 +32,7 @@ class Outline extends \yii\db\ActiveRecord
     {
         return [
             [['member_id', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['ext_data'], 'string', 'max' => 255],
         ];
     }
 
@@ -48,6 +49,7 @@ class Outline extends \yii\db\ActiveRecord
             'status' => '账号状态',
             'created_at' => '退网时间',
             'updated_at' => '注册时间',
+            'ext_data' => '扩展',
         ];
     }
     

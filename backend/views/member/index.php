@@ -153,13 +153,19 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                     return Html::a(Html::tag('span', '修改', ['class' => ""]), ['member/update', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '修改']);
                 },
                 'change' => function ($url, $model, $key) {
-                    if($model->status == 0 ){
+                    if ($model->status == 0) {
+                        return '';
+                    }
+                    if ($model->status == 2) {
                         return '';
                     }
                     return Html::a(Html::tag('span', '冻结', ['class' => ""]), ['member/change', 'id'=>$model->id, 'state' => 0], ['class' => "btn btn-xs btn-success", 'title' => '冻结']);
                 },
                 'unchange' =>  function ($url, $model, $key) {
-                    if($model->status == 1){
+                    if ($model->status == 1) {
+                        return '';
+                    }
+                    if ($model->status == 2) {
                         return '';
                     }
                     return Html::a(Html::tag('span', '解冻', ['class' => ""]), ['member/change', 'id'=>$model->id, 'state' => 1], ['class' => "btn btn-xs btn-success", 'title' => '冻结']);

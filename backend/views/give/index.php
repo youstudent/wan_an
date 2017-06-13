@@ -36,10 +36,19 @@ $this->params['breadcrumbs'][] = '赠送记录';
         //'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
     $columns = [
-        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
-                    'id',
-            'member_id',
-            'give_member_id',
+//        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
+        [
+            'attribute' => 'id',
+            'mergeHeader'=>true,
+        ],
+        [
+            'attribute' => 'member_id',
+            'mergeHeader'=>true,
+        ],
+        [
+            'attribute' => 'give_member_id',
+            'mergeHeader'=>true,
+        ],
         [
             'attribute' => 'type',
             'value' => function ($model) {
@@ -51,7 +60,8 @@ $this->params['breadcrumbs'][] = '赠送记录';
                     return '未知类型';
                 }
             
-            }
+            },
+            'mergeHeader'=>true,
     
         ],
         [
@@ -63,9 +73,13 @@ $this->params['breadcrumbs'][] = '赠送记录';
                     return '时间异常';
                 }
             
-            }
+            },
+            'mergeHeader'=>true,
         ],
-            'give_coin',
+        [
+            'attribute' => 'give_coin',
+            'mergeHeader'=>true,
+        ],
         /*[
             'class' => 'kartik\grid\ActionColumn',
             'dropdown' => false,

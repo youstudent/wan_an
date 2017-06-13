@@ -59,7 +59,7 @@ class Member extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => '会员自增ID',
+            'id' => '会员ID',
             'parent_id' => '直推会员id',
             'name' => '用户姓名',
             'password' => '会员密码',
@@ -122,39 +122,35 @@ class Member extends \yii\db\ActiveRecord
      * @return bool|null
      */
     public function changeMember($param){
-        $this->msg = $param['state'] == 1 ? '冻结' : '解冻';
-        if(!$this->validate()){
-            return null;
-        }
-
+        $this->msg = $param['state'] == 0 ? '冻结' : '解冻';
         $info = Member::findOne(['id'=>$param['id']]);
         $info->status = $param['state'];
 
-        return $info->save();
+        return $info->save(false);
     }
     // 资金
     public function getBonus($num, $id)
     {
         if ($num == 1) {
             $query = (new \yii\db\Query());
-            $old = $query->from(Bonus::tableName())->where(['member_id' => $id, 'coin_type' => 1, 'type' => [1,2,3,5]])->sum('num');
-            $cover = $query->from(Bonus::tableName())->where(['member_id' => $id, 'coin_type' => 1, 'type' => 4])->sum('num');
-            return $old-$cover;
+            $old = $query->select('a_coin')->from(Member::tableName())->where(['id' => $id])->scalar();
+            return $old?$old:0;
         }
         if ($num == 2) {
             $query = (new \yii\db\Query());
-            $old = $query->from(Bonus::tableName())->where(['member_id' => $id, 'coin_type' => 2])->sum('num');
+            $old = $query->select('b_coin')->from(Member::tableName())->where(['id' => $id])->scalar();
             return $old?$old:0;
         }
         if ($num == 3) {
             $query = (new \yii\db\Query());
-            $old = $query->from(Bonus::tableName())->where(['member_id' => $id, 'coin_type' => 1, 'type' => [1,2,3,5]])->sum('num');
+            $old = $query->from(Bonus::tableName())->where(['member_id' => $id, 'coin_type' => 1 ,'type' => [1,2,3,5,6,11]])->sum('num');
             return $old?$old:0;
         }
         if ($num == 4) {
             $query = (new \yii\db\Query());
             $cover = $query->from(Bonus::tableName())->where(['member_id' => $id, 'coin_type' => 1, 'type' => 4])->sum('num');
-            return $cover;
+            $back = $query->from(Bonus::tableName())->where(['member_id' => $id, 'coin_type' => 1, 'type' => 9])->sum('num');
+            return $cover-$back?$cover-$back:0;
         }
 
     }
