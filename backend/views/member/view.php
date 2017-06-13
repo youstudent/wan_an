@@ -82,6 +82,7 @@ $this->params['breadcrumbs'][] = '奖金详情';
                 'convertFormat' => true,
 
             ]),
+            'headerOptions' => ['width' => '500'],
         ],
         [
             'attribute' => 'type',
@@ -113,7 +114,8 @@ $this->params['breadcrumbs'][] = '奖金详情';
                 3 => '额外分享',
                 4 => '提现',
                 5 => '注册奖金',
-            ]
+            ],
+            'headerOptions' => ['width' => '500'],
         ],
         [
             'attribute' => 'num',

@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = '赠送记录';
 
             
         ],
-        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
+//        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
        // '{export}',
     ];
     $panels = [

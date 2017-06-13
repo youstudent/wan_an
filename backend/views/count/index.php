@@ -29,7 +29,7 @@ use api\models\User;
             'todayHighlight' => true,
         ]
     ]);
-    echo \yii\bootstrap\Html::submitButton('查询或刷新',['class'=>'btn bnt-info','style'=>'margin-bottom:11px;padding-left: 12px;margin-left: 19px;;']);
+    echo \yii\bootstrap\Html::submitButton('查询或刷新',['class'=>'btn btn-xs btn-primary','style'=>'margin-bottom:11px;padding-left: 12px;margin-left: 19px;;']);
     \yii\bootstrap\ActiveForm::end();
     ?>
 </div>

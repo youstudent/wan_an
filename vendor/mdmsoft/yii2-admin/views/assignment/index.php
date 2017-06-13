@@ -25,7 +25,7 @@ $columns[] = [
     'template' => '{view}',
     'buttons' => [
         'view' => function ($url, $model, $key) {
-            return Html::a(Html::tag('span', '查看详情', ['class' => ""]), ['assignment/view', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '查看详情']);
+            return Html::a(Html::tag('span', '分配', ['class' => "btn btn-xs btn-primary"]), ['assignment/view', 'id'=>$model->id]);
         },
     ],
 ];

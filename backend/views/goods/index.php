@@ -28,7 +28,7 @@ $this->params['breadcrumbs'][] = '商品管理列表';
 
             
         ],
-        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
+//        ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
         //'{export}',
     ];
     $panels = [
@@ -50,18 +50,18 @@ $this->params['breadcrumbs'][] = '商品管理列表';
             'template'=> '{view} {update} {delete}',
             'buttons' => [
                 'view' => function ($url, $model, $key) {
-                    return Html::a(Html::tag('span', '查看详情', ['class' => ""]), ['goods/view', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '查看详情']);
+                    return Html::a(Html::tag('span', '查看详情', ['class' => "btn btn-xs btn-primary"]), ['goods/view', 'id'=>$model->id]);
                 },
                 'update' => function ($url, $model, $key) {
-                    return Html::a(Html::tag('span', '修改', ['class' => ""]), ['goods/update', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '修改']);
+                    return Html::a(Html::tag('span', '修改', ['class' => "btn btn-xs btn-success"]), ['goods/update', 'id'=>$model->id]);
                 },
                 'delete' => function ($url, $model, $key) {
-                    return Html::a(Html::tag('span', '删除', ['class' => ""]), ['goods/delete', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '删除']);
+                    return Html::a(Html::tag('span', '删除', ['class' => "btn btn-xs btn-danger"]), ['goods/delete', 'id'=>$model->id]);
                 },
             ],
         ],
         [
-            'class' => 'kartik\grid\CheckboxColumn',
+//            'class' => 'kartik\grid\CheckboxColumn',
         ],
     ];
     

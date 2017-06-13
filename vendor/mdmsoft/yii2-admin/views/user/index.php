@@ -66,10 +66,10 @@ $this->params['breadcrumbs'][] = '管理员列表';
                 'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
-                        return Html::a(Html::tag('span', '查看详情', ['class' => ""]), ['user/view', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '查看详情']);
+                        return Html::a(Html::tag('span', '查看详情', ['class' => "btn btn-xs btn-primary"]), ['user/view', 'id'=>$model->id]);
                     },
                     'delete' => function ($url, $model, $key) {
-                        return Html::a(Html::tag('span', '删除', ['class' => ""]), ['user/delete', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '删除']);
+                        return Html::a(Html::tag('span', '删除', ['class' => "btn btn-xs btn-danger"]), ['user/delete', 'id'=>$model->id]);
                     },
                 ],
             ],

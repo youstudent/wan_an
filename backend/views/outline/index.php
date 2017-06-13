@@ -51,6 +51,7 @@ $this->params['breadcrumbs'][] = '退网管理列表';
                 'convertFormat' => true,
 
             ]),
+            'headerOptions' => ['width' => '300'],
         ],
 
         [

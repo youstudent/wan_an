@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = '财务管理列表';
              Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['record/index'], ['data-pjax' => 0, 'class' => 'btn btn-default', 'title' => '刷新']). ' '
             
          ],
-       ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
+//       ['content' => '{dynagridFilter}{dynagridSort}{dynagrid}'],
        // '{export}',
     ];
     $panels = [
@@ -49,7 +49,11 @@ $this->params['breadcrumbs'][] = '财务管理列表';
             'footer' => '<button href="#" class="btn btn-default btn-xs btn-delete ">批量通过</button>',
             'footerOptions' => ['colspan' => 10],  //设置删除按钮垮列显示；
         ],*/
-        'member_id',
+
+        [
+            'attribute' => 'member_id',
+            'headerOptions' => ['width' => '100'],
+        ],
         [
             'label' => '会员名',
             'attribute' => 'mamber_name',
@@ -57,7 +61,11 @@ $this->params['breadcrumbs'][] = '财务管理列表';
             'mergeHeader'=>true,
         
         ],
-        'coin',
+        [
+            'attribute' => 'coin',
+            'mergeHeader'=>true,
+
+        ],
         [
             'label' => '电话',
             'attribute' => 'member.mobile',
@@ -144,7 +152,7 @@ $this->params['breadcrumbs'][] = '财务管理列表';
                         'title' => Yii::t('yii', '通过'),
                         'aria-label' => Yii::t('yii', '通过'),
                         'data-pjax' => '1',
-                        'class'=>'a-post',
+                        'class'=>"btn btn-xs btn-success",
                         'post=msg'=>'你确定要启用吗?',
                         'post_url'=>1,
                     ];
@@ -158,6 +166,7 @@ $this->params['breadcrumbs'][] = '财务管理列表';
                         'title' => Yii::t('yii', '拒绝'),
                         'aria-label' => Yii::t('yii', '拒绝'),
                         'data-pjax' => '2',
+                        'class'=>"btn btn-xs btn-danger",
                     ];
                     if ($model->status == 0) {
                         return Html::a('拒绝', $url, $options);

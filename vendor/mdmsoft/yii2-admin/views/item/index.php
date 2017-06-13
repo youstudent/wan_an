@@ -47,13 +47,13 @@ unset($rules[RouteRule::RULE_NAME]);
                 'template'=> '{view} {update} {delete}',
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
-                        return Html::a(Html::tag('span', '查看详情', ['class' => ""]), ['role/view', 'id'=>$model->name], ['class' => "btn btn-xs btn-success", 'title' => '查看详情']);
+                        return Html::a(Html::tag('span', '查看详情', ['class' => "btn btn-xs btn-primary"]), ['role/view', 'id'=>$model->name]);
                     },
                     'update' => function ($url, $model, $key) {
-                        return Html::a(Html::tag('span', '修改', ['class' => ""]), ['role/update', 'id'=>$model->name], ['class' => "btn btn-xs btn-success", 'title' => '修改']);
+                        return Html::a(Html::tag('span', '修改', ['class' => "btn btn-xs btn-success"]), ['role/update', 'id'=>$model->name]);
                     },
                     'delete' => function ($url, $model, $key) {
-                        return Html::a(Html::tag('span', '删除', ['class' => ""]), ['role/delete', 'id'=>$model->name], ['class' => "btn btn-xs btn-success", 'title' => '删除']);
+                        return Html::a(Html::tag('span', '删除', ['class' => "btn btn-xs btn-danger"]), ['role/delete', 'id'=>$model->name]);
                     },
                 ],
             ],

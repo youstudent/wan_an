@@ -38,8 +38,14 @@ $this->params['breadcrumbs'][] = '会员管理列表';
 
     $columns = [
 //        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
-                    'id',
-        'mobile',
+        [
+            'attribute' => 'id',
+            'headerOptions' => ['width' => '100'],
+        ],
+        [
+            'attribute' => 'mobile',
+            'headerOptions' => ['width' => '150'],
+        ],
         [
             'attribute' => 'created_at',
             'label' => '注册时间',
@@ -54,6 +60,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                     'locale' => ['format' => 'Y-m-d'],
                 ],
             ]),
+            'headerOptions' => ['width' => '200'],
 
         ],
         [
@@ -116,19 +123,20 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             'value' => function($model) {
                 switch ($model-> status) {
                     case '0';
-                        return '已冻结';
+                        return '<span class="label bg-primary">冻结</span>';
                         break;
                     case '1';
-                        return '正常';
+                        return '<span class="label bg-primary">正常</span>';
                         break;
                     case '2';
-                        return '已退网';
+                        return '<span class="label bg-primary">已退网</span>';
                         break;
                     default:
                         return '未知状态';
                         break;
                 }
             },
+            'format'=>'raw',
             'filter'    => false,
             'mergeHeader'=>true,
 //            'filter' => [
@@ -147,10 +155,10 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             'template'=> '{view} {update} {change} {unchange}',
             'buttons' => [
                 'view' => function ($url, $model, $key) {
-                    return Html::a(Html::tag('span', '奖金详情', ['class' => ""]), ['member/view', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '奖金详情']);
+                    return Html::a(Html::tag('span', '奖金详情', ['class' => "btn btn-xs btn-primary"]), ['member/view', 'id'=>$model->id]);
                 },
                 'update' => function ($url, $model, $key) {
-                    return Html::a(Html::tag('span', '修改', ['class' => ""]), ['member/update', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '修改']);
+                    return Html::a(Html::tag('span', '修改', ['class' => "btn btn-xs btn-success"]), ['member/update', 'id'=>$model->id]);
                 },
                 'change' => function ($url, $model, $key) {
                     if ($model->status == 0) {
@@ -159,7 +167,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                     if ($model->status == 2) {
                         return '';
                     }
-                    return Html::a(Html::tag('span', '冻结', ['class' => ""]), ['member/change', 'id'=>$model->id, 'state' => 0], ['class' => "btn btn-xs btn-success", 'title' => '冻结']);
+                    return Html::a(Html::tag('span', '冻结', ['class' => "btn btn-xs btn-danger"]), ['member/change', 'id'=>$model->id, 'state' => 0]);
                 },
                 'unchange' =>  function ($url, $model, $key) {
                     if ($model->status == 1) {
@@ -168,7 +176,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                     if ($model->status == 2) {
                         return '';
                     }
-                    return Html::a(Html::tag('span', '解冻', ['class' => ""]), ['member/change', 'id'=>$model->id, 'state' => 1], ['class' => "btn btn-xs btn-success", 'title' => '冻结']);
+                    return Html::a(Html::tag('span', '解冻', ['class' => "btn btn-xs btn-info"]), ['member/change', 'id'=>$model->id, 'state' => 1]);
                 },
             ]
         ],
@@ -194,7 +202,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                     'panel' => $panels,
                     'toolbar' => $toolbars,
                 ],
-                'options' => ['id' => 'User'.Yii::$app->user->identity->id] // a unique identifier is important
+                'options' => ['id' => 'Member'.Yii::$app->user->identity->id] // a unique identifier is important
     ]);
 
     DynaGrid::end();

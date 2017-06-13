@@ -33,7 +33,11 @@ $this->params['breadcrumbs'][] = $this->title;
     ];
     $columns = [
 //        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
-            'member_id',
+        [
+            'attribute' => 'member_id',
+            'label' => '会员ID',
+            'headerOptions' => ['width' => '200'],
+        ],
         [
             'attribute' => 'created_at',
             'label' => '充值时间',
@@ -48,6 +52,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     'locale' => ['format' => 'Y-m-d'],
                 ],
             ]),
+            'headerOptions' => ['width' => '200'],
+
         ],
 
         [
@@ -65,7 +71,8 @@ $this->params['breadcrumbs'][] = $this->title;
             'filter' => [
                 1 => '金果',
                 2 => '金种子'
-            ]
+            ],
+            'headerOptions' => ['width' => '200'],
         ],
         [
             'attribute' => 'num',
@@ -75,6 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
             },
             'filter'    => false,
             'mergeHeader'=>true,
+            'headerOptions' => ['width' => '200'],
         ],
         [
             'attribute' => 'operation',
@@ -94,6 +102,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                2 => '扣除'
 //            ]
             'mergeHeader'=>true,
+            'headerOptions' => ['width' => '200'],
         ],
     ];
     
