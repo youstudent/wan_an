@@ -10,7 +10,7 @@ use yii\grid\DataColumn;
 /* @var $searchModel backend\models\searchs\MemberSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-
+$this->title = '';
 $this->params['breadcrumbs'][] = '系谱图';
 $this->registerCss("
 ::-webkit-scrollbar {

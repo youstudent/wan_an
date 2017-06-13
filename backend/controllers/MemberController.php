@@ -291,8 +291,8 @@ class MemberController extends Controller
     }
 
 
-    public function actionTreePage()
+    public function actionTree()
     {
-        return $this->render('tree_page');
+        return $this->render('tree');
     }
 }

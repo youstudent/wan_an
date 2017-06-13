@@ -1,5 +1,6 @@
 <?php
 use kartik\daterange\DateRangePicker;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\dynagrid\DynaGrid;
@@ -17,9 +18,12 @@ $this->params['breadcrumbs'][] = '财务管理列表';
 
 </div>
 
-<ul class="nav nav-pills">
-    <li role="presentation" ><a href="<?= \yii\helpers\Url::to(['record/index?status=0']) ?>">待审核</a></li>
-    <li role="presentation" class="active"><a href="<?= \yii\helpers\Url::to(['record/index?status=1']) ?>">已审核</a></li>
+<ul class="nav nav-tabs ">
+    <?php
+    $get  = Yii::$app->request->get();
+    ?>
+    <li role="presentation" <?php if(!ArrayHelper::getValue($get, 'status', 0)){ echo 'class="active"'; } ?>  ><a href="<?= \yii\helpers\Url::to(['record/index?status=0']) ?>">待审核</a></li>
+    <li role="presentation" <?php if(ArrayHelper::getValue($get, 'status', 0)){ echo 'class="active"'; } ?>  ><a href="<?= \yii\helpers\Url::to(['record/index?status=1']) ?>">已审核</a></li>
 </ul>
 <div class="record-index">
     <div class="page-header">
