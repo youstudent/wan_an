@@ -39,8 +39,10 @@ $this->params['breadcrumbs'][] = '管理员列表';
             ],
             [
                 'attribute' => 'created_at',
-                'format' => 'date',
                 'label' => '创建时间',
+                'value' => function ($model) {
+                    return date('Y-m-d H:i:s', $model->created_at);
+                },
                 'filter'    => DateRangePicker::widget([
                     'model'         => $searchModel,
                     'attribute'     => 'created_at',
@@ -49,6 +51,7 @@ $this->params['breadcrumbs'][] = '管理员列表';
                         'locale' => ['format' => 'Y-m-d'],
                     ],
                 ]),
+
             ],
             [
                 'attribute' => 'status',
