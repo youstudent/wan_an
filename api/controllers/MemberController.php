@@ -148,7 +148,7 @@ class MemberController extends ApiController
     {
         $model = new RegisterForm();
 
-        if ($model->register(Yii::$app->request->post(), 1)) {
+        if ($model->register(Yii::$app->request->post(), ArrayHelper::getValue(Yii::$app->session->get('member'), 'vip_number'))) {
             return $this->jsonReturn(1, 'success', ['vip_number' => $model->vip_number]);
         }
         return $this->jsonReturn(0, $model->errorMsg);

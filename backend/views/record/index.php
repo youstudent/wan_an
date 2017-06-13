@@ -16,9 +16,10 @@ $this->params['breadcrumbs'][] = '财务管理列表';
 <div class="page-header">
 
 </div>
-<ul class="nav nav-tabs">
-    <li class="dropdown"><a href="<?= \yii\helpers\Url::to(['record/index?status=0']) ?>">待审核</a></li>
-    <li class="dropdown"><a href="<?= \yii\helpers\Url::to(['record/index?status=1']) ?>">已审核</a></li>
+
+<ul class="nav nav-pills">
+    <li role="presentation" ><a href="<?= \yii\helpers\Url::to(['record/index?status=0']) ?>">待审核</a></li>
+    <li role="presentation" class="active"><a href="<?= \yii\helpers\Url::to(['record/index?status=1']) ?>">已审核</a></li>
 </ul>
 <div class="record-index">
     <div class="page-header">
