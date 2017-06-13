@@ -56,12 +56,6 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'as access' => [
-            'class' => 'mdm\admin\components\AccessControl',
-            'allowActions' => [
-               '*'
-            ]
-        ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
@@ -70,6 +64,12 @@ return [
             ],
         ],
         */
+    ],
+    'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+        'allowActions' => [
+            'site/*',
+        ]
     ],
     'params' => $params,
 ];

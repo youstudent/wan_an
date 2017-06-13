@@ -3,7 +3,6 @@
 namespace backend\models;
 
 use Yii;
-use app\models\User;
 
 
 /**
