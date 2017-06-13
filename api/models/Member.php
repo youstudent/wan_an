@@ -111,7 +111,7 @@ class Member extends \yii\db\ActiveRecord
 
         $data['child_num'] = $this->son($member_id);
         $data['group_num'] = $this->group($member_id)?$this->group($member_id):1;
-        $data['child'] = $this->child($member_id)<0?0:$this->child($member_id);
+        $data['child'] = $this->child($member_id)<=0?0:$this->child($member_id);
 
         return $data;
     }
@@ -195,8 +195,10 @@ class Member extends \yii\db\ActiveRecord
             $this->addError('message', '请联系管理员');
             return false;
         }
+        $detail->last_login_time = time();
+        $detail->save(false);
         // session 保存用户登录数据
-        Yii::$app->session->set('member',['member_id'=>$id,'member_name'=>$member['name'], 'vip_number'=>$member['vip_number']]);
+        Yii::$app->session->set('member',['member_id'=>$member['id'],'member_name'=>$member['name'], 'vip_number'=>$member['vip_number']]);
         return true;
 
     }
@@ -208,14 +210,6 @@ class Member extends \yii\db\ActiveRecord
      */
     public function logout()
     {
-//        Yii::$app->session->clear();
-        // 获取用户id
-        $session = Yii::$app->session->get('member');
-        $member_id = $session['member_id'];
-
-        $model = Member::findOne($member_id);
-        $model->last_login_time = time();
-        $model->save();
         Yii::$app->session->destroy();
         Yii::$app->session->removeAll();
         return true;
@@ -231,16 +225,26 @@ class Member extends \yii\db\ActiveRecord
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
 
+        // 改变状态值
         $model = Member::findOne($member_id);
         $model->status = 2;
 
+        // 改变上一级直推数量
+        $query = (new \yii\db\Query());
+        $pid = $query->select('parent_id')->from(Member::tableName())->where(['id' => $member_id])->scalar();
+        $query = (new \yii\db\Query());
+        $pidModel = Member::findOne($pid);
+        $pidModel->child_num = $pidModel->child_num - 1;
+
+        // 添加退网记录
         $outModel = new Outline();
         $outModel->member_id = $model->id;
         $outModel->created_at = time();
         $outModel->updated_at = $model->created_at;
-        $outModel->save(false);
+        $ext_data= ['name'=>$model->name, 'mobile'=>$model->mobile, 'vip_number'=>$model->vip_number];
+        $outModel->ext_data = json_encode($ext_data, JSON_UNESCAPED_UNICODE);
 
-        if($model->save(false)){
+        if($model->save(false) && $pidModel->save(false) && $outModel->save(false)){
             return true;
         }
         return false;

@@ -22,7 +22,12 @@ if (!empty($extraColumns)) {
 }
 $columns[] = [
     'class' => 'yii\grid\ActionColumn',
-    'template' => '{view}'
+    'template' => '{view}',
+    'buttons' => [
+        'view' => function ($url, $model, $key) {
+            return Html::a(Html::tag('span', '查看详情', ['class' => ""]), ['assignment/view', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '查看详情']);
+        },
+    ],
 ];
 ?>
 <div class="assignment-index">

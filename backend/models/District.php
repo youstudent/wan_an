@@ -106,7 +106,7 @@ class District extends \yii\db\ActiveRecord
 
                 $v->member_id = $old_id;
                 if(!$v->save()){
-                    throw new \yii\db\Exception(); //手动抛出异常,再由下面捕获。
+                    throw new \yii\db\Exception('失败'); //手动抛出异常,再由下面捕获。
                 }
 
             }
@@ -114,7 +114,7 @@ class District extends \yii\db\ActiveRecord
 
                 $v->member_id = $new_id;
                 if(!$v->save()){
-                    throw new \yii\db\Exception(); //手动抛出异常,再由下面捕获。
+                    throw new \yii\db\Exception('失败'); //手动抛出异常,再由下面捕获。
                 }
 
             }
@@ -122,7 +122,7 @@ class District extends \yii\db\ActiveRecord
 
                 $v->member_id = $old_id;
                 if(!$v->save()){
-                    throw new \yii\db\Exception(); //手动抛出异常,再由下面捕获。
+                    throw new \yii\db\Exception('失败'); //手动抛出异常,再由下面捕获。
                 }
 
             }

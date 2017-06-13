@@ -91,9 +91,24 @@ class Bonus extends \yii\db\ActiveRecord
         }
         foreach ($bonus as &$v) {
             $v['created_at'] = date('Y/m/d H:i:s', $v['created_at']);
+            switch ($v['type']) {
+                case 1:
+                    $v['typeName'] = '绩效';
+                    break;
+                case 2:
+                    $v['typeName'] = '分享';
+                    break;
+                case 3:
+                    $v['typeName'] = '额外分享';
+                    break;
+                case 5:
+                    $v['typeName'] = '注册奖金';
+                    break;
+            }
         }
         $gross = $query->from(Bonus::tableName())->where(['member_id' => $member_id, 'type' => [1,2,3,5]])->sum('num');
         $bonus = ['gross'=>$gross,'data'=>$bonus];
+
         return $bonus;
     }
     

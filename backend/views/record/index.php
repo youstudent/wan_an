@@ -53,13 +53,33 @@ $this->params['breadcrumbs'][] = '财务管理列表';
         [
             'label' => '会员名',
             'attribute' => 'mamber_name',
-            'value' => 'member.name'
+            'value' => 'member.name',
+            'mergeHeader'=>true,
         
         ],
         'coin',
-        'member.mobile',
-        'member.deposit_bank',
-        'member.bank_account',
+        [
+            'label' => '电话',
+            'attribute' => 'member.mobile',
+            'value' => 'member.mobile',
+            'mergeHeader'=>true,
+
+        ],
+        [
+            'label' => '开户行',
+            'attribute' => 'member.deposit_bank',
+            'value' => 'member.deposit_bank',
+            'mergeHeader'=>true,
+
+        ],
+        [
+            'label' => '银行账号',
+            'attribute' => 'member.bank_account',
+            'value' => 'member.bank_account',
+            'mergeHeader'=>true,
+
+        ],
+
         [
             'attribute' => 'created_at',
             'label' => '申请时间',
@@ -82,7 +102,8 @@ $this->params['breadcrumbs'][] = '财务管理列表';
                     return '数据还未处理';
                 }
                
-            }
+            },
+            'mergeHeader'=>true,
         ],
         [
             'attribute' => 'status',

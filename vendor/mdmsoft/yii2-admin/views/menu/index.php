@@ -37,7 +37,22 @@ $this->params['breadcrumbs'][] = '菜单列表';
             ],
             'route',
             'order',
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'=> '{view} {update} {delete}',
+                'buttons' => [
+                    'view' => function ($url, $model, $key) {
+                        return Html::a(Html::tag('span', '查看详情', ['class' => ""]), ['menu/view', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '查看详情']);
+                    },
+                    'update' => function ($url, $model, $key) {
+                        return Html::a(Html::tag('span', '修改', ['class' => ""]), ['menu/update', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '修改']);
+                    },
+                    'delete' => function ($url, $model, $key) {
+                        return Html::a(Html::tag('span', '删除', ['class' => ""]), ['menu/delete', 'id'=>$model->id], ['class' => "btn btn-xs btn-success", 'title' => '删除']);
+                    },
+                ],
+            ],
+
         ],
     ]);
     ?>

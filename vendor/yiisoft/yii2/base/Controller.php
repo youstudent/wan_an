@@ -326,7 +326,7 @@ class Controller extends Component implements ViewContextInterface
     public function getUniqueId()
     {
         return $this->module instanceof Application ? $this->id : $this->module->getUniqueId() . '/' . $this->id;
-    }
+}
 
     /**
      * Returns the route of the current request.

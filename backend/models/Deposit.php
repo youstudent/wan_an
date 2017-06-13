@@ -87,10 +87,17 @@ class Deposit extends \yii\db\ActiveRecord
         if (!$result) {
             Yii::$app->session->setFlash('error', '用户不存在');
         }
-        if ($data['Deposit']['operation'] == 2 ) {
-            if ($result->a_coin < $data['Deposit']['num'] || $result->b_coin < $data['Deposit']['num']) {
+        if ($data['Deposit']['operation'] == 2 && $data['Deposit']['type'] ==1) {
+            if ($result->a_coin < $data['Deposit']['num']) {
 
-                Yii::$app->session->setFlash('error', '余额不足,扣除失败');
+                Yii::$app->session->setFlash('error', '金果不足,扣除失败');
+                return null;
+            }
+        }
+        if ($data['Deposit']['operation'] == 2 && $data['Deposit']['type'] ==2) {
+            if ($result->b_coin < $data['Deposit']['num']) {
+
+                Yii::$app->session->setFlash('error', '金种子不足,扣除失败');
                 return null;
             }
         }
