@@ -84,8 +84,13 @@ class Deposit extends \yii\db\ActiveRecord
     {
         $id = $data['Deposit']['member_id'];
         $result = Member::findOne(['id' => $id]);
+        if ($data['Deposit']['num'] < 0) {
+            Yii::$app->session->setFlash('error', '金额不能为负');
+            return null;
+        }
         if (!$result) {
             Yii::$app->session->setFlash('error', '用户不存在');
+            return null;
         }
         if ($data['Deposit']['operation'] == 2 && $data['Deposit']['type'] ==1) {
             if ($result->a_coin < $data['Deposit']['num']) {
