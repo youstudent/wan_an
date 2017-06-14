@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use sintret\gii\models\LogUpload;
 use sintret\gii\components\Util;
+use yii\helpers\FileHelper;
 
 
 /**
@@ -21,7 +22,6 @@ class BrannerController extends Controller
 
     public function behaviors()
     {
-        return parent::behaviors();
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
@@ -73,7 +73,8 @@ class BrannerController extends Controller
             $path = '/upload/branner_imgs/';
             if ($model->img){
                 if (!file_exists($path)){
-                    mkdir($path,'0777',true);
+//                    mkdir($path,'0777',true);
+                    FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
                 }
                 $path = $path.uniqid().'.'.$model->img->extension;
                 $model->img->saveAs($path,false);

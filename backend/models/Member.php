@@ -163,10 +163,12 @@ class Member extends \yii\db\ActiveRecord
             return $child_num;
         }
         if ($num == 2) {
-            return $this->group($id)?$this->group($id):1;
+            $group = $this->group($id);
+            return $group?$group:0;
         }
         if ($num == 3) {
-            return $this->child($id)<0?0:$this->child($id);
+            $child = $this->child($id);
+            return $child<0?0:$child;
         }
 
     }

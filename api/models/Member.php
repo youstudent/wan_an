@@ -108,10 +108,12 @@ class Member extends \yii\db\ActiveRecord
         if(!isset($data) || empty($data)){
             return null;
         }
-
-        $data['child_num'] = $this->son($member_id);
-        $data['group_num'] = $this->group($member_id)?$this->group($member_id):1;
-        $data['child'] = $this->child($member_id)<=0?0:$this->child($member_id);
+        $son = $this->son($member_id);
+        $child = $this->child($member_id);
+        $group = $this->group($member_id);
+        $data['child_num'] = $son;
+        $data['group_num'] = $group?$group:0;
+        $data['child'] = $child?0:$child;
 
         return $data;
     }

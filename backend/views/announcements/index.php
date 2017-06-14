@@ -37,7 +37,12 @@ $this->params['breadcrumbs'][] = '公告管理列表';
                     'id',
             'title',
             'author',
-            'content:ntext',
+        [
+            'attribute' => 'content',
+            'value' => function ($model) {
+                return strip_tags($model->content);
+            }
+        ],
         [
             'attribute' => 'created_at',
             'value' => function ($model) {
@@ -76,7 +81,7 @@ $this->params['breadcrumbs'][] = '公告管理列表';
                     return Html::a(Html::tag('span', '修改', ['class' => "btn btn-xs btn-success"]), ['announcements/update', 'id'=>$model->id]);
                 },
                 'delete' => function ($url, $model, $key) {
-                    return Html::a(Html::tag('span', '删除', ['class' => "btn btn-xs btn-danger"]), ['announcements/delete', 'id'=>$model->id]);
+                    return Html::a(Html::tag('span', '删除', ['class' => "btn btn-xs btn-danger del"]), ['announcements/delete', 'id'=>$model->id]);
                 },
             ],
         ],
@@ -106,5 +111,29 @@ $this->params['breadcrumbs'][] = '公告管理列表';
     ]);
 
     DynaGrid::end();
+   $js =<<<JS
+       $(function () {
+            $('.del').click(function () {
+                var form = $(this);
+                if (confirm("确定要删除吗?")) {
+                    $.ajax({
+                        url: form.attr('action'),
+                        type: 'post',
+                        data: form.serialize()
+                    });
+                    if (data == 1){
+                        $(tThis).parent().parent().remove();
+                        alert('删除成功')
+                    }else{
+                        alert('删除失败')
+                    }
+                }
+                return false;
+            })
+        });
+
+JS;
+$this->registerJs($js);
 ?>   
 </div>
+

@@ -5,6 +5,7 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\web\UploadedFile;
+use yii\helpers\FileHelper;
 
 class Upload extends Model
 {
@@ -75,8 +76,8 @@ class Upload extends Model
         if(!empty($save_path)){
             $save_dir = dirname(Yii::getAlias('@webroot').$save_path);
             if(!is_dir($save_dir)){
-                mkdir($save_dir, 0755);
-
+//                mkdir($save_dir, 0755);
+                FileHelper::createDirectory($save_dir, $mode = 0775, $recursive = true);
             }
         }
         return $save_path;
