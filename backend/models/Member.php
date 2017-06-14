@@ -163,31 +163,35 @@ class Member extends \yii\db\ActiveRecord
             return $child_num;
         }
         if ($num == 2) {
-            $group = $this->group($id);
-            return $group?$group:0;
+            $group = 1;
+//            $group = $this->group($id);
+            return $group;
         }
         if ($num == 3) {
-            $child = $this->child($id);
-            return $child<0?0:$child;
+            $child = 1;
+//            $child = $this->child($id);
+            return $child;
         }
 
     }
+    protected $num = 0;
     /**
      * 区数量查询
      * @return int
      */
-    public function group($id)
+    public function group($id, $num =0)
     {
         $query = (new \yii\db\Query());
         $district = $query->select('district')->from(District::tableName())->where(['member_id' => $id, 'seat' => 1])->one();
 
         $query = (new \yii\db\Query());
-        $data = $query->from(District::tableName())->where(['district' => $district['district']])->all();
-        $num = 0;
+        $data = $query->select('member_id')->from(District::tableName())->where(['district' => $district['district']])->all();
+
         if (count($data) >= 40) {
-            $num ++;
+            $num++ ;
+            $data = array_splice($data,1);
             foreach ($data as $v) {
-                $this->group($v['member_id']);
+                $this->group($v['member_id'], $num);
             }
         }
 
@@ -198,17 +202,17 @@ class Member extends \yii\db\ActiveRecord
      * 挂靠总量查询
      * @return int
      */
-    public function child($id)
+    public function child($id, $num = 0)
     {
         $query = (new \yii\db\Query());
         $district = $query->select('district')->from(District::tableName())->where(['member_id' => $id, 'seat' => 1])->one();
         $query = (new \yii\db\Query());
-        $data = $query->from(District::tableName())->where(['district' => $district['district']])->all();
-        $num = 0;
+        $data = $query->select('member_id')->from(District::tableName())->where(['district' => $district['district']])->all();
         $num += count($data)-1;
         if (count($data) >= 40) {
+            $data = array_splice($data,1);
             foreach ($data as $v) {
-                $this->child($v['member_id']);
+                $this->group($v['member_id'], $num);
             }
         }
 
