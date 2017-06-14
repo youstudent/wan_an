@@ -37,12 +37,12 @@ $this->params['breadcrumbs'][] = '公告管理列表';
                     'id',
             'title',
             'author',
-        [
-            'attribute' => 'content',
-            'value' => function ($model) {
-                return strip_tags($model->content);
-            }
-        ],
+//        [
+//            'attribute' => 'content',
+//            'value' => function ($model) {
+//                return strip_tags($model->content);
+//            }
+//        ],
         [
             'attribute' => 'created_at',
             'value' => function ($model) {
