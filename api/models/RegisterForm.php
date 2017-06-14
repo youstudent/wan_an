@@ -645,7 +645,6 @@ class RegisterForm extends Member
     /**
      * 添加会员
      * @param $post
-     * @param $referrer_id
      * @return Member
      */
     public function addMember($post)
@@ -654,6 +653,8 @@ class RegisterForm extends Member
         $model->load($post, '');
         $model->created_at = time();
         $model->updated_at = time();
+        $model->a_coin = 0;
+        $model->b_coin = 0;
         $model->parent_id = $post['referrer_id'];
         $model->vip_number = $this->vip_number = Member::find()->max('vip_number') + 1;
         $model->password = Yii::$app->security->generatePasswordHash($this->password);
