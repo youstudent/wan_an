@@ -24,7 +24,6 @@ class FruiterController extends Controller
 
     public function behaviors()
     {
-        return parent::behaviors();
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
