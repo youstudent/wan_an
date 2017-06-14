@@ -202,6 +202,15 @@ class RegisterForm extends Member
             $this->errorMsg = '添加直推数量或者直推奖金失败';
             return false;
         }
+
+        $coin_money = Yii::$app->params['coin_type_2_money'];
+        Helper::saveBonusLog($referrer_id, 1, 2, $coin_money);
+        //给推荐人发放奖金
+        if(!Helper::addMemberBCoin($referrer_id, $coin_money)){
+            $this->errorMsg = '分享奖金添加失败';
+            return false;
+        }
+
         return true;
 
     }
@@ -224,10 +233,13 @@ class RegisterForm extends Member
        }
        $member->a_coin -= $this->a_coin + 5;
        $member->b_coin -= $this->b_coin;
-       $member->save();
+       if($member->save(false) == false){
+           $this->errorMsg = '操作人信息更新失败';
+           return false;
+       }
 
         //生成奖励5块钱的流水
-        Helper::saveBonusLog($member_id, 2, 5, 5);
+        Helper::saveBonusLog($member_id, 1, 5, 5);
         //添加消耗记录
         if($this->a_coin){
             Helper::saveBonusLog($member_id, 1, 10, $this->a_coin);
@@ -310,19 +322,12 @@ class RegisterForm extends Member
             if ($result == false) {
                 return false;
             }
-            //第一次循环就找到爹了。 这个就只用给推荐人发一个直推奖励
-            if($i == 1 && $seat_node['member_id'] == $referrer_id){
-                $coin_money = Yii::$app->params['coin_type_2_money'];
-                Helper::saveBonusLog($referrer_id, 2, 2, $coin_money, 0);
-                //给推荐人发放奖金
-                if(!Helper::addMemberBCoin($referrer_id, $coin_money)){
-                    $this->errorMsg = '分享奖金添加失败';
-                    return false;
-                }
-            }else{
-                //给这个区所有的上级给见点奖
+
+            //如果新增的会员，在上级的区里面，就没得 见点奖
+            if( !($this->checkMemberInMemberDistrict($this->member_id, $referrer_id) && $member_id == $referrer_id) ){
+                //给上级添加挂靠奖
                 $coin_money = Yii::$app->params['coin_type_1_money'];
-                Helper::saveBonusLog($member_id, 2, 1, $coin_money, 0);
+                Helper::saveBonusLog($member_id, 1, 1, $coin_money, 0);
                 if(!Helper::addMemberBCoin($member_id, $coin_money)){
                     $this->errorMsg = '绩效奖金添加失败';
                     return false;
@@ -343,6 +348,30 @@ class RegisterForm extends Member
         return true;
     }
 
+    /**
+     * 检查会员有没有在另一会员的区中
+     * @param $member_id
+     * @param $another_member_id
+     * @return bool
+     */
+    public function checkMemberInMemberDistrict($member_id, $another_member_id)
+    {
+        $district = $this->getMemberRootDistrict($another_member_id);
+        $result = $this->getDistrictMember($district, $member_id);
+
+        return $result ? true : false;
+    }
+
+    /**
+     * 获取指定区，指定会员信息
+     * @param $district
+     * @param $member_id
+     * @return array|null|\yii\db\ActiveRecord
+     */
+    public function getDistrictMember($district, $member_id)
+    {
+        return District::find()->where(['district'=>$district, 'member_id'=>$member_id])->one();
+    }
     /**
      * 根据推荐id。获取一个可用的区域信息
      * @param $referrer_id
@@ -504,12 +533,12 @@ class RegisterForm extends Member
     {
         $count = MemberDistrict::find()->where(['referrer_id'=>$member_id, 'is_extra'=>1])->count();
         if($count == 1){
-            return Helper::saveBonusLog($member_id, 2, 3, 300, 0, ['note'=> '额外分享第4个区']);
+            return Helper::saveBonusLog($member_id, 1, 3, 300, 0, ['note'=> '额外分享第4个区']);
         }
         if($count == 2){
-            return Helper::saveBonusLog($member_id, 2, 3, 600, 0, ['note'=> '额外分享第5个区']);
+            return Helper::saveBonusLog($member_id, 1, 3, 600, 0, ['note'=> '额外分享第5个区']);
         }else{
-            return Helper::saveBonusLog($member_id, 2, 3, 900, 0, ['note'=> '额外分享6个区,几6个区以上']);
+            return Helper::saveBonusLog($member_id, 1, 3, 900, 0, ['note'=> '额外分享6个区,几6个区以上']);
         }
     }
     /**

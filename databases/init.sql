@@ -613,7 +613,7 @@ CREATE TABLE `wa_member` (
 -- ----------------------------
 -- Records of wa_member
 -- ----------------------------
-INSERT INTO `wa_member` VALUES ('1', '1', '0', 'member1', '$2y$13$gu094onaVGc9v5Juiz6SD.Tcoxio8IANlYRZjgd7mlFEDjS1OtIVK', '13219890986', '成都银行', '62284848822113464', '环球中心', '1496629517', '1', '1497343480', '0', '99994949', '2147479647', '0', '0');
+INSERT INTO `wa_member` VALUES ('1', '1', '0', 'member1', '$2y$13$gu094onaVGc9v5Juiz6SD.Tcoxio8IANlYRZjgd7mlFEDjS1OtIVK', '13219890986', '成都银行', '62284848822113464', '环球中心', '1496629517', '1', '1497343480', '0', '0', '0', '0', '0');
 
 -- ----------------------------
 -- Table structure for wa_member_district
