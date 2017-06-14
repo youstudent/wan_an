@@ -109,8 +109,10 @@ class Member extends \yii\db\ActiveRecord
             return null;
         }
         $son = $this->son($member_id);
-        $child = $this->child($member_id);
-        $group = $this->group($member_id);
+//        $child = $this->child($member_id);
+        $child = 1;
+//        $group = $this->group($member_id);
+        $group = 1;
         $data['child_num'] = $son;
         $data['group_num'] = $group?$group:0;
         $data['child'] = $child?0:$child;
@@ -133,21 +135,21 @@ class Member extends \yii\db\ActiveRecord
      * 区数量查询
      * @return int
      */
-    public function group($id)
+    public function group($id, $num =0)
     {
         $query = (new \yii\db\Query());
         $district = $query->select('district')->from(District::tableName())->where(['member_id' => $id, 'seat' => 1])->one();
 
         $query = (new \yii\db\Query());
-        $data = $query->from(District::tableName())->where(['district' => $district['district']])->all();
-        $num = 0;
+        $data = $query->select('member_id')->from(District::tableName())->where(['district' => $district['district']])->all();
+
         if (count($data) >= 40) {
-            $num ++;
+            $num++ ;
+            $data = array_splice($data,1);
             foreach ($data as $v) {
-                $this->group($v['member_id']);
+                $num = $this->group($v['member_id'], $num);
             }
         }
-
         return $num;
     }
 
@@ -155,21 +157,23 @@ class Member extends \yii\db\ActiveRecord
      * 挂靠总量查询
      * @return int
      */
-    public function child($id)
+    public function child($id, $num = 0)
     {
         $query = (new \yii\db\Query());
         $district = $query->select('district')->from(District::tableName())->where(['member_id' => $id, 'seat' => 1])->one();
+
         $query = (new \yii\db\Query());
-        $data = $query->from(District::tableName())->where(['district' => $district['district']])->all();
-        $num = 0;
-        $num += count($data)-1;
+        $data = $query->select('member_id')->from(District::tableName())->where(['district' => $district['district']])->all();
+
+        $num = count($data)-1;
+        $temp = 0;
         if (count($data) >= 40) {
+            $data = array_splice($data,13);
             foreach ($data as $v) {
-                $this->child($v['member_id']);
+                $temp += $this->child($v['member_id'], 0);
             }
         }
-
-        return $num;
+        return $num + $temp;
     }
     /**
      * 用户登录操作
