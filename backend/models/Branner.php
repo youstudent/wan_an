@@ -64,15 +64,15 @@ class Branner extends \yii\db\ActiveRecord
         }
 
         $this->img = UploadedFile::getInstance($this, 'img');
-        $path = '/public/upload/branner_imgs/';
         if ($this->img) {
-            if (!file_exists($path)) {
-//                    mkdir($path,'0777',true);
-                FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
-            }
+            $path = '/public/upload/branner_imgs/';
             $uniqid = uniqid();
             $save_path = '/upload/branner_imgs/' . $uniqid  . '.' . $this->img->extension; ;
             $path = $path . $uniqid . '.' . $this->img->extension;
+            $path_dir = dirname(Yii::getAlias('@webroot') . $path);
+            if (!is_dir($path_dir)) {
+                FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
+            }
             $this->img->saveAs(Yii::getAlias('@webroot') . $path);
             $this->img = $save_path;
         }
@@ -93,16 +93,15 @@ class Branner extends \yii\db\ActiveRecord
         $handle = UploadedFile::getInstance($this, 'img');
         if(isset($handle)){
             $this->img = UploadedFile::getInstance($this, 'img');
-            $path = '/public/upload/branner_imgs/';
             if ($this->img) {
-                $path = dirname(Yii::getAlias('@webroot') . $path);
-                if (!file_exists($path)) {
-//                    mkdir($path,'0777',true);
-                    FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
-                }
+                $path = '/public/upload/branner_imgs/';
                 $uniqid = uniqid();
                 $save_path = '/upload/branner_imgs/' . $uniqid  . '.' . $this->img->extension; ;
                 $path = $path . $uniqid . '.' . $this->img->extension;
+                $path_dir = dirname(Yii::getAlias('@webroot') . $path);
+                if (!is_dir($path_dir)) {
+                    FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
+                }
                 $this->img->saveAs(Yii::getAlias('@webroot') . $path);
                 $this->img = $save_path;
             }
