@@ -68,6 +68,7 @@ class GoodsController extends Controller
     {
         $model = new Goods();
         $GoodsImgModel = new GoodsImg();
+        $GoodsImgModel->scenario = 'add';
 
         if ($model->addGoods(Yii::$app->request->post())) {
             Yii::$app->session->setFlash('success', '添加商品成功!  ');
@@ -89,9 +90,9 @@ class GoodsController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $GoodsImgModel = new GoodsImg();
+        $GoodsImgModel = GoodsImg::findOne(['goods_id'=>$id]);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->updateGoods(Yii::$app->request->post())) {
             Yii::$app->session->setFlash('success', '商品信息更新成功!  ');
             return $this->redirect(['view', 'id' => $model->id]);
         } else {

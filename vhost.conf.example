@@ -1,0 +1,14 @@
+<VirtualHost *:80>
+    Header set Access-Control-Allow-Origin http://wantu3.cn
+    Header set Access-Control-Allow-Credentials true
+    DocumentRoot "E:\www\wan_an\api\web"
+    ServerName api.wantu3.ypxl
+    ServerAlias
+  <Directory "E:\www\wan_an\api\web">
+      Options FollowSymLinks ExecCGI
+      AllowOverride All
+      Order allow,deny
+      Allow from all
+      Require all granted
+  </Directory>
+</VirtualHost>

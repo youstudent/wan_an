@@ -74,7 +74,7 @@ class Helper{
     }
 
     /**
-     * 给会员添加奖金
+     * 给会员添加B奖金
      * @param $member_id
      * @param $num
      * @return bool
@@ -83,6 +83,21 @@ class Helper{
     {
         $model = Member::findOne(['id'=>$member_id]);
         $model->b_coin +=$num;
+        if(!$model->save(false)){
+            return false;
+        }
+        return true;
+    }
+    /**
+     * 给会员添加A奖金
+     * @param $member_id
+     * @param $num
+     * @return bool
+     */
+    public static function addMemberACoin($member_id, $num)
+    {
+        $model = Member::findOne(['id'=>$member_id]);
+        $model->a_coin +=$num;
         if(!$model->save(false)){
             return false;
         }

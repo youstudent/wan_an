@@ -28,6 +28,7 @@ class GoodsImg extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+            [['img_path'], 'required', 'message' => "请选择图片上传", 'on'=> 'add'],
             [['goods_id'], 'integer'],
             [['img_path'], 'string', 'max' => 255]
         ];
@@ -41,7 +42,7 @@ class GoodsImg extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'goods_id' => '模型名',
-            'img_path' => '存放路径',
+            'img_path' => '图片',
         ];
     }
 
@@ -71,7 +72,7 @@ class GoodsImg extends \yii\db\ActiveRecord
 
     */
 
-    public static function bindGoods($goods_id, $ids)
+    public static function bindGoods($goods_id, $ids, $is_reaplace = false)
     {
         $ids = trim($ids, ',');
         if(strpos($ids, ',') === false){
@@ -81,12 +82,14 @@ class GoodsImg extends \yii\db\ActiveRecord
         }else{
             $ids = explode(',', $ids);
         }
-       
-            $model = GoodsImg::findOne(['id'=>$ids]);
-            $model->goods_id = $goods_id;
-            $model->save();
-        
-        return true;
+        if($is_reaplace){
+            //先将以前的取消掉
+            Yii::$app->db->createCommand()->update(self::tableName(), ['goods_id'=>0], ['goods_id'=>$goods_id])->execute();
+        }
+        $model = GoodsImg::findOne(['id'=>$ids]);
+        $model->goods_id = $goods_id;
+        $model->save();
 
+        return true;
     }
 }

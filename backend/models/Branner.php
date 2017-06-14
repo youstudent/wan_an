@@ -3,6 +3,8 @@
 namespace backend\models;
 
 use Yii;
+use yii\helpers\FileHelper;
+use yii\web\UploadedFile;
 
 
 /**
@@ -15,7 +17,8 @@ use Yii;
  */
 class Branner extends \yii\db\ActiveRecord
 {
-    public static $status_options=[1=>'启用',0=>'禁用'];
+    public static $status_options = [1 => '启用', 0 => '禁用'];
+
     /**
      * @inheritdoc
      */
@@ -30,10 +33,8 @@ class Branner extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name','content','status'],'required' ],
-            [['img'], 'file', 'extensions' => 'jpg, png,gif,jpeg', 'mimeTypes' => 'image/jpeg, image/png',],
+            [['name', 'content', 'status'], 'required'],
             [['name'], 'string', 'max' => 30],
-            [['img'],'safe']
         ];
     }
 
@@ -44,11 +45,68 @@ class Branner extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'img'=>'图片',
+            'img' => '图片',
             'name' => '名称',
-            'status'=>'状态',
+            'status' => '状态',
             'content' => '文本',
         ];
     }
 
+
+    public function addBanner($post)
+    {
+        if (!$this->load($post)) {
+            return null;
+        }
+
+        if (!$this->validate()) {
+            return null;
+        }
+
+        $this->img = UploadedFile::getInstance($this, 'img');
+        $path = '/public/upload/branner_imgs/';
+        if ($this->img) {
+            if (!file_exists($path)) {
+//                    mkdir($path,'0777',true);
+                FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
+            }
+            $uniqid = uniqid();
+            $save_path = '/upload/branner_imgs/' . $uniqid  . '.' . $this->img->extension; ;
+            $path = $path . $uniqid . '.' . $this->img->extension;
+            $this->img->saveAs(Yii::getAlias('@webroot') . $path);
+            $this->img = $save_path;
+        }
+        $this->save();
+        return $this;
+    }
+
+    public function updateBanner($post)
+    {
+        if (!$this->load($post)) {
+            return null;
+        }
+
+        if (!$this->validate()) {
+            return null;
+        }
+
+        $handle = UploadedFile::getInstance($this, 'img');
+        if(isset($handle)){
+            $this->img = UploadedFile::getInstance($this, 'img');
+            $path = '/public/upload/branner_imgs/';
+            if ($this->img) {
+                if (!file_exists($path)) {
+//                    mkdir($path,'0777',true);
+                    FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
+                }
+                $uniqid = uniqid();
+                $save_path = '/upload/branner_imgs/' . $uniqid  . '.' . $this->img->extension; ;
+                $path = $path . $uniqid . '.' . $this->img->extension;
+                $this->img->saveAs(Yii::getAlias('@webroot') . $path);
+                $this->img = $save_path;
+            }
+        }
+        $this->save();
+        return $this;
+    }
 }

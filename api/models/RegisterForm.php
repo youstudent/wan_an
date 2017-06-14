@@ -174,7 +174,7 @@ class RegisterForm extends Member
         }
 
         //添加一个推荐人奖励-
-        $result = Helper::addMemberBCoin($this->referrer_id, Yii::$app->params['coin_type_2_money']);
+        $result = Helper::addMemberACoin($this->referrer_id, Yii::$app->params['coin_type_2_money']);
         if($result == false){
             $this->errorMsg = '添加分享人奖金失败';
             return false;
@@ -206,7 +206,7 @@ class RegisterForm extends Member
         $coin_money = Yii::$app->params['coin_type_2_money'];
         Helper::saveBonusLog($referrer_id, 1, 2, $coin_money);
         //给推荐人发放奖金
-        if(!Helper::addMemberBCoin($referrer_id, $coin_money)){
+        if(!Helper::addMemberACoin($referrer_id, $coin_money)){
             $this->errorMsg = '分享奖金添加失败';
             return false;
         }
@@ -231,7 +231,8 @@ class RegisterForm extends Member
            $this->addError('b_coin', '金种子数量不足');
            return false;
        }
-       $member->a_coin -= $this->a_coin + 5;
+       $member->a_coin -= $this->a_coin;
+       $member->a_coin += 5;
        $member->b_coin -= $this->b_coin;
        if($member->save(false) == false){
            $this->errorMsg = '操作人信息更新失败';
@@ -325,10 +326,10 @@ class RegisterForm extends Member
 
             //如果新增的会员，在上级的区里面，就没得 见点奖
             if( !($this->checkMemberInMemberDistrict($this->member_id, $referrer_id) && $member_id == $referrer_id) ){
-                //给上级添加挂靠奖
+                //给上级添加挂靠奖A
                 $coin_money = Yii::$app->params['coin_type_1_money'];
                 Helper::saveBonusLog($member_id, 1, 1, $coin_money, 0);
-                if(!Helper::addMemberBCoin($member_id, $coin_money)){
+                if(!Helper::addMemberACoin($member_id, $coin_money)){
                     $this->errorMsg = '绩效奖金添加失败';
                     return false;
                 }

@@ -3,6 +3,8 @@
 namespace backend\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
 
 
 /**
@@ -17,6 +19,8 @@ class Goods extends \yii\db\ActiveRecord
 {
     //暂存图片的id
     public $img_ids;
+
+    public $errorMsg;
     /**
      * @inheritdoc
      */
@@ -31,7 +35,8 @@ class Goods extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['price'], 'number'],
+            [['price', 'name'], 'required'],
+            [['price'], 'integer'],
             [['describe'], 'string'],
             [['name'], 'string', 'max' => 30],
         ];
@@ -81,20 +86,61 @@ class Goods extends \yii\db\ActiveRecord
         if(!$this->load($post)){
             return null;
         }
+
         if(!$this->validate()){
             return null;
         }
-
-        if(!isset($post['GoodsImg']['img_path']) || empty($post['GoodsImg']['img_path'])){
-            $this->addError('img_ids', '请先上传商品图片');
+        //同步上传逻辑,处理图片
+        $upload = new Upload();
+        $img_id = $upload->uploadGoodsImgs(null);
+        if(!isset($img_id)){
+            $this->errorMsg = '图片获取失败';
             return null;
         }
         if(!$this->save()){
-            $this->addError('name', '保存失败');
+            $this->errorMsg = '保存失败';
+            return null;
         }
         //更新上传文件
-        GoodsImg::bindGoods($this->id, $post['GoodsImg']['img_path']);
+        GoodsImg::bindGoods($this->id, $img_id);
         return $this->id ? $this : null;
+    }
+    public function updateGoods($post)
+    {
+        if(!$this->load($post)){
+            return null;
+        }
+
+        if(!$this->validate()){
+            return null;
+        }
+        //同步上传逻辑,处理图片 - 没有图片上传的情况
+        $GoodsImg = new GoodsImg();
+        $handle = UploadedFile::getInstance($GoodsImg, 'img_path');
+        if(!isset($handle)){
+            if(!$this->save()){
+                $this->errorMsg = '保存失败';
+                return null;
+            }
+            return $this;
+        }
+
+        $upload = new Upload();
+        $img_id = $upload->uploadGoodsImgs(null);
+        if(!isset($img_id)){
+            $this->errorMsg = '图片获取失败';
+            return null;
+        }
+        //更新上传文件
+        GoodsImg::bindGoods($this->id, $img_id, true);
+
+        if(!$this->save()){
+            $this->errorMsg = '保存失败';
+            return null;
+        }
+        return $this;
+
+
     }
 
     public function getGoodsImg()
@@ -104,7 +150,7 @@ class Goods extends \yii\db\ActiveRecord
 
     public function getGoodsImgs($goods_id)
     {
-        $imgs = GoodsImg::find()->where(['goods_id'=>$goods_id])->select('img_path')->orderBy('id')->column();
+        $imgs = GoodsImg::find()->where(['goods_id'=>$goods_id])->select('img_path')->limit(1)->orderBy('id')->column();
 
         foreach($imgs as &$img){
             $img = Yii::$app->params['img_domain'] . $img;

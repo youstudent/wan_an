@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50553
 File Encoding         : 65001
 
-Date: 2017-06-13 16:44:58
+Date: 2017-06-14 14:13:19
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -287,6 +287,7 @@ INSERT INTO `wa_auth_item` VALUES ('/record/parsing', '2', null, null, null, '14
 INSERT INTO `wa_auth_item` VALUES ('/record/parsing-log', '2', null, null, null, '1495680408', '1495680408');
 INSERT INTO `wa_auth_item` VALUES ('/record/sample', '2', null, null, null, '1495680412', '1495680412');
 INSERT INTO `wa_auth_item` VALUES ('/record/update', '2', null, null, null, '1495680401', '1495680401');
+INSERT INTO `wa_auth_item` VALUES ('/tools/*', '2', null, null, null, '1497420759', '1497420759');
 INSERT INTO `wa_auth_item` VALUES ('RBAC管理', '2', null, null, null, '1495557434', '1495557434');
 INSERT INTO `wa_auth_item` VALUES ('管理员', '1', '具有后台管理员的角色', null, null, '1495553016', '1495767296');
 INSERT INTO `wa_auth_item` VALUES ('财务员', '1', '负责审核提现申请的角色', null, null, '1495553314', '1495553314');
@@ -390,6 +391,7 @@ INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/member/*');
 INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/outline/*');
 INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/record/*');
 INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/record/delete');
+INSERT INTO `wa_auth_item_child` VALUES ('管理员', '/tools/*');
 INSERT INTO `wa_auth_item_child` VALUES ('管理员', 'RBAC管理');
 
 -- ----------------------------

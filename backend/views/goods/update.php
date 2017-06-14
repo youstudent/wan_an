@@ -68,13 +68,13 @@ JS;
                         ],
                         'uploadAsync' => true,
                         // 最少上传的文件个数限制
-                        'minFileCount' => 2,
+                        'minFileCount' => 1,
                         // 最多上传的文件个数限制
-                        'maxFileCount' => 3,
+                        'maxFileCount' => 1,
                         // 是否显示移除按钮，指input上面的移除按钮，非具体图片上的移除按钮
-                        'showRemove' => true,
+                        'showRemove' => false,
                         // 是否显示上传按钮，指input上面的上传按钮，非具体图片上的上传按钮
-                        'showUpload' => true,
+                        'showUpload' => false,
                         //是否显示[选择]按钮,指input上面的[选择]按钮,非具体图片上的上传按钮
                         'showBrowse' => true,
                         // 展示图片区域是否可点击选择多文件
@@ -95,6 +95,7 @@ JS;
                         "fileuploaded" => $fileuploadedJs,
                     ],
                 ]) ?>
+                <?= $form->field($GoodsImgModel, 'img_path')->hiddenInput()->label(false) ?>
 
                 <?= $form->field($model, 'describe')->textarea(['rows' => 6]) ?>
             </div>
