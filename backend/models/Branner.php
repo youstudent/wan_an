@@ -95,6 +95,7 @@ class Branner extends \yii\db\ActiveRecord
             $this->img = UploadedFile::getInstance($this, 'img');
             $path = '/public/upload/branner_imgs/';
             if ($this->img) {
+                $path = dirname(Yii::getAlias('@webroot') . $path);
                 if (!file_exists($path)) {
 //                    mkdir($path,'0777',true);
                     FileHelper::createDirectory($path, $mode = 0775, $recursive = true);
