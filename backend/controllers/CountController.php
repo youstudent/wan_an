@@ -57,7 +57,7 @@ class CountController extends Controller
         //查询  扣除金种子的数量
         $seed2 = Bonus::find()->select("sum(num),type,coin_type");
         $search->search($seed2);
-        $num_seed2 = $seed->andWhere(['coin_type'=>2,'type'=>7])->asArray()->all();
+        $num_seed2 = $seed2->andWhere(['coin_type'=>2,'type'=>7])->asArray()->all();
          //查询 注册人的金种子    总业绩=  注册人数x900(注册成功会扣除400的金果和500的金种子)
         $b_coin = Bonus::find()->select("sum(num),type,coin_type");
         $search->search($b_coin);

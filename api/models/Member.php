@@ -147,10 +147,9 @@ class Member extends \yii\db\ActiveRecord
             $num++ ;
             $data = array_splice($data,1);
             foreach ($data as $v) {
-                $this->group($v['member_id'], $num);
+                $num = $this->group($v['member_id'], $num);
             }
         }
-
         return $num;
     }
 
@@ -162,17 +161,19 @@ class Member extends \yii\db\ActiveRecord
     {
         $query = (new \yii\db\Query());
         $district = $query->select('district')->from(District::tableName())->where(['member_id' => $id, 'seat' => 1])->one();
+
         $query = (new \yii\db\Query());
         $data = $query->select('member_id')->from(District::tableName())->where(['district' => $district['district']])->all();
-        $num += count($data)-1;
+
+        $num = count($data)-1;
+        $temp = 0;
         if (count($data) >= 40) {
-            $data = array_splice($data,1);
+            $data = array_splice($data,13);
             foreach ($data as $v) {
-                $this->group($v['member_id'], $num);
+                $temp += $this->child($v['member_id'], 0);
             }
         }
-
-        return $num;
+        return $num + $temp;
     }
     /**
      * 用户登录操作

@@ -135,6 +135,9 @@ class MemberController extends ApiController
     {
         $model = new Fruiter();
         if ($fruiter = $model->getFruiter()) {
+            if (!$fruiter['img_path']) {
+                return $this->jsonReturn(0, '你的果树还没有种植');
+            }
             return $this->jsonReturn(1, 'success', $fruiter);
         }
         return $this->jsonReturn(0, '你还没有认购果树');
