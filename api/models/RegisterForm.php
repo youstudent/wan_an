@@ -17,6 +17,7 @@ use common\models\Tree;
 use Yii;
 use yii\db\Exception;
 use yii\helpers\ArrayHelper;
+use yii\helpers\FileHelper;
 use yii\swiftmailer\Mailer;
 
 class RegisterForm extends Member
@@ -27,6 +28,8 @@ class RegisterForm extends Member
     public $referrer_id;
     public $action_member_id;
     public $re_password;
+
+    protected $transaction;
 
 
 
@@ -73,9 +76,31 @@ class RegisterForm extends Member
         }
     }
 
+    /**
+     * 解锁
+     * @return bool
+     */
+    protected function unLock()
+    {
+        $key = Yii::$app->params['lock_file_key'];
+        return  Yii::$app->cache->set($key, 0);
+    }
+
+    /**
+     * 检查锁
+     * @return bool
+     */
+    protected function checkLock()
+    {
+        $key = Yii::$app->params['lock_file_key'];
+        if(Yii::$app->cache->get($key)){
+            return false;
+        }
+        Yii::$app->cache->set($key, 1);
+        return true;
+    }
     public function register($post, $action_member_id)
     {
-        $action_member_id = 1;
         //将推荐的vip_number转换成member_id
         $post['referrer_id'] = $this->vipNumber2MemberId($post['referrer_id']);
 
@@ -84,61 +109,68 @@ class RegisterForm extends Member
             return false;
         }
 
-
         if($this->a_coin + $this->b_coin != 900){
             $this->errorMsg = '注入的金豆和金种子和必须等于900';
             return false;
         }
 
-        //判断操作人的金钱是不是够
-        $result = $this->rewardActionMember($action_member_id);
-        if($result == false){
-            $this->errorMsg = current($this->getFirstErrors());
-            return false;
-        }
-        //$transaction = Yii::$app->db->beginTransaction();
-
-        //检查有没有退网的空位
-        $blank_member = $this->getBlankMemberInfo();
-        if(isset($blank_member) && !empty($blank_member)){
-            //这里进行继承会员
-            return $this->inheritanceMember($post, $blank_member);
-        }
-
-        //添加会员
-        $result = $this->addMember($post);
-        if ($result == false) {
-            $this->errorMsg = '添加会员失败';
-            //$transaction->rollBack();
-            return false;
-        }
-        $this->member_id = $result->id;
-        Helper::shareMemberLog($this->referrer_id, $this->member_id);
-
-
-
-
-        //给分享人添加区数和奖金记录
-        $result = $this->setIncMemberShare($this->referrer_id);
-        if($result == false){
-            $this->errorMsg = '添加分享人区奖金失败';
+        if($this->checkLock() == false){
+            $this->errorMsg = '后台正在进行注册操作，请稍后再试';
             return false;
         }
 
-        //step1 . 判断推荐人是否区满
-        $result = $this->step1($this->referrer_id);
-        if ($result == false) {
-            //$transaction->rollBack();
-            return false;
-        }
-        try {
-            //$transaction->commit();
+        $this->transaction = Yii::$app->db->beginTransaction();
+        try{
+            //判断操作人的金钱是不是够
+            $result = $this->rewardActionMember($action_member_id);
+            if($result == false){
+                $this->errorMsg = current($this->getFirstErrors());
+                $this->transaction->rollBack();
+                return false;
+            }
+
+
+            //检查有没有退网的空位
+            $blank_member = $this->getBlankMemberInfo();
+            if(isset($blank_member) && !empty($blank_member)){
+                //这里进行继承会员
+                return $this->inheritanceMember($post, $blank_member);
+            }
+
+            //添加会员
+            $result = $this->addMember($post);
+            if ($result == false) {
+                $this->errorMsg = '添加会员失败';
+                //$transaction->rollBack();
+                $this->transaction->rollBack();
+                return false;
+            }
+            $this->member_id = $result->id;
+            Helper::shareMemberLog($this->referrer_id, $this->member_id);
+
+            //给分享人添加区数和奖金记录
+            $result = $this->setIncMemberShare($this->referrer_id);
+            if($result == false){
+                $this->errorMsg = '添加分享人区奖金失败';
+                $this->transaction->rollBack();
+                return false;
+            }
+
+            //step1 . 判断推荐人是否区满
+            $result = $this->step1($this->referrer_id);
+            if ($result == false) {
+                //$transaction->rollBack();
+                $this->transaction->rollBack();
+                return false;
+            }
+            $this->transaction->commit();
+            $this->unLock();
             return true;
-        } catch (Exception $e) {
-            //$transaction->rollBack();
+        }catch(Exception $exception){
+            $this->transaction->rollBack();
+            $this->unLock();
             return false;
         }
-
     }
 
     /**
@@ -619,11 +651,10 @@ class RegisterForm extends Member
     public function addMember($post)
     {
         $model = new Member();
-        $model->name = $post['name'];
+        $model->load($post, '');
         $model->created_at = time();
         $model->updated_at = time();
         $model->parent_id = $post['referrer_id'];
-        $model->mobile = $post['mobile'];
         $model->vip_number = $this->vip_number = Member::find()->max('vip_number') + 1;
         $model->password = Yii::$app->security->generatePasswordHash($this->password);
         return $model->save(false) ? $model : null;
