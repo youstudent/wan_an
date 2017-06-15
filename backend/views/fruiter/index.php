@@ -77,10 +77,16 @@ $this->params['breadcrumbs'][] = '果树管理列表';
             'template'=> '{update} {delete}',
             'buttons' => [
                 'update' => function ($url, $model, $key) {
-                    return Html::a(Html::tag('span', '编辑', ['class' => "btn btn-xs btn-success"]), ['fruiter/update', 'id'=>$model->id]);
+                    if ($model->status == 1) {
+                        return '';
+                    }
+                    return Html::a(Html::tag('span', '添加果树图片', ['class' => "btn btn-xs btn-success"]), ['fruiter/update', 'id'=>$model->id, 'state' => 0]);
                 },
-                'delete' => function ($url, $model, $key) {
-                    return Html::a(Html::tag('span', '删除', ['class' => "btn btn-xs btn-danger"]), ['fruiter/delete', 'id'=>$model->id]);
+                'delete' =>  function ($url, $model, $key) {
+                    if ($model->status == 0) {
+                        return '';
+                    }
+                    return Html::a(Html::tag('span', '移除果树图片', ['class' => "btn btn-xs btn-danger"]), ['fruiter/delete', 'id'=>$model->id, 'state' => 1]);
                 },
             ]
         ],

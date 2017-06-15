@@ -103,7 +103,7 @@ JS;
 
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
-                <?= Html::submitButton($model->isNewRecord ? '添加' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                <?= Html::submitButton($model->isNewRecord ? '添加果树图片' : '添加果树图片', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
             </div>
         </div>
 
