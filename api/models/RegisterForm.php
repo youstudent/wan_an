@@ -93,14 +93,16 @@ class RegisterForm extends Member
     protected function checkLock()
     {
         $key = Yii::$app->params['lock_file_key'];
-        if(Yii::$app->cache->get($key)){
+        $lock = Yii::$app->cache->get($key);
+        if($lock){
             return false;
         }
-        Yii::$app->cache->set($key, 1);
+        Yii::$app->cache->set($key, 1, 3000);
         return true;
     }
     public function register($post, $action_member_id)
     {
+        //$action_member_id=1;
         //将推荐的vip_number转换成member_id
         $post['referrer_id'] = $this->vipNumber2MemberId($post['referrer_id']);
 
@@ -508,34 +510,34 @@ class RegisterForm extends Member
     public function addReferrerChildDistrict($district)
     {
         $root_member = $this->byDistrictsGetMemberId($district, [1]);
-
+        //获取区主人。并给当前区加一个普通区记录
         $root_member_info = Member::findOne(['id'=>$root_member['member_id']]);
+        Helper::memberDistrictLog($root_member_info->id, $district, 0);
 
-        if(isset($root_member_info) && !empty($root_member_info)){
-            //判断是当前会员是这个爹的几个会员
-            $is_extra = 0;
-            $share_logs = ShareLog::find()->where(['referrer_id'=>$root_member_info->id])->orderBy(['created_at'=> SORT_ASC])->all();
-            if(isset($share_logs) && !empty($share_logs)){
-                foreach($share_logs as $key => $val)
-                {
-                    if($val['member_id'] == $root_member_info->id && $key > 2){
-                        $is_extra = 1;
-                        break;
-                    }
-                }
-            }
-            Helper::memberDistrictLog($root_member_info->id, $district, $is_extra);
-            //执行额外分享逻辑
-            if($is_extra){
-                $this->addReferrerDistrictBonus($root_member_info->id);
-            }
+        //判断区主人的推荐人是否存在
+        if(!$root_member_info->parent_id){
             return true;
         }
-        $this->errorMsg = '查找根会员失败';
-        return false;
+
+        $is_extra = 0;
+        $share_logs = ShareLog::find()->where(['referrer_id'=>$root_member_info->parent_id])->orderBy(['created_at'=> SORT_ASC])->all();
+        if(isset($share_logs) && !empty($share_logs)){
+            foreach($share_logs as $key => $val)
+            {
+                if($val['member_id'] == $root_member_info->id && $key > 2){
+                    $is_extra = 1;
+                    break;
+                }
+            }
+        }
+        Helper::memberDistrictLog($root_member_info->parent_id, $district, $is_extra);
+        //执行额外分享逻辑
+        if($is_extra){
+            $this->addReferrerDistrictBonus($root_member_info->parent_id);
+        }
+        return true;
 
     }
-
     /**
      * 获取满足换位的会员
      * @param $member_id
@@ -572,11 +574,14 @@ class RegisterForm extends Member
     {
         $count = MemberDistrict::find()->where(['referrer_id'=>$member_id, 'is_extra'=>1])->count();
         if($count == 1){
+            Helper::addMemberACoin($member_id, 300);
             return Helper::saveBonusLog($member_id, 1, 3, 300, 0, ['note'=> '额外分享第4个区']);
         }
         if($count == 2){
+            Helper::addMemberACoin($member_id, 600);
             return Helper::saveBonusLog($member_id, 1, 3, 600, 0, ['note'=> '额外分享第5个区']);
         }else{
+            Helper::addMemberACoin($member_id, 900);
             return Helper::saveBonusLog($member_id, 1, 3, 900, 0, ['note'=> '额外分享6个区,几6个区以上']);
         }
     }
