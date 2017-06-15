@@ -101,6 +101,7 @@ class RegisterForm extends Member
     }
     public function register($post, $action_member_id)
     {
+        $action_member_id=1;
         //将推荐的vip_number转换成member_id
         $post['referrer_id'] = $this->vipNumber2MemberId($post['referrer_id']);
 
@@ -126,6 +127,7 @@ class RegisterForm extends Member
             if($result == false){
                 $this->errorMsg = current($this->getFirstErrors());
                 $this->transaction->rollBack();
+                $this->unLock();
                 return false;
             }
 
@@ -143,6 +145,7 @@ class RegisterForm extends Member
                 $this->errorMsg = '添加会员失败';
                 //$transaction->rollBack();
                 $this->transaction->rollBack();
+                $this->unLock();
                 return false;
             }
             $this->member_id = $result->id;
@@ -153,6 +156,7 @@ class RegisterForm extends Member
             if($result == false){
                 $this->errorMsg = '添加分享人区奖金失败';
                 $this->transaction->rollBack();
+                $this->unLock();
                 return false;
             }
 
@@ -161,6 +165,7 @@ class RegisterForm extends Member
             if ($result == false) {
                 //$transaction->rollBack();
                 $this->transaction->rollBack();
+                $this->unLock();
                 return false;
             }
             $this->transaction->commit();
@@ -202,6 +207,7 @@ class RegisterForm extends Member
 
         if(!$blank_member->save(false)){
             $this->errorMsg = '继承失败';
+            $this->unLock();
             return false;
         }
 
@@ -209,6 +215,7 @@ class RegisterForm extends Member
         $result = Helper::addMemberACoin($this->referrer_id, Yii::$app->params['coin_type_2_money']);
         if($result == false){
             $this->errorMsg = '添加分享人奖金失败';
+            $this->unLock();
             return false;
         }
         return $this;
