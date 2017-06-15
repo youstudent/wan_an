@@ -73,17 +73,26 @@ class Bonus extends \yii\db\ActiveRecord
         // 判断调用的type类型
         // 全部
         if ($type == 0) {
-            $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>[1,2,3,5]])->all();
+            $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())
+                    ->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>[1,2,3,5]])
+                    ->orderBy(['created_at' => 'desc'])
+                    ->all();
         }
 
         // 绩效
         if ($type == 1) {
-            $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>1])->all();
+            $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())
+                    ->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>1])
+                    ->orderBy(['created_at' => 'desc'])
+                    ->all();
         }
 
         // 分享
         if ($type == 2) {
-            $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>2])->all();
+            $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())
+                    ->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>2])
+                    ->orderBy(['created_at' => 'desc'])
+                    ->all();
         }
 
         if(!isset($bonus) || empty($bonus)){

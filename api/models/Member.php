@@ -109,10 +109,10 @@ class Member extends \yii\db\ActiveRecord
             return null;
         }
         $son = $this->son($member_id);
-//        $child = $this->child($member_id);
-        $child = 1;
-//        $group = $this->group($member_id);
-        $group = 1;
+        $child = $this->child($member_id);
+//        $child = 1;
+        $group = $this->group($member_id);
+//        $group = 1;
         $data['child_num'] = $son;
         $data['group_num'] = $group?$group:0;
         $data['child'] = $child?0:$child;
@@ -229,7 +229,7 @@ class Member extends \yii\db\ActiveRecord
     {
         // 获取用户id
         $session = Yii::$app->session->get('member');
-        $member_id = $session['member_id'];
+        $member_id = $session['vip_number'];
 
         // 改变状态值
         $model = Member::findOne($member_id);
@@ -244,7 +244,7 @@ class Member extends \yii\db\ActiveRecord
 
         // 添加退网记录
         $outModel = new Outline();
-        $outModel->member_id = $model->id;
+        $outModel->member_id = $model->vip_number;
         $outModel->created_at = time();
         $outModel->updated_at = $model->created_at;
         $ext_data= ['name'=>$model->name, 'mobile'=>$model->mobile, 'vip_number'=>$model->vip_number];
