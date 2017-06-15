@@ -72,7 +72,7 @@ class FruiterController extends Controller
         $FruiterImgModel = new FruiterImg();
 
         if ($model->addFruiter(Yii::$app->request->post())) {
-            Yii::$app->session->setFlash('success', '添加果树成功!  ');
+            Yii::$app->session->setFlash('success', '添加果树图片成功!  ');
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -114,8 +114,10 @@ class FruiterController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-        Yii::$app->session->setFlash('danger', '删除成功!');
+        $model = $this->findModel($id);
+        if ($model->delFruiter($id)) {
+            Yii::$app->session->setFlash('danger', '移除果树图片成功!');
+        }
 
         return $this->redirect(['index']);
     }

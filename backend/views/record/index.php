@@ -67,7 +67,7 @@ $this->params['breadcrumbs'][] = '财务管理列表';
         
         ],
         [
-            'attribute' => 'coin',
+            'attribute' => 'total',
             'mergeHeader'=>true,
 
         ],
@@ -158,7 +158,7 @@ $this->params['breadcrumbs'][] = '财务管理列表';
                         'aria-label' => Yii::t('yii', '通过'),
                         'data-pjax' => '1',
                         'class'=>"btn btn-xs btn-success",
-                        'post=msg'=>'你确定要启用吗?',
+                        'post=msg'=>'你确定要通过吗?',
                         'post_url'=>1,
                     ];
                     if ($model->status == 0) {

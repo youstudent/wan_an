@@ -34,7 +34,7 @@ class Record extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['member_id', 'created_at', 'updated_at', 'status'], 'integer'],
+            [['member_id', 'created_at', 'updated_at', 'status', 'total'], 'integer'],
             [['coin'], 'number'],
         ];
     }
@@ -52,7 +52,7 @@ class Record extends \yii\db\ActiveRecord
             'member.deposit_bank'=>'开户行',
             'member.bank_account'=>'银行账号',
             'created_at' => '申请时间',
-            'coin' => '申请金额',
+            'total' => '申请金额',
             'updated_at' => '处理时间',
             'status' => '状态',
         ];
@@ -72,12 +72,14 @@ class Record extends \yii\db\ActiveRecord
      */
     public static function pass($id,$ids){
         $Helper = new Helper();
-        $model=self::findOne(['id'=>$id]);
+        $model = Record::findOne(['id'=>$id]);
+
         if($ids==2){
           $member=Member::findOne(['id'=>$model->member_id]);
           $a_coin=$member->a_coin;
-          $member->a_coin=$a_coin+$model->total;
-          if($member->save()){
+          $member->a_coin=$a_coin + $model->total;
+
+          if($member->save(false)){
               // 申请拒绝
               $Helper->pool($model->member_id,1,9,$model->total);
           }

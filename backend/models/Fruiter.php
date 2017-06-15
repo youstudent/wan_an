@@ -148,4 +148,16 @@ class Fruiter extends \yii\db\ActiveRecord
 
         return $imgs;
     }
+
+    public function delFruiter($id)
+    {
+        $model = Fruiter::findOne($id);
+        $FruiterImgModel = FruiterImg::findOne(['fruiter_id'=>$id]);
+        $FruiterImgModel->delete();
+        $model->status = 0;
+        if ($model->save(false)) {
+            return true;
+        }
+        return false;
+    }
 }
