@@ -16,12 +16,12 @@ $this->params['breadcrumbs'][] = '会员管理列表';
 <div class="member-index">
 
     <div class="page-header">
-    
+
     </div>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 
-<?php 
+<?php
      $toolbars = [
         ['content' =>
            // Html::a('<i class="fa fa-file-excel-o"></i>', ['member/parsing'], ['type' => 'button', 'title' => '刷新 ' . $this->title, 'class' => 'btn btn-danger']) . ' ' .
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
     $columns = [
 //        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
         [
-            'attribute' => 'id',
+            'attribute' => 'vip_number',
             'headerOptions' => ['width' => '100'],
         ],
         [
@@ -206,5 +206,5 @@ $this->params['breadcrumbs'][] = '会员管理列表';
     ]);
 
     DynaGrid::end();
-?>   
+?>
 </div>

@@ -83,7 +83,7 @@ class Deposit extends \yii\db\ActiveRecord
     public function deposit($data)
     {
         $id = $data['Deposit']['member_id'];
-        $result = Member::findOne(['id' => $id]);
+        $result = Member::findOne(['vip_number' => $id]);
         if ($data['Deposit']['num'] < 0) {
             Yii::$app->session->setFlash('error', '金额不能为负');
             return null;

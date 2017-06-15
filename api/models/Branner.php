@@ -61,7 +61,7 @@ class Branner extends \yii\db\ActiveRecord
         foreach ($model as &$v) {
             $v['img'] = Yii::$app->params['img_domain'].$v['img'];
         }
-        $title = Announcements::find()->select(['title'])->orderBy('created_at DESC')->limit(1)->all();
+        $title = Announcements::find()->where(['status'=>])->select(['title'])->orderBy('created_at DESC')->limit(1)->all();
 
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
