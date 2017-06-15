@@ -101,7 +101,6 @@ class RegisterForm extends Member
     }
     public function register($post, $action_member_id)
     {
-        $action_member_id=1;
         //将推荐的vip_number转换成member_id
         $post['referrer_id'] = $this->vipNumber2MemberId($post['referrer_id']);
 
