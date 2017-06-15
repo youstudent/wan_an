@@ -73,8 +73,8 @@
             uploadBatch: 'batch file upload',
             uploadExtra: 'form data upload'
         },
-        dropZoneTitle: '拖拽文件到这里 &hellip;<br>支持多文件同时上传',
-        dropZoneClickTitle: '<br>(或点击{files}按钮选择文件)',
+        dropZoneTitle: '点击选择按钮选择文件&hellip;<br>仅支持上传一个图片',
+        dropZoneClickTitle: '<br>(点击{files}按钮选择文件)',
         fileActionSettings: {
             removeTitle: '删除文件',
             uploadTitle: '上传文件',
