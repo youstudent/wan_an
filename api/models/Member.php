@@ -115,7 +115,7 @@ class Member extends \yii\db\ActiveRecord
 //        $group = 1;
         $data['child_num'] = $son;
         $data['group_num'] = $group?$group:0;
-        $data['child'] = $child?0:$child;
+        $data['child'] = $child?$child:0;
 
         return $data;
     }
