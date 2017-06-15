@@ -55,13 +55,11 @@ class Branner extends \yii\db\ActiveRecord
     public function branner()
     {
         $model = self::find()->where(['status'=>1])->select(['id', 'img'])->orderBy('id DESC')->limit(3)->all();
-        if ($model === false || $model==null) {
-            return false;
-        }
+
         foreach ($model as &$v) {
             $v['img'] = Yii::$app->params['img_domain'].$v['img'];
         }
-        $title = Announcements::find()->select(['title'])->orderBy('created_at DESC')->limit(1)->all();
+        $title = Announcements::find()->where(['status'=>1])->select(['title'])->orderBy('created_at DESC')->limit(1)->all();
 
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];

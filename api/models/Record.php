@@ -59,7 +59,7 @@ class Record extends \yii\db\ActiveRecord
     {
        // $id = $data['id'];//模拟数据
         $session = Yii::$app->session->get('member');
-        $id = $session['member_id'];
+        $id = $session['vip_number'];
         $re = Record::findOne(['member_id' => $id, 'date' => date('Y-m-d')]);
         if ($re !== null) {
             $message = '每天只能提现一次';
@@ -84,7 +84,7 @@ class Record extends \yii\db\ActiveRecord
             $this->addError('message', '必须直推至少一人才能提现');
             return false;
         };
-        $result = Member::findOne(['id' => $id]);
+        $result = Member::findOne(['vip_number' => $id]);
         if ($result->a_coin < $data['coin']) {
             $this->addError('code', 0);
             $this->addError('message', '你的余额不足');
@@ -118,9 +118,12 @@ class Record extends \yii\db\ActiveRecord
     public function index()
     {
         $session = Yii::$app->session->get('member');
-        $member_id = $session['member_id'];
+        $member_id = $session['vip_number'];
         //根据会员id 查询用户 申请记录数据
-        $model = self::find()->select(['id', 'member_id', 'created_at', 'total', 'status'])->where(['member_id' => $member_id])->all();
+        $model = self::find()->select(['id', 'member_id', 'created_at', 'total', 'status'])
+                ->where(['vip_number' => $member_id])
+                ->orderBy(['created_at' => 'desc'])
+                ->all();
         if ($model == false) {
             $this->addError('code', 0);
             $this->addError('message', '没有提现记录');
@@ -137,8 +140,8 @@ class Record extends \yii\db\ActiveRecord
     //当前会员金果
     public function coin(){
         $session = Yii::$app->session->get('member');
-        $member_id = $session['member_id'];
-        $data = \api\models\Member::find()->select('a_coin')->where(['id'=>$member_id])->all();
+        $member_id = $session['vip_number'];
+        $data = \api\models\Member::find()->select('a_coin')->where(['vip_number'=>$member_id])->all();
         if ($data == false || $data == null){
             $this->addError('code', 0);
             $this->addError('message', '用户信息不存在');

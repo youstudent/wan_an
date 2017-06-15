@@ -58,10 +58,11 @@ class Give extends \yii\db\ActiveRecord
     //金果和金种子的赠送
     public function give($data){
         $session = Yii::$app->session->get('member');
-        $member_id = $session['member_id'];
-        $member = Member::findOne(['id' => $member_id]);
+        $member_id = $session['vip_number'];
+
+        $member = Member::findOne(['vip_number' => $member_id]);
         $result = Member::findOne(['parent_id' => $member_id]);
-        $give_member  = Member::findOne(['id'=>$data['give_member_id']]);
+        $give_member  = Member::findOne(['vip_number'=>$data['give_member_id']]);
         if ($data['give_coin']<=0){
             $this->addError('message','赠送金果和金种子必须大于0');
             return false;
@@ -112,7 +113,7 @@ class Give extends \yii\db\ActiveRecord
                     $new_ext_data = serialize($ext_data);
                     $Helper= new Helper();
                     if ($Helper->pool($member_id,$data['coinType'],8,$data['give_coin'],null,$new_ext_data)===false
-                        || $Helper->pool($give_member,$data['coinType'],11,$data['give_coin'],null,$new_ext_data)===false){
+                        || $Helper->pool($data['give_member_id'],$data['coinType'],11,$data['give_coin'],null,$new_ext_data)===false){
                         return false;
                     }
 
@@ -129,8 +130,8 @@ class Give extends \yii\db\ActiveRecord
     //赠送记录
     public function gives(){
         $session = Yii::$app->session->get('member');
-        $member_id = $session['member_id'];
-        $data = Give::find()->where(['member_id'=>$member_id])->all();
+        $member_id = $session['vip'];
+        $data = Give::find()->where(['member_id'=>$member_id])->orderBy(['created_at' => 'desc'])->all();
         if ($data==false || $data==null){
             $this->addError('message','没有赠送数据');
             return false;
@@ -146,7 +147,7 @@ class Give extends \yii\db\ActiveRecord
     public function gain(){
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
-        $data = Give::find()->where(['give_member_id'=>$member_id])->all();
+        $data = Give::find()->where(['give_member_id'=>$member_id])->orderBy(['created_at' => 'desc'])->all();
         if ($data==false || $data==null){
             $this->addError('message','没有获赠送数据');
             return false;
