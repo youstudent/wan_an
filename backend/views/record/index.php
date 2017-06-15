@@ -181,7 +181,7 @@ $this->params['breadcrumbs'][] = '财务管理列表';
         ],
         
         [
-           'class' => 'kartik\grid\CheckboxColumn',
+//           'class' => 'kartik\grid\CheckboxColumn',
         ],
     ];
     
