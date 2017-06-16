@@ -60,7 +60,7 @@ class Record extends \yii\db\ActiveRecord
        // $id = $data['id'];//模拟数据
         $session = Yii::$app->session->get('member');
         $id = $session['member_id'];
-$id = 1;
+
         $re = Record::findOne(['member_id' => $id, 'date' => date('Y-m-d')]);
         if ($re !== null) {
             $message = '每天只能提现一次';
