@@ -625,7 +625,7 @@ CREATE TABLE `wa_member_district` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `member_id` int(11) DEFAULT NULL COMMENT '会员id',
   `district` int(11) DEFAULT NULL COMMENT '区id',
-  `is_ extra` tinyint(1) DEFAULT '0' COMMENT '是否是本身39个会员形成的区；1是 0否',
+  `is_extra` tinyint(1) DEFAULT '0' COMMENT '是否是本身39个会员形成的区；1是 0否',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='会员直推区表';
 

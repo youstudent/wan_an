@@ -572,7 +572,7 @@ class RegisterForm extends Member
      */
     public function addReferrerDistrictBonus($member_id)
     {
-        $count = MemberDistrict::find()->where(['referrer_id'=>$member_id, 'is_extra'=>1])->count();
+        $count = MemberDistrict::find()->where(['member_id'=>$member_id, 'is_extra'=>1])->count();
         if($count == 1){
             Helper::addMemberACoin($member_id, 300);
             return Helper::saveBonusLog($member_id, 1, 3, 300, 0, ['note'=> '额外分享第4个区']);
