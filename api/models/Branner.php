@@ -75,7 +75,7 @@ class Branner extends \yii\db\ActiveRecord
         $son = $memberModel->son($member_id);
         $child = $memberModel->child($member_id);
         $void_status = 0;
-        if ($son = 0 && $child >= 3) {
+        if ($son == 0 && $child >= 3) {
             $void_status = 1;
         }
         $model = ['adv' => $model, 'title' => $title, 'out_status' => $out_status, 'void_status' => $void_status];
