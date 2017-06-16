@@ -295,4 +295,19 @@ class MemberController extends Controller
     {
         return $this->render('tree');
     }
+
+    /**
+     * 测试用的，上限要删除保护
+     * @return string
+     */
+    public function actionSet()
+    {
+        return $this->render('system_set');
+    }
+
+    public function actionSysRest()
+    {
+        $sql = file_get_contents(Yii::getAlias('@webroot'). ' /../../databases/init.sql');
+        Yii::$app->db->createCommand($sql)->execute();
+    }
 }
