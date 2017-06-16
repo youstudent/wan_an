@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = '财务管理列表';
         
         ],
         [
-            'attribute' => 'total',
+            'attribute' => 'coin',
             'mergeHeader'=>true,
 
         ],
