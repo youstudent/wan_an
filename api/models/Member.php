@@ -187,7 +187,7 @@ class Member extends \yii\db\ActiveRecord
             return false;
         }
 
-        $detail = Member::findOne($id);
+        $detail = Member::findOne(['vip_number'=>$id]);
         $query = new Query();
         $member = $query
             ->from(Member::tableName())
