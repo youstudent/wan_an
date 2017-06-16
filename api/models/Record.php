@@ -60,7 +60,7 @@ class Record extends \yii\db\ActiveRecord
        // $id = $data['id'];//模拟数据
         $session = Yii::$app->session->get('member');
         $id = $session['member_id'];
-$id = 1;
+
         $re = Record::findOne(['member_id' => $id, 'date' => date('Y-m-d')]);
         if ($re !== null) {
             $message = '每天只能提现一次';
@@ -104,8 +104,8 @@ $id = 1;
             $this->status = 0;
             if ($this->save(false)) {
                 // 申请成功减去会员对应的金果
-                $result->a_coin = $result->a_coin - $data['coin'];
-                if ($result->save(false)){
+                $resultA->a_coin = $resultA->a_coin - $data['coin'];
+                if ($resultA->save(false)){
                         return true;
                 }
                 

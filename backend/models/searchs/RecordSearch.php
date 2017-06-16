@@ -86,7 +86,7 @@ class recordSearch extends Record
             //'member_id' => $this->member_id,
             // 'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-            'status'=>$this->status,
+            '{{%record}}.status'=>$this->status,
             'coin'=>$this->coin
         ])->andFilterWhere(['>=','created_at',$start])->andFilterWhere(['<=','created_at',$end]);
 

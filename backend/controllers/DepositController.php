@@ -71,6 +71,7 @@ class DepositController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             if ($model->deposit(Yii::$app->request->post())) {
                 Yii::$app->session->setFlash('success', '充值成功');
+                return $this->redirect('open');
             }
         }
         return $this->render('deposit', [
@@ -90,6 +91,7 @@ class DepositController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($model->deposit(Yii::$app->request->post())) {
                 Yii::$app->session->setFlash('success', '扣除成功');
+                return $this->redirect('end');
             }
         }
 
