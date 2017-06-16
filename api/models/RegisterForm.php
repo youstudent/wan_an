@@ -227,7 +227,7 @@ class RegisterForm extends Member
      */
     public function getBlankMemberInfo()
     {
-        return Member::find()->where(['status'=>3])->orderBy(['id'=>SORT_ASC])->one();
+        return Member::find()->where(['status'=>2])->orderBy(['id'=>SORT_ASC])->one();
     }
     /**
      * 设置直推数量的递增
