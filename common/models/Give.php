@@ -58,9 +58,9 @@ class Give extends \yii\db\ActiveRecord
     //金果和金种子的赠送
     public function give($data){
         $session = Yii::$app->session->get('member');
-        $member_id = $session['vip_number'];
+        $member_id = $session['member_id'];
 
-        $member = Member::findOne(['vip_number' => $member_id]);
+        $member = Member::findOne(['id' => $member_id]);
         $result = Member::findOne(['parent_id' => $member_id]);
         $give_member  = Member::findOne(['vip_number'=>$data['give_member_id']]);
         if ($data['give_coin']<=0){
@@ -99,13 +99,14 @@ class Give extends \yii\db\ActiveRecord
         
         if ($member->save(false)){
             if ($give_member->save(false)){
-                $this->member_id=$member_id;
+                $memberModel = Member::findOne($data['give_member_id']);
+                $this->member_id=$member->vip_number;
                 $this->give_member_id=$data['give_member_id'];
                 $this->created_at=time();
                 $this->give_coin=$data['give_coin'];
                 if ($this->save(false)){
                     $ext_data=[];
-                    $ext_data['member_id']=$member_id;
+                    $ext_data['member_id']=$member->vip_number;;
                     $ext_data['give_member_id']=$data['give_member_id'];
                     $ext_data['give_coin']=$data['give_coin'];
                     $ext_data['coin_type']=$data['coinType'];
@@ -113,7 +114,7 @@ class Give extends \yii\db\ActiveRecord
                     $new_ext_data = serialize($ext_data);
                     $Helper= new Helper();
                     if ($Helper->pool($member_id,$data['coinType'],8,$data['give_coin'],null,$new_ext_data)===false
-                        || $Helper->pool($data['give_member_id'],$data['coinType'],11,$data['give_coin'],null,$new_ext_data)===false){
+                        || $Helper->pool($memberModel->id,$data['coinType'],11,$data['give_coin'],null,$new_ext_data)===false){
                         return false;
                     }
 
@@ -130,7 +131,8 @@ class Give extends \yii\db\ActiveRecord
     //赠送记录
     public function gives(){
         $session = Yii::$app->session->get('member');
-        $member_id = $session['vip'];
+        $member_id = $session['vip_number'];
+
         $data = Give::find()->where(['member_id'=>$member_id])->orderBy(['created_at' => 'desc'])->all();
         if ($data==false || $data==null){
             $this->addError('message','没有赠送数据');
@@ -146,7 +148,8 @@ class Give extends \yii\db\ActiveRecord
     //获赠记录
     public function gain(){
         $session = Yii::$app->session->get('member');
-        $member_id = $session['member_id'];
+        $member_id = $session['vip_number'];
+
         $data = Give::find()->where(['give_member_id'=>$member_id])->orderBy(['created_at' => 'desc'])->all();
         if ($data==false || $data==null){
             $this->addError('message','没有获赠送数据');

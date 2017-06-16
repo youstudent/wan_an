@@ -93,9 +93,6 @@ class Order extends \yii\db\ActiveRecord
         $this->status = 1;
         $this->goods_id = $goods_id;
 
-        $query = (new \yii\db\Query());
-        $name = $query->select('name')->from(Member::tableName())->where(['vip_number' => $member_id])->one();
-
         $fruiter = new Fruiter();
         $fruiter->member_id = $member_id;
         $fruiter->order_sn = 'WA'. date('YmdHis') . $member_id;

@@ -40,6 +40,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
 //        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
         [
             'attribute' => 'vip_number',
+            'label' => '会员ID',
             'headerOptions' => ['width' => '100'],
         ],
         [

@@ -18,7 +18,8 @@ class MemberForm extends Member
         return [
             [['parent_id', 'last_login_time', 'status', 'created_at', 'updated_at',  'a_coin', 'b_coin', 'child_num', 'out_status'], 'integer'],
             [['vip_number'], 'required'],
-            [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255]
+            [['name', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255],
+            [['password'], 'string', 'min'=>6,'max' => 12],
         ];
     }
 
