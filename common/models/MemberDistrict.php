@@ -10,7 +10,7 @@ use Yii;
  * @property integer $id
  * @property integer $member_id
  * @property integer $district
- * @property integer $is_ extra
+ * @property integer $is_extra
  */
 class MemberDistrict extends \yii\db\ActiveRecord
 {
@@ -28,7 +28,7 @@ class MemberDistrict extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['member_id', 'district', 'is_ extra'], 'integer'],
+            [['member_id', 'district', 'is_extra'], 'integer'],
         ];
     }
 
@@ -41,7 +41,7 @@ class MemberDistrict extends \yii\db\ActiveRecord
             'id' => 'ID',
             'member_id' => '会员id',
             'district' => '区id',
-            'is_ extra' => '是否是本身39个会员形成的区；1是 0否',
+            'is_extra' => '是否是本身39个会员形成的区；1是 0否',
         ];
     }
 }
