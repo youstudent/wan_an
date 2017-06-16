@@ -43,10 +43,12 @@ $this->params['breadcrumbs'][] = '赠送记录';
         ],
         [
             'attribute' => 'member_id',
+            'label' => '赠送人ID',
             'mergeHeader'=>true,
         ],
         [
             'attribute' => 'give_member_id',
+            'label' => '被赠送人ID',
             'mergeHeader'=>true,
         ],
         [

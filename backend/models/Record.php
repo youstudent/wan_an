@@ -47,6 +47,7 @@ class Record extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'member_id' => '会员ID',
+            'member.vip_number' => '会员vip_number',
             'member.name'=>'会员姓名',
             'member.mobile'=>'电话',
             'member.deposit_bank'=>'开户行',

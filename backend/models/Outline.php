@@ -44,6 +44,7 @@ class Outline extends \yii\db\ActiveRecord
         return [
             'id' => '记录ID',
             'member_id' => '退网会员ID',
+            'member.id' => '退网会员vipnumber',
             'member.name' => '会员姓名',
             'member.mobile' => '电话',
             'status' => '账号状态',

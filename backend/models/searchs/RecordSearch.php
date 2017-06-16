@@ -2,6 +2,7 @@
 
 namespace backend\models\searchs;
 
+use backend\models\Member;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -44,23 +45,23 @@ class recordSearch extends Record
     public function search($params)
     {
         $query = Record::find();
-
+        $query->joinWith(['member']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
         
         if(isset($params['status']) && $params['status'] == 1){
             $query->andFilterWhere([
-                'status' => [1,2]
+                self::tableName() .'.status' => [1,2]
             ]);
-           
+
         }else{
             $query->andFilterWhere([
-                'status' => 0
-                
+                self::tableName() .'.status' => 0
+
             ]);
         }
-        
+
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
@@ -79,15 +80,17 @@ class recordSearch extends Record
             $end_date =  substr($this->created_at,12);
             $end = strtotime($end_date);
         }
+
         $query->andFilterWhere([
             'id' => $this->id,
-            'member_id' => $this->member_id,
+            //'member_id' => $this->member_id,
             // 'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'status'=>$this->status,
             'coin'=>$this->coin
         ])->andFilterWhere(['>=','created_at',$start])->andFilterWhere(['<=','created_at',$end]);
-        
+
+       $query->andFilterWhere(['like', '{{%member}}.vip_number', $this->member_id]) ;
         return $dataProvider;
     }
 }
