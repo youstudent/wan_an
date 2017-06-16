@@ -45,6 +45,10 @@ JS;
         <div class="row">
             <div class="col-md-6">
 
+                <?= $form->field($model, 'name')->textInput(['maxlength' => 30]) ?>
+
+                <?= $form->field($model, 'price')->textInput(['maxlength' => 10]) ?>
+
                 <?= $form->field($GoodsImgModel, 'img_path')->widget(FileInput::classname(),[
                     'name' => 'img_path',
                     'options' => ['multiple' => true, 'accept' => 'image/*'],
@@ -93,15 +97,13 @@ JS;
                     ],
                 ]) ?>
 
-                <?= $form->field($model, 'describe')->textarea(['rows' => 6]) ?>
+                <?= $form->field($model, 'describe')->widget('common\widgets\ueditor\Ueditor',[
+                    'options'=>[
+                        'initialFrameWidth' => 750,
+                    ]
+                ]) ?>
             </div>
 
-            <div class="col-md-6">
-
-                <?= $form->field($model, 'name')->textInput(['maxlength' => 30]) ?>
-
-                <?= $form->field($model, 'price')->textInput(['maxlength' => 10]) ?>
-            </div>
 
         </div>
 

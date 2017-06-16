@@ -39,7 +39,12 @@ $this->params['breadcrumbs'][] = '商品管理列表';
         ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
             'name',
             'price',
-            'describe:ntext',
+            [
+                    'attribute' => 'describe',
+                    'value' => function($model){
+                        return mb_substr(strip_tags($model->describe),0,4, 'utf-8') . '...';
+                    }
+            ],
         [
             'class' => 'kartik\grid\ActionColumn',
             'dropdown' => false,

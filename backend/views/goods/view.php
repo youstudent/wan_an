@@ -48,7 +48,10 @@ $this->params['breadcrumbs'][] = '商品详情';
                         return  '';
                     }
             ],
-            'describe:ntext',
+            [
+              'attribute' => 'describe',
+                'format' => 'raw',
+            ],
         ]]) ;?>
 
 </div>
