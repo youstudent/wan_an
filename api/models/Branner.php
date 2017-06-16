@@ -54,7 +54,7 @@ class Branner extends \yii\db\ActiveRecord
     //广告管理列表
     public function branner()
     {
-        $model = self::find()->where(['status'=>1])->select(['id', 'img'])->orderBy('id DESC')->limit(3)->all();
+        $model = self::find()->where(['status'=>1])->select(['id', 'img'])->orderBy('id DESC')->limit(5)->all();
 
         foreach ($model as &$v) {
             $v['img'] = Yii::$app->params['img_domain'].$v['img'];
