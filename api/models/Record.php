@@ -104,8 +104,8 @@ class Record extends \yii\db\ActiveRecord
             $this->status = 0;
             if ($this->save(false)) {
                 // 申请成功减去会员对应的金果
-                $result->a_coin = $result->a_coin - $data['coin'];
-                if ($result->save(false)){
+                $resultA->a_coin = $resultA->a_coin - $data['coin'];
+                if ($resultA->save(false)){
                         return true;
                 }
                 
