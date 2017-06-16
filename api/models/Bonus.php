@@ -75,7 +75,7 @@ class Bonus extends \yii\db\ActiveRecord
         if ($type == 0) {
             $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())
                     ->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>[1,2,3,5]])
-                    ->orderBy(['created_at' => 'desc'])
+                    ->orderBy(['created_at' => SORT_DESC])
                     ->all();
         }
 
@@ -83,7 +83,7 @@ class Bonus extends \yii\db\ActiveRecord
         if ($type == 1) {
             $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())
                     ->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>1])
-                    ->orderBy(['created_at' => 'desc'])
+                    ->orderBy(['created_at' => SORT_DESC])
                     ->all();
         }
 
@@ -91,7 +91,7 @@ class Bonus extends \yii\db\ActiveRecord
         if ($type == 2) {
             $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())
                     ->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>2])
-                    ->orderBy(['created_at' => 'desc'])
+                    ->orderBy(['created_at' => SORT_DESC])
                     ->all();
         }
 

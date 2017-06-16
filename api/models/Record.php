@@ -123,7 +123,7 @@ class Record extends \yii\db\ActiveRecord
         //根据会员id 查询用户 申请记录数据
         $model = self::find()->select(['id', 'member_id', 'created_at', 'total', 'status'])
                 ->where(['member_id' => $member_id])
-                ->orderBy(['created_at' => 'desc'])
+                ->orderBy(['created_at' => SORT_DESC])
                 ->all();
         if ($model == false) {
             $this->addError('code', 0);
