@@ -120,7 +120,7 @@ class RegisterForm extends Member
             $this->errorMsg = '后台正在进行注册操作，请稍后再试';
             return false;
         }
-
+        
         $this->transaction = Yii::$app->db->beginTransaction();
         try{
             //判断操作人的金钱是不是够
@@ -137,7 +137,11 @@ class RegisterForm extends Member
             $blank_member = $this->getBlankMemberInfo();
             if(isset($blank_member) && !empty($blank_member)){
                 //这里进行继承会员
-                return $this->inheritanceMember($post, $blank_member);
+                 if($this->inheritanceMember($post, $blank_member)){
+                     $this->transaction->commit();
+                     $this->unLock();
+                     return true;
+                 }
             }
 
             //添加会员
