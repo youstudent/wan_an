@@ -142,7 +142,7 @@ $id = 1;
     public function coin(){
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
-$member_id =3;
+
         $data = \api\models\Member::find()->select('a_coin')->where(['id'=>$member_id])->all();
         if ($data == false || $data == null){
             $this->addError('code', 0);
