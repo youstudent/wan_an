@@ -133,7 +133,7 @@ class Give extends \yii\db\ActiveRecord
         $session = Yii::$app->session->get('member');
         $member_id = $session['vip_number'];
 
-        $data = Give::find()->where(['member_id'=>$member_id])->orderBy(['created_at' => 'desc'])->all();
+        $data = Give::find()->where(['member_id'=>$member_id])->orderBy(['created_at' => SORT_DESC])->all();
         if ($data==false || $data==null){
             $this->addError('message','没有赠送数据');
             return false;
@@ -150,7 +150,7 @@ class Give extends \yii\db\ActiveRecord
         $session = Yii::$app->session->get('member');
         $member_id = $session['vip_number'];
 
-        $data = Give::find()->where(['give_member_id'=>$member_id])->orderBy(['created_at' => 'desc'])->all();
+        $data = Give::find()->where(['give_member_id'=>$member_id])->orderBy(['created_at' => SORT_DESC])->all();
         if ($data==false || $data==null){
             $this->addError('message','没有获赠送数据');
             return false;
