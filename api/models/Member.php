@@ -99,7 +99,7 @@ class Member extends \yii\db\ActiveRecord
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
 
-        $arr = ['id', 'parent_id', 'name', 'mobile', 'deposit_bank', 'bank_account', 'address',
+        $arr = ['vip_number as id', 'parent_id', 'name', 'mobile', 'deposit_bank', 'bank_account', 'address',
                 'child_num', 'a_coin', 'b_coin'];
         $query = (new \yii\db\Query());
         $data= $query->select($arr)->from(Member::tableName())

@@ -120,7 +120,7 @@ class RegisterForm extends Member
             $this->errorMsg = '后台正在进行注册操作，请稍后再试';
             return false;
         }
-        
+
         $this->transaction = Yii::$app->db->beginTransaction();
         try{
             //判断操作人的金钱是不是够
@@ -209,6 +209,7 @@ class RegisterForm extends Member
         $blank_member->deposit_bank = ArrayHelper::getValue($post, 'deposit_bank', '');
         $blank_member->bank_account = ArrayHelper::getValue($post, 'bank_account', '');
         $blank_member->address = ArrayHelper::getValue($post, 'address', '');
+        $blank_member->out_status=0;
 
         if(!$blank_member->save(false)){
             $this->errorMsg = '继承失败';
