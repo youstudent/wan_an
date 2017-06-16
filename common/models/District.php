@@ -137,19 +137,19 @@ class District extends \yii\db\ActiveRecord
     {
         $flag = true;
         //变更用户的奖金记录到新的用户奖金记录下面
-        $b_coin = Bonus::find()->where(['type'=>1, 'member_id'=> $old_member_id])->sum('num');
+        $a_coin = Bonus::find()->where(['type'=>1, 'member_id'=> $old_member_id])->sum('num');
 
         $flag = $flag &&  Yii::$app->db->createCommand()->update('{{%bonus}}', ['member_id'=>$new_member_id], ['member_id'=>$old_member_id])->execute();
 
-        //更新两个用户的奖金
+        //更新两个用户的奖金a
         $oldMember = Member::findOne(['id'=>$old_member_id]);
-        $oldMember->b_coin = $oldMember->b_coin - $b_coin;
+        $oldMember->a_coin = $oldMember->a_coin - $a_coin;
         //更新已被换位标志
         $oldMember->out_status = 1;
         $flag = $flag && $oldMember->save(false);
 
         $newMember = Member::findOne(['id'=>$new_member_id]);
-        $newMember->b_coin += $b_coin;
+        $newMember->a_coin += $a_coin;
         $flag = $flag && $newMember->save(false);
         return $flag;
     }
