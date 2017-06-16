@@ -104,7 +104,7 @@ class RegisterForm extends Member
     {
         //$action_member_id=1;
         //将推荐的vip_number转换成member_id
-        $post['referrer_id'] = $this->vipNumber2MemberId($post['referrer_id']);
+        $post['referrer_id'] = Helper::vipNumberToMemberId($post['referrer_id']);
 
         if(!$this->load($post, '') || !$this->validate()){
             $this->errorMsg = current($this->getFirstErrors());
@@ -183,16 +183,7 @@ class RegisterForm extends Member
         }
     }
 
-    /**
-     * 会员vip_number转换从成id
-     * @param $vip_number
-     * @return int|null
-     */
-    public function vipNumber2MemberId($vip_number)
-    {
-        $member = Member::findOne(['id'=>$vip_number]);
-        return isset($member) ? $member->id : null;
-    }
+
     //继承会员逻辑
     public function inheritanceMember($post, $blank_member)
     {
