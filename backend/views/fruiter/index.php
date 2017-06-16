@@ -36,7 +36,11 @@ $this->params['breadcrumbs'][] = '果树管理列表';
     $columns = [
 //        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
 //                    'id',
-            'member_id',
+        [
+            'attribute' => 'member_id',
+            'value' => 'member.vip_number',
+            'filter'    => false,
+        ],
             'member.name',
             'order_sn',
             'fruiter_name',

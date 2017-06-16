@@ -57,11 +57,12 @@ $this->params['breadcrumbs'][] = '财务管理列表';
 
         [
             'attribute' => 'member_id',
+            'value' => 'member.vip_number',
             'headerOptions' => ['width' => '100'],
         ],
         [
             'label' => '会员名',
-            'attribute' => 'mamber_name',
+            'attribute' => 'member.name',
             'value' => 'member.name',
             'mergeHeader'=>true,
         

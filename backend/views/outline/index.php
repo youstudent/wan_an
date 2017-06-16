@@ -35,6 +35,7 @@ $this->params['breadcrumbs'][] = '退网管理列表';
     $columns = [
         [
             'attribute' => 'member_id',
+            'value' => 'member.vip_number',
             'filter'    => false,
         ],
             'member.name',

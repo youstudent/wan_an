@@ -120,7 +120,7 @@ class Deposit extends \yii\db\ActiveRecord
                 }
 
                 $Helper= new Helper();
-                if ($Helper->pool($id,$data['Deposit']['type'],$type,$data['Deposit']['num'],null,null)===false){
+                if ($Helper->pool($result->id,$data['Deposit']['type'],$type,$data['Deposit']['num'],null,null)===false){
                     return false;
                 }
                 return $this;
