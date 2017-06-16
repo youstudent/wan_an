@@ -1,5 +1,6 @@
 <?php
 
+use common\components\Helper;
 use kartik\daterange\DateRangePicker;
 use yii\helpers\Html;
 use kartik\grid\GridView;
@@ -37,7 +38,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
     ];
 
     $columns = [
-//        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
+        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
         [
             'attribute' => 'vip_number',
             'label' => '会员ID',
@@ -73,6 +74,9 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             'attribute' => 'parent_id',
             'filter'    => false,
             'mergeHeader'=>true,
+            'value' => function($model) {
+                return Helper::memberIdToVipNumber($model->parent_id);
+            }
         ],
         [
             'attribute' => 'a_coin',

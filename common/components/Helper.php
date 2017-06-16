@@ -103,4 +103,29 @@ class Helper{
         }
         return true;
     }
+
+    /**
+     * vip_number转member_id
+     * @param $vip_number
+     * @return int
+     */
+    public static function vipNumberToMemberId($vip_number)
+    {
+        $model = Member::findOne(['vip_number'=>$vip_number]);
+        return $model->id;
+    }
+
+    /**
+     * member_id转vip_number
+     * @param $member_id
+     * @return int
+     */
+    public static function memberIdToVipNumber($member_id)
+    {
+        if($member_id == 0){
+            return '不存在';
+        }
+        $model = Member::findOne(['id'=>$member_id]);
+        return $model->vip_number;
+    }
 }
