@@ -100,6 +100,13 @@ class RegisterForm extends Member
         Yii::$app->cache->set($key, 1, 3000);
         return true;
     }
+
+    /**
+     * 根据注册表单和操作人id添加会员
+     * @param $post
+     * @param $action_member_id
+     * @return bool
+     */
     public function register($post, $action_member_id)
     {
         //$action_member_id=1;
@@ -167,6 +174,14 @@ class RegisterForm extends Member
 
             //step1 . 判断推荐人是否区满
             $result = $this->step1($this->referrer_id);
+            if ($result == false) {
+                //$transaction->rollBack();
+                $this->transaction->rollBack();
+                $this->unLock();
+                return false;
+            }
+            //添加会员的上级id
+            $result = Helper::addMemberNode($this->member_id);
             if ($result == false) {
                 //$transaction->rollBack();
                 $this->transaction->rollBack();

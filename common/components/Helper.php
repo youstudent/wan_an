@@ -5,8 +5,11 @@ namespace common\components;
 
 use api\models\Member;
 use common\models\Bonus;
+use common\models\District;
 use common\models\MemberDistrict;
+use common\models\MemberNode;
 use common\models\ShareLog;
+use Yii;
 
 class Helper{
     /**
@@ -127,5 +130,64 @@ class Helper{
         }
         $model = Member::findOne(['id'=>$member_id]);
         return $model->vip_number;
+    }
+
+    /**
+     * 添加会员的NODE表关系
+     * @param $member_id
+     * @return bool
+     */
+    public static function addMemberNode($member_id)
+    {
+
+        //先根据Member_id 找到对应的上级id
+        $parent_district = District::findOne(['member_id'=>$member_id, 'seat'=>[2,3,4]])->district;
+
+        $parent_id  = District::findOne(['district'=>$parent_district, 'seat'=>1])->member_id;
+
+        $model  = new MemberNode();
+        $model->member_id = $member_id;
+        $model->above_member_id = $parent_id;
+        if(!$model->save()){
+            return false;
+        }
+        //获取上级的所有，并继承过来
+        $parentMemberNode = MemberNode::find()->select( 'above_member_id')->where(['member_id'=>$parent_id])->orderBy(['id'=>SORT_ASC])->asArray()->all();
+        if(isset($parentMemberNode) && count($parentMemberNode)){
+            foreach($parentMemberNode as &$val){
+                $val[] = $member_id;
+            }
+            $result = Yii::$app->db->createCommand()->batchInsert(MemberNode::tableName(), ['above_member_id', 'member_id'], $parentMemberNode)->execute();
+            if(!$result){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 获取玩家的挂靠数
+     * @param $member_id
+     * @return int|string
+     */
+    public static function getMemberUnderNum($member_id)
+    {
+        return MemberNode::find()->where(['member_id'=>$member_id])->count();
+    }
+
+    /**
+     * 获取玩家的满区数量
+     * @param $member_id
+     * @return int|string
+     */
+    public static function getMemberUnderDistrict($member_id)
+    {
+        $member_ids  = MemberNode::find()->where(['member_id'=>$member_id])->select('above_member_id')->column();
+
+        if(isset($member_id) && count($member_ids)){
+            //获取区数量
+            return District::find()->where(['member_id'=>$member_ids, 'seat'=>40])->count();
+        }
+        return 0;
     }
 }

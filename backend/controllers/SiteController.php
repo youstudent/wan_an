@@ -63,12 +63,12 @@ class SiteController extends Controller
     {
 
         if (!Yii::$app->user->isGuest) {
-            return $this->redirect('/count/index');
+            return $this->redirect('/record/index');
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->redirect('/count/index');
+            return $this->redirect('/record/index');
         } else {
             return $this->render('login', [
                 'model' => $model,

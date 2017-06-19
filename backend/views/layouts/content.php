@@ -39,5 +39,5 @@ use dmstr\widgets\Alert;
     <div class="pull-right hidden-xs">
         <b>Version</b> 2.0
     </div>
-    <strong>X-Power-By <a href="http://angkebrand.com">昂恪科技</a> - </strong> ∑
+    <strong>X-Power-By <a href="http://angkebrand.com"></a> - </strong> ∑
 </footer>
