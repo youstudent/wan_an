@@ -28,6 +28,7 @@ class RegisterForm extends Member
     public $referrer_id;
     public $action_member_id;
     public $re_password;
+    public $referrer_username;
 
     protected $transaction;
 
@@ -37,13 +38,16 @@ class RegisterForm extends Member
     public function rules()
     {
         return [
-            [['referrer_id', 'name', 'mobile', 'password', 're_password', 'a_coin', 'b_coin'], 'required'],
-            [['referrer_id', 'mobile', 'a_coin', 'b_coin'], 'integer'],
+            [['referrer_username','username', 'name', 'mobile', 'password', 're_password', 'a_coin', 'b_coin'], 'required'],
+            [['mobile', 'a_coin', 'b_coin'], 'integer'],
             [['deposit_bank', 'bank_account', 'address','name'], 'string'],
             ['a_coin', 'integer', 'max'=> 500, 'min'=> 0, 'tooBig'=> '{attribute}最多使用500'],
             ['b_coin', 'integer', 'max'=> 900, 'min'=> 400, 'tooSmall'=> '{attribute}最少使用400'],
             ['re_password', 'validateRePassword', 'skipOnEmpty' => false, 'skipOnError' => false],
             ['mobile','match','pattern'=>'/^0?(13|14|15|18)[0-9]{9}$/','message'=>'手机号码不正确'],
+            [['referrer_username', 'username'], 'string'],
+            [['referrer_username', 'username'], 'match','pattern'=>'/\b[a-zA-Z0-9]{5}\b/','message'=>'{attribute}格式不正确'],
+            [['username'], 'unique', 'message' => "{attribute}已经被占用了"]
 
         ];
     }
@@ -51,6 +55,8 @@ class RegisterForm extends Member
     public function attributeLabels()
     {
         return [
+            'referrer_username' => '推荐人用户名',
+            'username' => '用户名',
             'referrer_id'  => '分享人id',
             'name'         => '姓名',
             'mobile'       => '手机号',
@@ -110,19 +116,19 @@ class RegisterForm extends Member
     public function register($post, $action_member_id)
     {
         //$action_member_id=1;
-        //将推荐的vip_number转换成member_id
-        $post['referrer_id'] = Helper::vipNumberToMemberId($post['referrer_id']);
-
         if(!$this->load($post, '') || !$this->validate()){
             $this->errorMsg = current($this->getFirstErrors());
             return false;
         }
+        //将推荐的username转换成member_id
+        $post['referrer_id'] = Helper::username2MemberId($post['referrer_username']);
+        $this->referrer_id = $post['referrer_id'];
 
         if($this->a_coin + $this->b_coin != 900){
             $this->errorMsg = '注入的金豆和金种子和必须等于900';
             return false;
         }
-
+        $this->unLock();
         if($this->checkLock() == false){
             $this->errorMsg = '后台正在进行注册操作，请稍后再试';
             return false;
@@ -210,6 +216,7 @@ class RegisterForm extends Member
         $blank_member->status=1;
         $blank_member->vip_number = $this->vip_number = Member::find()->max('vip_number') + 1;
         $blank_member->password = Yii::$app->security->generatePasswordHash($this->password);
+        $blank_member->username = $post['username'];
 
         //更新扩展资料
         $blank_member->deposit_bank = ArrayHelper::getValue($post, 'deposit_bank', '');
@@ -225,6 +232,7 @@ class RegisterForm extends Member
 
         //添加一个推荐人奖励-
         $result = Helper::addMemberACoin($this->referrer_id, Yii::$app->params['coin_type_2_money']);
+        Helper::saveBonusLog($this->referrer_id, 1, 2, Yii::$app->params['coin_type_2_money'], 0, ['note'=> '分享会员'. $this->username . '奖励', 'relation'=>$this->username]);
         if($result == false){
             $this->errorMsg = '添加分享人奖金失败';
             $this->unLock();
@@ -255,7 +263,7 @@ class RegisterForm extends Member
         }
 
         $coin_money = Yii::$app->params['coin_type_2_money'];
-        Helper::saveBonusLog($referrer_id, 1, 2, $coin_money);
+        Helper::saveBonusLog($referrer_id, 1, 2, $coin_money, 0, ['note'=> '推荐会员'. $this->username . '奖励', 'relation'=>$this->username]);
         //给推荐人发放奖金
         if(!Helper::addMemberACoin($referrer_id, $coin_money)){
             $this->errorMsg = '分享奖金添加失败';
@@ -291,12 +299,12 @@ class RegisterForm extends Member
        }
 
         //生成奖励5块钱的流水
-        Helper::saveBonusLog($member_id, 1, 5, 5);
+        Helper::saveBonusLog($member_id, 1, 5, 5, 0, ['note'=> '注册会员'. $this->username . '奖励', 'relation'=>$this->username]);
         //添加消耗记录
         if($this->a_coin){
-            Helper::saveBonusLog($member_id, 1, 10, $this->a_coin);
+            Helper::saveBonusLog($member_id, 1, 10, $this->a_coin, 0, ['note'=> '注册会员'. $this->username . '消耗', 'relation'=>$this->username]);
         }
-        Helper::saveBonusLog($member_id, 2, 10, $this->b_coin);
+        Helper::saveBonusLog($member_id, 2, 10, $this->b_coin, 0, ['note'=> '注册会员'. $this->username . '消耗', 'relation'=>$this->username]);
 
         //清空这两个记录的值
         $this->a_coin =0;
@@ -379,7 +387,7 @@ class RegisterForm extends Member
             if( !($this->checkMemberInMemberDistrict($this->member_id, $referrer_id) && $member_id == $referrer_id) ){
                 //给上级添加挂靠奖A
                 $coin_money = Yii::$app->params['coin_type_1_money'];
-                Helper::saveBonusLog($member_id, 1, 1, $coin_money, 0);
+                Helper::saveBonusLog($member_id, 1, 1, $coin_money, 0, ['note'=> '挂靠会员'. $this->username . '奖励', 'relation'=>$this->username]);
                 if(!Helper::addMemberACoin($member_id, $coin_money)){
                     $this->errorMsg = '绩效奖金添加失败';
                     return false;
@@ -586,14 +594,14 @@ class RegisterForm extends Member
         $count = MemberDistrict::find()->where(['member_id'=>$member_id, 'is_extra'=>1])->count();
         if($count == 1){
             Helper::addMemberACoin($member_id, 300);
-            return Helper::saveBonusLog($member_id, 1, 3, 300, 0, ['note'=> '额外分享第4个区']);
+            return Helper::saveBonusLog($member_id, 1, 3, 300, 0, ['note'=> '添加会员'. $this->username . '奖励,额外第4区', 'relation'=>$this->username]);
         }
         if($count == 2){
             Helper::addMemberACoin($member_id, 600);
-            return Helper::saveBonusLog($member_id, 1, 3, 600, 0, ['note'=> '额外分享第5个区']);
+            return Helper::saveBonusLog($member_id, 1, 3, 600, 0, ['note'=> '添加会员'. $this->username . '奖励,额外第5区', 'relation'=>$this->username]);
         }else{
             Helper::addMemberACoin($member_id, 900);
-            return Helper::saveBonusLog($member_id, 1, 3, 900, 0, ['note'=> '额外分享6个区,几6个区以上']);
+            return Helper::saveBonusLog($member_id, 1, 3, 900, 0, ['note'=> '添加会员'. $this->username . '奖励,额外6个以上', 'relation'=>$this->username]);
         }
     }
     /**

@@ -11,6 +11,7 @@ namespace api\controllers;
 use api\models\RegisterForm;
 use Codeception\Lib\Di;
 use common\models\District;
+use common\models\MemberNode;
 use yii;
 use api\models\Member;
 
@@ -148,7 +149,7 @@ class MemberController extends ApiController
     {
         $model = new RegisterForm();
 
-        if ($model->register(Yii::$app->request->post(), ArrayHelper::getValue(Yii::$app->session->get('member'), 'vip_number'))) {
+        if ($model->register(Yii::$app->request->post(), ArrayHelper::getValue(Yii::$app->session->get('member'), 'username'))) {
             return $this->jsonReturn(1, 'success', ['vip_number' => $model->vip_number]);
         }
         return $this->jsonReturn(0, $model->errorMsg ? $model->errorMsg : '服务器繁忙');
@@ -168,6 +169,19 @@ class MemberController extends ApiController
         return $this->jsonReturn(0, $model->getFirstError('message'));
     }
 
+    /**
+     *检测会员是否存在
+     * @return array
+     */
+    public function actionAble()
+    {
+        $model = new Member();
+        if ($model->checkMember(Yii::$app->request->queryParams)) {
+            return $this->jsonReturn(1, '账户可用');
+        }
+
+        return $this->jsonReturn(0, '账户不可用');
+    }
     /**
      * 获取树状信息
      * @return array

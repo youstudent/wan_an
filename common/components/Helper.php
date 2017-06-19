@@ -190,4 +190,14 @@ class Helper{
         }
         return 0;
     }
+
+    /**
+     * 用户名转换成memberid
+     * @param $username
+     * @return mixed
+     */
+    public static function username2MemberId($username)
+    {
+        return Member::findOne(['username'=>$username])->id;
+    }
 }

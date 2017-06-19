@@ -27,6 +27,7 @@ use yii\captcha\CaptchaAction;
  * @property integer $a_coin
  * @property integer $b_coin
  * @property integer $child_num
+ * @property string $username
  */
 class Member extends \yii\db\ActiveRecord
 {
@@ -50,7 +51,7 @@ class Member extends \yii\db\ActiveRecord
     {
         return [
             [['parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num', 'out_status'], 'integer'],
-            [['vip_number', 'a_coin', 'b_coin', 'child_num'], 'required'],
+            [['vip_number', 'a_coin', 'b_coin', 'child_num', 'username'], 'required'],
             [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255],
             // verifyCode needs to be entered correctly
             ['verifyCode', 'captcha'],
@@ -337,7 +338,7 @@ class Member extends \yii\db\ActiveRecord
      */
     public function getOne($params)
     {
-        $data = Member::findOne(['vip_number'=>$params['vip_number']]);
+        $data = Member::findOne(['username'=>$params['username']]);
         if(isset($data)){
             return ['name'=>$data->name];
         }
@@ -360,5 +361,23 @@ class Member extends \yii\db\ActiveRecord
         }
         return true;
 
+    }
+
+    /**
+     * 检查会员名是否可用
+     * @param $params
+     * @return bool
+     */
+    public function checkMember($params)
+    {
+        if(!preg_match("/\b[a-zA-Z0-9]{5}\b/", $params['username'])){
+            return false;
+        }
+        $one = $this->getOne($params);
+
+        if(isset($one) && !empty($one)){
+            return false;
+        }
+        return true;
     }
 }
