@@ -191,7 +191,7 @@ class Member extends \yii\db\ActiveRecord
         $query = new Query();
         $member = $query
             ->from(Member::tableName())
-            ->where(['vip_number'=>$id])
+            ->where(['username'=>$id])
             ->one();
         if(!isset($detail) || !Member::validatePassword($password,$detail->password)){
             $this->addError('message', '账号或密码错误');
@@ -204,7 +204,8 @@ class Member extends \yii\db\ActiveRecord
         $detail->last_login_time = time();
         $detail->save(false);
         // session 保存用户登录数据
-        Yii::$app->session->set('member',['member_id'=>$member['id'],'member_name'=>$member['name'], 'vip_number'=>$member['vip_number']]);
+        Yii::$app->session->set('member',['member_id'=>$member['id'],'member_name'=>$member['name'], 'vip_number'=>$member['vip_number'],
+                                        'username'=>$member['username']]);
         return true;
 
     }
@@ -360,5 +361,29 @@ class Member extends \yii\db\ActiveRecord
         }
         return true;
 
+    }
+
+    /**
+     * 关联用户
+     */
+    public function relate()
+    {
+        // 获取用户id
+        $session = Yii::$app->session->get('member');
+        $member_id = $session['member_id'];
+
+        $query = (new \yii\db\Query());
+        $mobile = $query->select('mobile')->from(Member::tableName())->where(['id' => $member_id])->scalar();
+
+        $query = (new \yii\db\Query());
+        $relate = $query->select(['username', 'created_at'])->from(Member::tableName())->where(['mobile' => $mobile])->all();
+        $data = array_splice($relate, 1);
+        foreach ($data as &$v) {
+            $v['created_at'] = date('Y/m/d H:i:s', $v['created_at']);
+        }
+        if ($data) {
+            return $data;
+        }
+        return null;
     }
 }

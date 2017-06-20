@@ -50,7 +50,7 @@ class Member extends \yii\db\ActiveRecord
         return [
             [['parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num', 'vip_number','out_status'], 'integer'],
             [['vip_number', 'a_coin', 'b_coin', 'child_num'], 'required'],
-            [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address', 'last_ip'], 'string', 'max' => 255]
+            [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255]
         ];
     }
     /**
@@ -183,17 +183,42 @@ class Member extends \yii\db\ActiveRecord
     public function group($id, $num =0)
     {
         $query = (new \yii\db\Query());
+        $i = $query->select('district')->from(District::tableName())->where(['seat' => 1])->all();
+        static $j;
+        $j = 0;
+        $query = (new \yii\db\Query());
         $district = $query->select('district')->from(District::tableName())->where(['member_id' => $id, 'seat' => 1])->one();
 
         $query = (new \yii\db\Query());
         $data = $query->select('member_id')->from(District::tableName())->where(['district' => $district['district']])->all();
+        while ($j <= count($i)) {
 
-        if (count($data) >= 40) {
-            $num++ ;
-            $data = array_splice($data,1);
-            foreach ($data as $v) {
-                $num = $this->group($v['member_id'], $num);
+            if (count($data) >= 40) {
+                $num = 1;
+                foreach ($data as $v) {
+                    $query = (new \yii\db\Query());
+                    $district = $query->select('district')->from(District::tableName())->where(['member_id' => $v['member_id'], 'seat' => 1])->one();
+
+                    $query = (new \yii\db\Query());
+                    $data = $query->select('member_id')->from(District::tableName())->where(['district' => $district['district']])->all();
+                    if (count($data) >= 40) {
+                        $num++ ;
+                        $j++;
+                        foreach ($data as $vv) {
+                            $query = (new \yii\db\Query());
+                            $district = $query->select('district')->from(District::tableName())->where(['member_id' => $vv['member_id'], 'seat' => 1])->one();
+
+                            $query = (new \yii\db\Query());
+                            $data = $query->select('member_id')->from(District::tableName())->where(['district' => $district['district']])->all();
+                            if (count($data) >= 40) {
+                                $num++ ;
+                                $j++;
+                            }
+                        }
+                    }
+                }
             }
+
         }
         return $num;
     }
