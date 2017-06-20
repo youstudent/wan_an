@@ -66,10 +66,13 @@ $this->params['breadcrumbs'][] = '管理员列表';
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template' => Helper::filterActionColumn(['view', 'activate', 'delete']),
+                'template' => Helper::filterActionColumn(['view', 'update', 'delete']),
                 'buttons' => [
                     'view' => function ($url, $model, $key) {
                         return Html::a(Html::tag('span', '查看详情', ['class' => "btn btn-xs btn-primary"]), ['user/view', 'id'=>$model->id]);
+                    },
+                    'update' => function ($url, $model, $key) {
+                        return Html::a(Html::tag('span', '修改', ['class' => "btn btn-xs btn-success"]), ['user/update', 'id'=>$model->id]);
                     },
                     'delete' => function ($url, $model, $key) {
                         return Html::a(Html::tag('span', '删除', ['class' => "btn btn-xs btn-danger"]), ['user/delete', 'id'=>$model->id]);

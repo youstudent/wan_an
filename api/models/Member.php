@@ -393,4 +393,28 @@ class Member extends \yii\db\ActiveRecord
         }
         return true;
     }
+
+    /**
+     * 关联用户
+     */
+    public function relate()
+    {
+        // 获取用户id
+        $session = Yii::$app->session->get('member');
+        $member_id = $session['member_id'];
+
+        $query = (new \yii\db\Query());
+        $mobile = $query->select('mobile')->from(Member::tableName())->where(['id' => $member_id])->scalar();
+
+        $query = (new \yii\db\Query());
+        $relate = $query->select(['username', 'created_at'])->from(Member::tableName())->where(['mobile' => $mobile])->all();
+        $data = array_splice($relate, 1);
+        foreach ($data as &$v) {
+            $v['created_at'] = date('Y/m/d H:i:s', $v['created_at']);
+        }
+        if ($data) {
+            return $data;
+        }
+        return null;
+    }
 }

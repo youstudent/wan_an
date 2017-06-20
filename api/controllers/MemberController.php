@@ -225,4 +225,16 @@ class MemberController extends ApiController
         $json = [ 'code'=> 0, 'data' => [], 'message'=> $model->getFirstErrors()];
         return $this->asJson($json);
     }
+    /**
+     * 账户关联
+     */
+    public function actionRelate()
+    {
+        $model = new Member();
+        if ($data = $model->relate()) {
+            return $this->jsonReturn(1, 'success', $data);
+        }
+        //如果返回null 返回错误信息
+        return $this->jsonReturn(0, '无关联用户');
+    }
 }

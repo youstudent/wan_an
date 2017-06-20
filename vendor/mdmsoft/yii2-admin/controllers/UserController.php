@@ -113,6 +113,26 @@ class UserController extends Controller
     }
 
     /**
+     * Updates an existing Order model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionUpdate($id)
+    {
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post()) && $model->updateUser($id,Yii::$app->request->post())) {
+            Yii::$app->session->setFlash('success', '修改成功');
+            return $this->redirect(['index']);
+        }
+
+        return $this->render('update', [
+            'model' => $model,
+        ]);
+    }
+
+    /**
      * Deletes an existing User model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id

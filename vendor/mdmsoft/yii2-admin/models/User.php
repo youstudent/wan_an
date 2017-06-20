@@ -55,6 +55,7 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
+            [[' name','email', 'password_hash'], 'safe'],
         ];
     }
     public function attributeLabels()
@@ -64,9 +65,31 @@ class User extends ActiveRecord implements IdentityInterface
           'email'=>'邮箱',
           'created_at'=>'时间',
           'status'=>'状态',
+            'password_hash'=>'密码',
         ];
     }
-    
+
+    /**
+     *
+     * @return User|null the saved model or null if saving fails
+     */
+    public function updateUser($id,$data)
+    {
+        $user = User::findOne($id);
+
+        $user->load($data, 'User');
+
+        $this->username = $data['User']['username'];
+        $this->password_hash = $data['User']['password_hash'];
+        $user->setPassword($this->password_hash);
+
+        if ($this->validate() && $user->save(false)) {
+            return $user;
+        }
+
+        return null;
+    }
+
     /**
      * @inheritdoc
      */

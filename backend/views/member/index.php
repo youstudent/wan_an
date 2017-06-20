@@ -122,6 +122,12 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             'mergeHeader'=>true,
         ],
         [
+            'attribute' => 'last_ip',
+            'label' => '最后登录地址',
+            'filter'    => false,
+            'mergeHeader'=>true,
+        ],
+        [
             'attribute' => 'status',
             'value' => function($model) {
                 switch ($model-> status) {
