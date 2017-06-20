@@ -158,7 +158,7 @@ class RegisterForm extends Member
             }
 
             //添加会员
-            $result = $this->addMember($post);
+            $result = $this->addMember($post, $action_member_id);
             if ($result == false) {
                 $this->errorMsg = '添加会员失败';
                 //$transaction->rollBack();
@@ -677,7 +677,7 @@ class RegisterForm extends Member
      * @param $post
      * @return Member
      */
-    public function addMember($post)
+    public function addMember($post, $action_member_id)
     {
         $model = new Member();
         $model->load($post, '');
@@ -688,6 +688,7 @@ class RegisterForm extends Member
         $model->parent_id = $post['referrer_id'];
         $model->vip_number = $this->vip_number = Member::find()->max('vip_number') + 1;
         $model->password = Yii::$app->security->generatePasswordHash($this->password);
+        $model->register_member_id = $action_member_id;
         return $model->save(false) ? $model : null;
     }
 

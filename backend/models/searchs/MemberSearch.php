@@ -3,6 +3,7 @@
 namespace backend\models\searchs;
 
 use backend\models\Bonus;
+use common\components\Helper;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
@@ -13,6 +14,10 @@ use backend\models\Member;
  */
 class MemberSearch extends Member
 {
+
+    public $referrer_username;
+    public $register_username;
+
     /**
      * @inheritdoc
      */
@@ -20,7 +25,7 @@ class MemberSearch extends Member
     {
         return [
             [['id', 'parent_id', 'last_login_time', 'status','updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num', 'out_status'], 'integer'],
-            [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address','created_at'], 'safe'],
+            [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address','created_at', 'referrer_username', 'register_username'], 'safe'],
         ];
     }
 
@@ -43,6 +48,8 @@ class MemberSearch extends Member
     public function search($params)
     {
         $query = Member::find();
+        $query->joinWith('referrer');
+        $query->joinWith('register');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -64,7 +71,7 @@ class MemberSearch extends Member
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'parent_id' => $this->parent_id,
+          //  'parent_id' => $this->getParentId(),
             'last_login_time' => $this->last_login_time,
             'status' => $this->status,
 //            'created_at' => $this->created_at,
@@ -80,7 +87,9 @@ class MemberSearch extends Member
             ->andFilterWhere(['like', 'mobile', $this->mobile])
             ->andFilterWhere(['like', 'deposit_bank', $this->deposit_bank])
             ->andFilterWhere(['like', 'bank_account', $this->bank_account])
-            ->andFilterWhere(['like', 'address', $this->address]);
+            ->andFilterWhere(['like', 'address', $this->address])
+            ->andFilterWhere(['like', 'referrer.username', $this->referrer_username])
+            ->andFilterWhere(['like', 'register.username', $this->register_username]);
 
         return $dataProvider;
     }

@@ -200,4 +200,25 @@ class Helper{
     {
         return Member::findOne(['username'=>$username])->id;
     }
+
+    /**
+     * 将id转换为用户名
+     * @param $member_id
+     * @return string
+     */
+    public static function memberId2Username($member_id)
+    {
+        if($member_id == 0){
+            return '不存在';
+        }
+        return Member::findOne(['id'=>$member_id])->username;
+    }
+
+    public static function username2VipNumber($username)
+    {
+        if(false != $model = Member::findOne(['username'=>$username])){
+            return $model->vip_number;
+        }
+        return false;
+    }
 }

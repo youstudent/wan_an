@@ -12,6 +12,9 @@ use common\models\Give;
  */
 class GiveSearchs extends Give
 {
+    public $give_username;
+    public $gain_username;
+
     /**
      * @inheritdoc
      */
@@ -20,6 +23,7 @@ class GiveSearchs extends Give
         return [
             [['id', 'member_id', 'give_member_id', 'type', 'created_at'], 'integer'],
             [['give_coin'], 'number'],
+            [['give_username', 'gain_username'], 'safe'],
         ];
     }
 
@@ -42,6 +46,8 @@ class GiveSearchs extends Give
     public function search($params)
     {
         $query = Give::find();
+        $query->joinWith('give');
+        $query->joinWith('gain');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -59,6 +65,9 @@ class GiveSearchs extends Give
             'created_at' => $this->created_at,
             'give_coin' => $this->give_coin,
         ]);
+
+        $query->andFilterWhere(['like', 'give.username', $this->give_username])
+              ->andFilterWhere(['like', 'gain.username', $this->gain_username]);
 
         return $dataProvider;
     }

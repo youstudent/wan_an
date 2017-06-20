@@ -2,6 +2,7 @@
 
 namespace api\models;
 
+use common\components\Helper;
 use common\models\District;
 use Yii;
 use yii\db\Query;
@@ -26,8 +27,11 @@ use yii\captcha\CaptchaAction;
  * @property integer $vip_number
  * @property integer $a_coin
  * @property integer $b_coin
- * @property integer $child_num
+ * @property integer $child_num  register_member_id
  * @property string $username
+ * @property integer $register_member_id
+ * @property integer $out_status
+ * @property string $last_login_ip
  */
 class Member extends \yii\db\ActiveRecord
 {
@@ -50,8 +54,8 @@ class Member extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num', 'out_status'], 'integer'],
-            [['vip_number', 'a_coin', 'b_coin', 'child_num', 'username'], 'required'],
+            [['parent_id', 'last_login_time', 'status', 'created_at', 'updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num', 'out_status', 'register_member_id'], 'integer'],
+            [['vip_number', 'a_coin', 'b_coin', 'child_num', 'username', 'register_member_id'], 'required'],
             [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address'], 'string', 'max' => 255],
             // verifyCode needs to be entered correctly
             ['verifyCode', 'captcha'],
@@ -100,7 +104,7 @@ class Member extends \yii\db\ActiveRecord
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
 
-        $arr = ['vip_number as id', 'parent_id', 'name', 'mobile', 'deposit_bank', 'bank_account', 'address',
+        $arr = ['username', 'parent_id', 'name', 'mobile', 'deposit_bank', 'bank_account', 'address',
                 'child_num', 'a_coin', 'b_coin'];
         $query = (new \yii\db\Query());
         $data= $query->select($arr)->from(Member::tableName())
@@ -109,14 +113,11 @@ class Member extends \yii\db\ActiveRecord
         if(!isset($data) || empty($data)){
             return null;
         }
-        $son = $this->son($member_id);
-        $child = $this->child($member_id);
+
+        $data['child'] = Helper::getMemberUnderNum($member_id);
 //        $child = 1;
-        $group = $this->group($member_id);
+        $data['group_num'] = Helper::getMemberUnderDistrict($member_id);
 //        $group = 1;
-        $data['child_num'] = $son;
-        $data['group_num'] = $group?$group:0;
-        $data['child'] = $child?$child:0;
 
         return $data;
     }
@@ -181,18 +182,18 @@ class Member extends \yii\db\ActiveRecord
      * @param $id $password
      * @return bool|array
      */
-    public function login($id, $password)
+    public function login($username, $password)
     {
-        if(empty($id) || empty($password)){
+        if(empty($username) || empty($password)){
             $this->addError('message', '账号或者密码不能为空');
             return false;
         }
 
-        $detail = Member::findOne(['vip_number'=>$id]);
+        $detail = Member::findOne(['username'=>$username]);
         $query = new Query();
         $member = $query
             ->from(Member::tableName())
-            ->where(['vip_number'=>$id])
+            ->where(['username'=>$username])
             ->one();
         if(!isset($detail) || !Member::validatePassword($password,$detail->password)){
             $this->addError('message', '账号或密码错误');
@@ -203,9 +204,10 @@ class Member extends \yii\db\ActiveRecord
             return false;
         }
         $detail->last_login_time = time();
+        $detail->last_login_ip = Yii::$app->request->getUserIP();
         $detail->save(false);
         // session 保存用户登录数据
-        Yii::$app->session->set('member',['member_id'=>$member['id'],'member_name'=>$member['name'], 'vip_number'=>$member['vip_number']]);
+        Yii::$app->session->set('member',['member_id'=>$member['id'],'member_name'=>$member['name'], 'vip_number'=>$member['vip_number'], 'username' => $member['username']]);
         return true;
 
     }
@@ -230,10 +232,18 @@ class Member extends \yii\db\ActiveRecord
     {
         // 获取用户id
         $session = Yii::$app->session->get('member');
-        $member_id = $session['vip_number'];
+        $member_id = $session['member_id'];
 
         // 改变状态值
         $model = Member::findOne($member_id);
+        if(!$model->out_status){
+            $this->addError('message', '你现在还不能退网');
+            return false;
+        }
+        if($model->status == 2){
+            $this->addError('message', '你已经退网了');
+            return false;
+        }
         $model->status = 2;
 
         // 改变上一级直推数量
@@ -245,11 +255,14 @@ class Member extends \yii\db\ActiveRecord
 
         // 添加退网记录
         $outModel = new Outline();
-        $outModel->member_id = $model->vip_number;
+        $outModel->member_id = $model->id;
+        $outModel->username = $model->username;
+        $outModel->name = $model->name;
+        $outModel->mobile = $model->mobile;
+        $outModel->vip_number = $model->vip_number;
         $outModel->created_at = time();
         $outModel->updated_at = $model->created_at;
-        $ext_data= ['name'=>$model->name, 'mobile'=>$model->mobile, 'vip_number'=>$model->vip_number];
-        $outModel->ext_data = json_encode($ext_data, JSON_UNESCAPED_UNICODE);
+        $outModel->ext_data = json_encode($model->toArray(), JSON_UNESCAPED_UNICODE);
 
         if($model->save(false) && $pidModel->save(false) && $outModel->save(false)){
             return true;
@@ -279,7 +292,7 @@ class Member extends \yii\db\ActiveRecord
                 return false;
             }
             $newmember = Member::findOne($member_id);
-            $newmember->name = $data['name'];
+           // $newmember->name = $data['name'];
             $newmember->bank_account = $data['bank_account'];
             $newmember->deposit_bank = $data['deposit_bank'];
             $newmember->address = $data['address'];
@@ -353,13 +366,13 @@ class Member extends \yii\db\ActiveRecord
      */
     public function outTime()
     {
-        if (date('H') == 23 && date('i') >= 50) {
-            return false;
+        if ( date('H')== 23 && date('i') >= 50) {
+            return true;
         }
         if (date('H') >=0  && date('H') <= 8) {
-            return false;
+            return true;
         }
-        return true;
+        return false;
 
     }
 

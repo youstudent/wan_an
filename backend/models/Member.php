@@ -239,4 +239,22 @@ class Member extends \yii\db\ActiveRecord
         return $this->parent_vip = $parent['vip_number'];
 
     }
+
+    /**
+     * 获取推荐人信息
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReferrer()
+    {
+        return $this->hasOne(Member::className(), ['id'=> 'parent_id'])->alias('referrer');
+    }
+
+    /**
+     * 获取注册人的信息
+     * @return \yii\db\ActiveQuery
+     */
+    public function getRegister()
+    {
+        return $this->hasOne(Member::className(), ['id'=> 'register_member_id'])->alias('register');
+    }
 }

@@ -9,9 +9,14 @@ use Yii;
  *
  * @property integer $id
  * @property integer $member_id
+ * @property string  $username
+ * @property string $name
+ * @property integer $vip_number
+ * @property string  $mobile
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $ext_data
  */
 class Outline extends \yii\db\ActiveRecord
 {

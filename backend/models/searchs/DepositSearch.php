@@ -12,6 +12,8 @@ use backend\models\Deposit;
  */
 class DepositSearch extends Deposit
 {
+    public $member_username;
+
     /**
      * @inheritdoc
      */
@@ -19,7 +21,7 @@ class DepositSearch extends Deposit
     {
         return [
             [['id', 'member_id', 'type', 'operation', 'num','updated_at'], 'integer'],
-            [['created_at'], 'safe'],
+            [['created_at', 'member_username'], 'safe'],
         ];
     }
 
@@ -43,6 +45,8 @@ class DepositSearch extends Deposit
     public function search($params)
     {
         $query = Deposit::find();
+        $query->alias('deposit');
+        $query->joinWith('member');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -70,8 +74,9 @@ class DepositSearch extends Deposit
             'num' => $this->num,
 //            'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
-        ])->andFilterWhere(['>=','created_at',$start])->andFilterWhere(['<=','created_at',$end]);
+        ])->andFilterWhere(['>=','deposit.created_at',$start])->andFilterWhere(['<=','deposit.created_at',$end]);
 
+        $query->andFilterWhere(['like', 'member.username', $this->member_username]);
         return $dataProvider;
     }
 }

@@ -42,14 +42,16 @@ $this->params['breadcrumbs'][] = '赠送记录';
             'mergeHeader'=>true,
         ],
         [
-            'attribute' => 'member_id',
-            'label' => '赠送人ID',
-            'mergeHeader'=>true,
+            'attribute' => 'give_username',
+            'label' => '赠送人',
+            'value' => 'give.username',
+            'headerOptions' => ['width'=>'150px']
         ],
         [
-            'attribute' => 'give_member_id',
-            'label' => '被赠送人ID',
-            'mergeHeader'=>true,
+            'attribute' => 'gain_username',
+            'label' => '被赠人',
+            'headerOptions' => ['width'=>'150px'],
+            'value' => 'gain.username'
         ],
         [
             'attribute' => 'type',

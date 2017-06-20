@@ -34,12 +34,12 @@ $this->params['breadcrumbs'][] = '退网管理列表';
     ];
     $columns = [
         [
-            'attribute' => 'member_id',
-            'value' => 'member.vip_number',
+            'attribute' => 'vip_number',
             'filter'    => false,
         ],
-            'member.name',
-            'member.mobile',
+            'username',
+            'name',
+            'mobile',
         [
             'attribute' => 'created_at',
             'label' => '退网时间',
@@ -63,7 +63,28 @@ $this->params['breadcrumbs'][] = '退网管理列表';
             },
             'filter'    => false,
         ],
-
+        [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' =>  function($model){
+                    return $model->status == 1 ? '<span class="label label-success radius">已确认</span>' : '<span class="label label-info radius">待确认</span>';
+                },
+                'filter' => [
+                        0 => '待确认',
+                        1 => '已确认',
+                ]
+        ],
+        [
+                'class' => 'kartik\grid\ActionColumn',
+                'template'=> '{confirm}',
+                'buttons' => [
+                        'confirm' => function ($url, $model, $key){
+                            if($model->status == 0){
+                                return Html::button('确认', ['class' => 'btn btn-default']);
+                            }
+                        }
+                ]
+        ]
         /*[
             'class' => 'kartik\grid\CheckboxColumn',
         ],*/

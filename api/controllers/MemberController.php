@@ -190,7 +190,7 @@ class MemberController extends ApiController
     {
 
         $model = new District();
-        if($data = $model->simpleTree(Yii::$app->request->post(), ArrayHelper::getValue(Yii::$app->session->get('member'), 'vip_number'))){
+        if($data = $model->simpleTree(Yii::$app->request->post(), ArrayHelper::getValue(Yii::$app->session->get('member'), 'username'))){
             return $this->jsonReturn(1, 'success', $data);
         }
         return $this->jsonReturn(0, $model->errorMsg);

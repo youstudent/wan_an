@@ -79,14 +79,13 @@ class Record extends \yii\db\ActiveRecord
             $this->addError('message', '提现金额必须是100的倍数');
             return false;
         };
-        $result = Member::findOne(['parent_id' => $id]);
-        if ($result == null || $result==false) {
+        $member = Member::findOne(['id' => $id]);
+        if ($member->child_num == 0) {
             $this->addError('code', 0);
             $this->addError('message', '必须直推至少一人才能提现');
             return false;
         };
-        $resultA = Member::findOne(['id' => $id]);
-        if ($resultA->a_coin < $data['coin']) {
+        if ($member->a_coin < abs($data['coin']) ) {
             $this->addError('code', 0);
             $this->addError('message', '你的余额不足');
             return false;
@@ -104,8 +103,8 @@ class Record extends \yii\db\ActiveRecord
             $this->status = 0;
             if ($this->save(false)) {
                 // 申请成功减去会员对应的金果
-                $resultA->a_coin = $resultA->a_coin - $data['coin'];
-                if ($resultA->save(false)){
+                $member->a_coin = $member->a_coin - abs($data['coin']);
+                if ($member->save(false)){
                         return true;
                 }
                 
