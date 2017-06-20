@@ -1,8 +1,13 @@
 <?php
+use common\components\Helper;
+use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
 use kartik\grid\GridView;
 use kartik\dynagrid\DynaGrid;
 use api\models\User;
+use yii\widgets\LinkPager;
+
 ?>
 <h2 style="color: #3C8DBC;text-align: center;margin-bottom: 60px;">统计中心</h2>
 <div class="cf well form-search" style="height: 68px;">
@@ -72,3 +77,85 @@ use api\models\User;
   -->
   </tbody>
 </table>
+
+<?php
+$log = \common\models\Bonus::find()->where(['coin_type'=>1, 'type'=> [1,2,3,5,6,7,10]])->orderBy(['created_at'=> SORT_DESC]);
+$params = Yii::$app->request->getQueryParam('CountSearch');
+
+if(isset($params['start']) && !empty($params['start'])){
+    $log->andFilterWhere(['>=', 'created_at', strtotime($params['start'])]);
+}
+if(isset($params['end']) && !empty($params['end'])){
+    $log->andFilterWhere(['<=', 'created_at', strtotime($params['end'])]);
+}
+$pages = new Pagination(['totalCount' =>$log->count(), 'pageSize' => '10']);
+$log_model = $log->offset($pages->offset)->limit($pages->limit)->all();
+
+
+?>
+
+
+<table class="table table-hover table-bordered table-striped" >
+    <thead>
+    <tr class="danger" >
+        <th>会员名</th>
+        <th>类型</th>
+        <th>金额</th>
+        <th>说明</th>
+        <th>时间</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach($log_model as $val){
+        $note = json_decode($val['ext_data'], true);
+        ?>
+        <tr>
+            <td><?= Helper::memberId2Username($val['member_id']) ?></td>
+            <td>
+                <?php
+                switch ($val['type']){
+                    case 1:
+                        echo '绩效';
+                        break;
+                    case 2:
+                        echo '分享';
+                        break;
+                    case 3:
+                        echo '额外分享';
+                        break;
+                    case 4:
+                        echo '提现';
+                        break;
+                    case 5:
+                        echo '注册';
+                        break;
+                    case 6:
+                        echo '充值';
+                        break;
+                    case 7:
+                        echo '扣除';
+                        break;
+                    case 8:
+                        echo '赠送';
+                        break;
+                    case 9:
+                        echo '提现失败';
+                        break;
+                    case 10:
+                        echo '注册扣除';
+                        break;
+                }
+                ?>
+            </td>
+            <td><?=$val['num']?></td>
+            <td><?= ArrayHelper::getValue($note, 'note', '') ?></td>
+            <td><?= date("Y-m-d H:i", $val['created_at']) ?></td>
+        </tr>
+
+    <?php } ?>
+    </tbody>
+</table>
+
+<?= LinkPager::widget(['pagination' => $pages]); ?>
+
+
