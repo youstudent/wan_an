@@ -32,10 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
 //        'before' => '<div style="padding-top: 7px;"><em>* The table at the right you can pull reports & personalize</em></div>',
     ];
     $columns = [
-//        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
+        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
         [
-            'attribute' => 'member_id',
-            'label' => '会员ID',
+            'attribute' => 'member_username',
+            'value' => 'member.username',
+            'label' => '会员名',
             'headerOptions' => ['width' => '200'],
         ],
         [
@@ -76,10 +77,7 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
         [
             'attribute' => 'num',
-            'label' => '余额',
-            'value' => function ($model) {
-                return $model->num;
-            },
+            'label' => '充值数量',
             'filter'    => false,
             'mergeHeader'=>true,
             'headerOptions' => ['width' => '200'],

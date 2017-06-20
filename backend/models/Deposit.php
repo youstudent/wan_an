@@ -4,7 +4,7 @@ namespace backend\models;
 
 use Yii;
 use backend\models\Member;
-use common\models\components\Helper;
+use common\components\Helper;
 
 /**
  * This is the model class for table "wa_deposit".
@@ -19,6 +19,7 @@ use common\models\components\Helper;
  */
 class Deposit extends \yii\db\ActiveRecord
 {
+    public $username;
     /**
      * @inheritdoc
      */
@@ -33,7 +34,9 @@ class Deposit extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['member_id', 'type', 'operation', 'num', 'created_at', 'updated_at'], 'integer']
+            [['username','type','operation'], 'required'],
+            [['member_id', 'type', 'operation', 'num', 'created_at', 'updated_at'], 'integer'],
+            [['num'], 'number', 'min'=> 1]
         ];
     }
 
@@ -47,9 +50,10 @@ class Deposit extends \yii\db\ActiveRecord
             'member_id' => '会员ID',
             'type' => '币种',
             'operation' => '',
-            'num' => '金额',
+            'num' => '充值数量',
             'created_at' => '创建时间 奖金获得时间',
             'updated_at' => '更新时间',
+            'username' => '用户名',
         ];
     }
 
@@ -80,53 +84,61 @@ class Deposit extends \yii\db\ActiveRecord
     */
 
     //充值和扣除
-    public function deposit($data)
+    public function deposit($post)
     {
-        $id = $data['Deposit']['member_id'];
-        $result = Member::findOne(['vip_number' => $id]);
-        if ($data['Deposit']['num'] < 0) {
-            Yii::$app->session->setFlash('error', '金额不能为负');
-            return null;
+        if(!$this->load($post)){
+            return false;
         }
-        if (!$result) {
+        if(!$this->validate()){
+            return false;
+        }
+
+        $member = Member::findOne(['username' => $this->username]);
+        if (!isset($member) || empty($member)) {
             Yii::$app->session->setFlash('error', '用户不存在');
             return null;
         }
-        if ($data['Deposit']['operation'] == 2 && $data['Deposit']['type'] ==1) {
-            if ($result->a_coin < $data['Deposit']['num']) {
+        $this->created_at = time();
+        //如果是扣除，先判断数量是否够
+        if ($this->operation == 2) {
+            if($this->type == 1){
+                if ($member->a_coin < $this->num) {
 
-                Yii::$app->session->setFlash('error', '金果不足,扣除失败');
-                return null;
-            }
-        }
-        if ($data['Deposit']['operation'] == 2 && $data['Deposit']['type'] ==2) {
-            if ($result->b_coin < $data['Deposit']['num']) {
-
-                Yii::$app->session->setFlash('error', '金种子不足,扣除失败');
-                return null;
-            }
-        }
-
-        if ($this->validate()) {
-            $this->created_at=time();
-            if ($this->save()) {
-                $type = $data['Deposit']['operation'] ==1 ? 6 : 7;
-                if ($data['Deposit']['operation'] ==1) {
-                    $data['Deposit']['type']==1?$result->a_coin += $data['Deposit']['num']:$result->b_coin += $data['Deposit']['num'];
-                    $result->save(false);
-                } else {
-                    $data['Deposit']['type']==1?$result->a_coin -= $data['Deposit']['num']:$result->b_coin -= $data['Deposit']['num'];
-                    $result->save(false);
+                    Yii::$app->session->setFlash('error', '金果不足,扣除失败');
+                    return null;
                 }
-
-                $Helper= new Helper();
-                if ($Helper->pool($result->id,$data['Deposit']['type'],$type,$data['Deposit']['num'],null,null)===false){
-                    return false;
-                }
-                return $this;
+                $member->a_coin =  $member->a_coin - $this->num;
             }
-        }
+            if($this->type == 2){
+                if ($member->b_coin < $this->num) {
 
-        return null;
+                    Yii::$app->session->setFlash('error', '金种子不足,扣除失败');
+                    return null;
+                }
+                $member->b_coin =  $member->b_coin - $this->num;
+            }
+            if(!$this->save()){
+                return false;
+            }
+            return Helper::saveBonusLog($member->id, $this->type, 7, $this->num, 0, ['note'=> '后台扣除']);
+        }else{
+            if($this->type == 1){
+                $member->a_coin = $member->a_coin + $this->num;
+            }
+            if($this->type == 2){
+                $member->b_coin = $member->b_coin + $this->num;
+            }
+            if(!$this->save()){
+                return false;
+            }
+            return Helper::saveBonusLog($member->id, $this->type, 6, $this->num, 0, ['note'=> '后台充值']);
+        }
     }
+
+    public function getMember()
+    {
+        return $this->hasOne(Member::className(), ['id'=> 'member_id'])->alias('member');
+    }
+
+
 }

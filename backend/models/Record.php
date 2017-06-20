@@ -47,24 +47,20 @@ class Record extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'member_id' => '会员ID',
-            'member.vip_number' => '会员vip_number',
-            'member.name'=>'会员姓名',
-            'member.mobile'=>'电话',
-            'member.deposit_bank'=>'开户行',
-            'member.bank_account'=>'银行账号',
+            'member_name'=>'会员姓名',
+            'member_mobile'=>'电话',
+            'member_deposit_bank'=>'开户行',
+            'member_bank_account'=>'银行账号',
             'created_at' => '申请时间',
             'total' => '申请金额',
             'updated_at' => '处理时间',
             'status' => '状态',
+            'member_username' => '会员名',
+            'coin' => '提现金额',
         ];
     }
     
-    
-    // 财务管理的提现记录与  会员建立一对一的关系
-    public function getMember()
-    {
-        return $this->hasOne(Member::className(), ['id' => 'member_id']);
-    }
+
     
     
     /**
@@ -92,12 +88,12 @@ class Record extends \yii\db\ActiveRecord
             $Helper->pool($model->member_id,1,4,$model->coin,$model->charge);
         }
     }
-    
-    
+
+
     /**
-     * @param $datas传过来的id
-     * @param $status拒绝值为2
-     * @param $type保存的类型为 9提现返回
+     * @param $datas 传过来的id
+     * @param $status 拒绝值为2
+     * @param $type 保存的类型为 9提现返回
      */
     public static function batch($datas,$status,$type){
         foreach ($datas as $data){
@@ -110,7 +106,11 @@ class Record extends \yii\db\ActiveRecord
           }
         }
     }
-    
+
+    public function getMember()
+    {
+        return $this->hasOne(Member::className(), ['id'=> 'member_id'])->alias('member');
+    }
 }
 
 

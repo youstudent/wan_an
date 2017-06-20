@@ -3,6 +3,7 @@
 namespace common\models;
 
 use backend\models\Member;
+use common\components\Helper;
 use Symfony\Component\Debug\Tests\Fixtures\DeprecatedInterface;
 use Yii;
 use yii\helpers\ArrayHelper;
@@ -55,19 +56,22 @@ class District extends \yii\db\ActiveRecord
     /**
      * 获取一个简单的树状结构
      * @param $post
+     * @param null $default_username
      * @return bool|mixed
      */
-    public function simpleTree($post, $default_vip_number = null)
+    public function simpleTree($post, $default_username = null)
     {
-        $vip_number = ArrayHelper::getValue($post, 'vip_number', null);
+        $username = ArrayHelper::getValue($post, 'username', null);
         $up =  ArrayHelper::getValue($post, 'up', 0);
-        if(empty($vip_number)){
-            if(is_null($default_vip_number)){
+        if(empty($username)){
+            if(is_null($default_username)){
                 $this->errorMsg = '未获取到登陆信息';
                 return false;
             }
-            $vip_number = $default_vip_number;
+            $username = $default_username;
         }
+
+        $vip_number = Helper::username2VipNumber($default_username);
 
         //区分是向上还是向下
         if($up){
@@ -80,7 +84,7 @@ class District extends \yii\db\ActiveRecord
             return false;
         }
         //查询这个区域下所有的会员
-        $data = $this->getDistrictMember($root_district['district'], 'm.vip_number,d.seat');
+        $data = $this->getDistrictMember($root_district['district'], 'm.username,d.seat');
         $output = $data[0];
         $i = 1;
         while(isset($data[$i])){
@@ -98,16 +102,19 @@ class District extends \yii\db\ActiveRecord
      */
     public function getFullTree($post)
     {
-        $vip_number = ArrayHelper::getValue($post, 'vip_number', 1);
+        $username = ArrayHelper::getValue($post, 'username');
         $up =  ArrayHelper::getValue($post, 'up', 0);
         //找到这个vip的 base 区
+
+        $vip_number = $username ? Helper::username2VipNumber($username) : 1;
+
         if($up){
             $district = $this->getMemberDistrict($vip_number, [2,3,4]);
         }else{
             $district = $this->getMemberDistrict($vip_number);
         }
         //找到这个区的所有会员
-        $members = $this->getDistrictAllMember($district['district'], 'vip_number,seat');
+        $members = $this->getDistrictAllMember($district['district'], 'username,seat');
         //这里要根据座位号来排序了
         foreach($members as &$val){
             $val['pid'] = Tree::$structure[$val['seat']]['node'];

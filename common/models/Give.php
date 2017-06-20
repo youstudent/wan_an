@@ -160,4 +160,13 @@ class Give extends \yii\db\ActiveRecord
         }
         return $data;
     }
+
+    public function getGain()
+    {
+        return $this->hasOne(Member::className(), ['id'=>'give_member_id'])->alias('gain');
+    }
+    public function getGive()
+    {
+        return $this->hasOne(Member::className(), ['id'=>'member_id'])->alias('give');
+    }
 }

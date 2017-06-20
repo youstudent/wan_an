@@ -14,6 +14,7 @@ use backend\models\Record;
 class recordSearch extends Record
 {
     public $member_name;
+    public $member_username;
     /**
      * @inheritdoc
      */
@@ -22,7 +23,7 @@ class recordSearch extends Record
         return [
             [['id', 'member_id'], 'integer'],
             [['coin'], 'number'],
-            [['status','created_at','updated_at'],'safe']
+            [['status','created_at','updated_at', 'member_username', 'member_name'],'safe']
         ];
     }
 
@@ -45,6 +46,7 @@ class recordSearch extends Record
     public function search($params)
     {
         $query = Record::find();
+        $query->alias('record');
         $query->joinWith(['member']);
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -52,12 +54,12 @@ class recordSearch extends Record
         
         if(isset($params['status']) && $params['status'] == 1){
             $query->andFilterWhere([
-                self::tableName() .'.status' => [1,2]
+                'record.status' => [1,2]
             ]);
 
         }else{
             $query->andFilterWhere([
-                self::tableName() .'.status' => 0
+                'record.status' => 0
 
             ]);
         }
@@ -65,12 +67,7 @@ class recordSearch extends Record
         if (!($this->load($params) && $this->validate())) {
             return $dataProvider;
         }
-        /*$status='';
-        if ($this->status =='通过'){
-            $status=1;
-        }else if ($this->status=='拒绝'){
-            $status=2;
-        }*/
+
          $start='';
          $end = '';
         //格式化时间
@@ -85,12 +82,13 @@ class recordSearch extends Record
             'id' => $this->id,
             //'member_id' => $this->member_id,
             // 'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            '{{%record}}.status'=>$this->status,
+            'record.updated_at' => $this->updated_at,
+            'record.status'=>$this->status,
             'coin'=>$this->coin
-        ])->andFilterWhere(['>=','created_at',$start])->andFilterWhere(['<=','created_at',$end]);
+        ])->andFilterWhere(['>=','record.created_at',$start])->andFilterWhere(['<=','record.created_at',$end]);
 
-       $query->andFilterWhere(['like', '{{%member}}.vip_number', $this->member_id]) ;
+        $query->andFilterWhere(['like', 'member.username', $this->member_username]) ;
+        $query->andFilterWhere(['like', 'member.name', $this->member_name]) ;
         return $dataProvider;
     }
 }

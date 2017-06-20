@@ -40,8 +40,8 @@ $this->params['breadcrumbs'][] = '会员管理列表';
     $columns = [
         ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
         [
-            'attribute' => 'vip_number',
-            'label' => '会员ID',
+            'attribute' => 'username',
+            'label' => '账号',
             'headerOptions' => ['width' => '100'],
         ],
         [
@@ -71,28 +71,26 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             'mergeHeader'=>true,
         ],
         [
-            'attribute' => 'parent_id',
-            'filter'    => false,
-            'mergeHeader'=>true,
-            'value' => function($model) {
-                return Helper::memberIdToVipNumber($model->parent_id);
-            }
+            'label' => '推荐人',
+            'attribute' => 'referrer_username',
+            'value' => 'referrer.username',
+            'headerOptions' => ['width' => '100px']
+        ],
+        [
+            'label' => '注册人',
+            'attribute' => 'register_username',
+            'value' => 'register.username',
+            'headerOptions' => ['width' => '100px']
         ],
         [
             'attribute' => 'a_coin',
             'label' => '金果数',
-            'value' => function ($model) {
-                return $model->getBonus(1, $model->id);
-            },
             'filter'    => false,
             'mergeHeader'=>true,
         ],
         [
             'attribute' => 'b_coin',
             'label' => '金种子数',
-            'value' => function ($model) {
-                return $model->getBonus(2, $model->id);
-            },
             'filter'    => false,
             'mergeHeader'=>true,
         ],
@@ -100,7 +98,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             'attribute' => 'group_num',
             'label' => '区数量',
             'value' => function ($model) {
-                return $model->getChild(2, $model->id);
+                return Helper::getMemberUnderDistrict($model->id);
             },
             'filter'    => false,
             'mergeHeader'=>true,
@@ -109,7 +107,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             'attribute' => 'child',
             'label' => '挂靠数',
             'value' => function ($model) {
-                return $model->getChild(3, $model->id);
+                return Helper::getMemberUnderNum($model->id);
             },
             'filter'    => false,
             'mergeHeader'=>true,
@@ -140,7 +138,7 @@ $this->params['breadcrumbs'][] = '会员管理列表';
                         return '<span class="label bg-primary">正常</span>';
                         break;
                     case '2';
-                        return '<span class="label bg-primary">已退网</span>';
+                        return '<span class="label label-warning radius">退网</span>';
                         break;
                     default:
                         return '未知状态';

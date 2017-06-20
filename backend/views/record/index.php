@@ -46,7 +46,7 @@ $this->params['breadcrumbs'][] = '财务管理列表';
     
     ];
     $columns = [
-        //['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
+        ['class' => 'kartik\grid\SerialColumn', 'order' => DynaGrid::ORDER_FIX_LEFT],
         /*[
             'class'=>\kartik\grid\CheckboxColumn::className(),
             'name'=>'id',  //设置每行数据的复选框属性
@@ -56,15 +56,14 @@ $this->params['breadcrumbs'][] = '财务管理列表';
         ],*/
 
         [
-            'attribute' => 'member_id',
-            'value' => 'member.vip_number',
+            'attribute' => 'member_username',
+            'value' => 'member.username',
             'headerOptions' => ['width' => '100'],
         ],
         [
             'label' => '会员名',
-            'attribute' => 'member.name',
+            'attribute' => 'member_name',
             'value' => 'member.name',
-            'mergeHeader'=>true,
         
         ],
         [
@@ -74,21 +73,21 @@ $this->params['breadcrumbs'][] = '财务管理列表';
         ],
         [
             'label' => '电话',
-            'attribute' => 'member.mobile',
+            'attribute' => 'member_mobile',
             'value' => 'member.mobile',
             'mergeHeader'=>true,
 
         ],
         [
             'label' => '开户行',
-            'attribute' => 'member.deposit_bank',
+            'attribute' => 'member_deposit_bank',
             'value' => 'member.deposit_bank',
             'mergeHeader'=>true,
 
         ],
         [
             'label' => '银行账号',
-            'attribute' => 'member.bank_account',
+            'attribute' => 'member_bank_account',
             'value' => 'member.bank_account',
             'mergeHeader'=>true,
 

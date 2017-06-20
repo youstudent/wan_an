@@ -19,7 +19,6 @@ $this->params['breadcrumbs'][] = '扣除';
 
     <?php     $form = ActiveForm::begin([
         'type' => ActiveForm::TYPE_HORIZONTAL,
-        'options' => ['enctype' => 'multipart/form-data']   // important, needed for file upload
     ]);?>
 
 
@@ -33,7 +32,7 @@ $this->params['breadcrumbs'][] = '扣除';
         </div>
         <div class="col-md-6">
 
-            <?= $form->field($model, 'member_id')->textInput(['style'=>'width:300px']) ?>
+            <?= $form->field($model, 'username')->textInput(['style'=>'width:300px']) ?>
 
             <?= $form->field($model, 'type')->dropDownList(['1'=>'金果', '2'=>'金种子'],
                 ['prompt'=>'请选择','style'=>'width:300px'])  ?>

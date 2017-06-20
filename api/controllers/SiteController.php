@@ -28,14 +28,14 @@ class SiteController extends ApiController
     public function actionLogin()
     {
         $loginModel = new Member();
-//        if ($loginModel->outTime()) {
-//            return $this->jsonReturn(0, '服务器维护中,请稍后再试');
-//        }
+        if ($loginModel->outTime()) {
+            return $this->jsonReturn(0, '服务器维护中,请稍后再试');
+        }
         if (!$this->createAction('captcha')->validate(Yii::$app->request->post('authCode'), true)) {
             return $this->jsonReturn(0, '验证码错误');
         }
 
-        if ($loginModel->login(Yii::$app->request->post('id'), Yii::$app->request->post('password'))) {
+        if ($loginModel->login(Yii::$app->request->post('username'), Yii::$app->request->post('password'))) {
             return $this->jsonReturn(1, 'success');
         }
         return $this->jsonReturn(0, $loginModel->getFirstError('message'));
@@ -73,8 +73,8 @@ class SiteController extends ApiController
                 'class' => 'api\models\CaptchaAction',
                 'fixedVerifyCode' => YII_ENV_TEST ? 'testme' : null,
                 'backColor'=>0x000000,//背景颜色
-                'maxLength' => 2, //最大显示个数
-                'minLength' => 2,//最少显示个数
+                'maxLength' => 4, //最大显示个数
+                'minLength' => 4,//最少显示个数
                 'height'=>25,//高度
                 'width' => 50,  //宽度
                 'foreColor'=>0xffffff,     //字体颜色

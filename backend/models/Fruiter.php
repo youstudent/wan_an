@@ -49,8 +49,8 @@ class Fruiter extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'member_id' => '会员ID',
-            'member.id' => '会员ID',
-            'member.name' => '姓名',
+            'member_username' => '用户名',
+            'member_name' => '姓名',
             'order_sn' => '订单号',
             'fruter_img.img_path' =>'果树图片',
             'fruiter_name' => '果树名称',

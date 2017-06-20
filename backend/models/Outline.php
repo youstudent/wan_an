@@ -11,9 +11,14 @@ use backend\models\Member;
  *
  * @property integer $id
  * @property integer $member_id
+ * @property string $username
+ * @property string $name
+ * @property string $mobile
+ * @property integer $vip_number
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
+ * @property string $ext_data
  */
 class Outline extends \yii\db\ActiveRecord
 {
@@ -31,8 +36,12 @@ class Outline extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['member_id', 'status', 'created_at', 'updated_at'], 'integer'],
-            [['ext_data'], 'string', 'max' => 255],
+            [['member_id', 'vip_number', 'status', 'created_at', 'updated_at'], 'integer'],
+            [['username', 'name', 'vip_number'], 'required'],
+            [['username'], 'string', 'max' => 6],
+            [['name'], 'string', 'max' => 60],
+            [['mobile'], 'string', 'max' => 15],
+            [['ext_data'], 'string', 'max' => 255]
         ];
     }
 
@@ -42,15 +51,16 @@ class Outline extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => '记录ID',
-            'member_id' => '退网会员ID',
-            'member.id' => '退网会员vipnumber',
-            'member.name' => '会员姓名',
-            'member.mobile' => '电话',
-            'status' => '账号状态',
+            'id' => 'ID',
+            'member_id' => '会员id',
+            'username' => '用户名',
+            'name' => '姓名',
+            'mobile' => '手机号',
+            'vip_number' => '会员编号',
+            'status' => '状态',
             'created_at' => '退网时间',
-            'updated_at' => '注册时间',
-            'ext_data' => '扩展',
+            'updated_at' => '操作时间',
+            'ext_data' => '扩展数据',
         ];
     }
     
