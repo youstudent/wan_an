@@ -36,7 +36,7 @@ class Deposit extends \yii\db\ActiveRecord
         return [
             [['username','type','operation'], 'required'],
             [['member_id', 'type', 'operation', 'num', 'created_at', 'updated_at'], 'integer'],
-            [['num'], 'number', 'min'=> 1]
+            [['num'], 'number', 'min'=> 1, 'max' => 2147483647]
         ];
     }
 
@@ -128,9 +128,10 @@ class Deposit extends \yii\db\ActiveRecord
             if($this->type == 2){
                 $member->b_coin = $member->b_coin + $this->num;
             }
-            if(!$this->save()){
+            if(!$this->save() || !$member->save(false)){
                 return false;
             }
+
             return Helper::saveBonusLog($member->id, $this->type, 6, $this->num, 0, ['note'=> '后台充值']);
         }
     }

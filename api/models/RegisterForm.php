@@ -444,12 +444,17 @@ class RegisterForm extends Member
         while(is_null($affiliated_node)){
             //找到这会员的可用下级
             $affiliated_node = $this->getMemberDistrictSeatCount($referrer_id);
-            $referrer_id = $this->getChildRandomDistrictMemberId($referrer_id);
-            if($affiliated_node['num'] == 40){
-                $affiliated_node = null;
+            if(isset($affiliated_node['num']) && $affiliated_node['num'] < 40){
+                return $affiliated_node;
             }
+            $referrer_id = $this->getChildRandomDistrictMemberId($referrer_id);
+            if($referrer_id == false){
+                $this->errorMsg = '挂靠点查询失败';
+                break;
+            }
+
         }
-        return $affiliated_node;
+
     }
 
     /**
@@ -460,7 +465,7 @@ class RegisterForm extends Member
     public function getChildRandomDistrictMemberId($member_id)
     {
         $member_district = $this->getMemberRootDistrict($member_id);
-        $ids = $this->byDistrictsGetAllMemberId($member_id);
+        $ids = $this->byDistrictsGetAllMemberId($member_district);
         if(!isset($ids) || empty($ids)){
             return false;
         }

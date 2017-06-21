@@ -172,7 +172,7 @@ class Helper{
      */
     public static function getMemberUnderNum($member_id)
     {
-        return MemberNode::find()->where(['member_id'=>$member_id])->count();
+        return MemberNode::find()->where(['above_member_id'=>$member_id])->count();
     }
 
     /**
@@ -182,7 +182,7 @@ class Helper{
      */
     public static function getMemberUnderDistrict($member_id)
     {
-        $member_ids  = MemberNode::find()->where(['member_id'=>$member_id])->select('above_member_id')->column();
+        $member_ids  = MemberNode::find()->where(['above_member_id'=>$member_id])->select('member_id')->column();
 
         if(isset($member_id) && count($member_ids)){
             //获取区数量
