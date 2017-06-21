@@ -47,6 +47,8 @@ class MemberController extends ApiController
     {
         $model = new Bonus();
         $type = \Yii::$app->request->get('type');
+//        $size = \Yii::$app->request->get('size');
+//        $page = \Yii::$app->request->get('page');
         if ($bonus = $model->getBonus($type)) {
             return $this->jsonReturn(1, 'success', $bonus);
         }
@@ -236,5 +238,19 @@ class MemberController extends ApiController
         }
         //如果返回null 返回错误信息
         return $this->jsonReturn(0, '无关联用户');
+    }
+
+    /**
+     * 获取用户的分享记录或者注册记录
+     * @return array
+     */
+    public function actionLog()
+    {
+        $model = new Member();
+
+        if($data = $model->log(Yii::$app->request->getQueryParam('type'), ArrayHelper::getValue(Yii::$app->session->get('member'), 'member_id'))){
+            return $this->jsonReturn(1, 'success', $data);
+        }
+        return $this->jsonReturn(0, '赞无记录', []);
     }
 }
