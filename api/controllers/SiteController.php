@@ -28,9 +28,9 @@ class SiteController extends ApiController
     public function actionLogin()
     {
         $loginModel = new Member();
-        if ($loginModel->outTime()) {
-            return $this->jsonReturn(0, '服务器维护中,请稍后再试');
-        }
+//        if ($loginModel->outTime()) {
+//            return $this->jsonReturn(0, '服务器维护中,请稍后再试');
+//        }
         if (!$this->createAction('captcha')->validate(Yii::$app->request->post('authCode'), true)) {
             return $this->jsonReturn(0, '验证码错误');
         }
