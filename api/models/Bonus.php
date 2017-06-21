@@ -67,7 +67,7 @@ class Bonus extends \yii\db\ActiveRecord
         // 获取用户id
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
-
+//$member_id=1;
         $query = (new \yii\db\Query());
 //        $pagesize =($page-1)* $size;
         // 判断调用的type类型
@@ -106,7 +106,9 @@ class Bonus extends \yii\db\ActiveRecord
         }
         foreach ($bonus as &$v) {
             $v['created_at'] = date('Y/m/d H:i', $v['created_at']);
-            $v['relate_username'] = json_decode($v['ext_data'])->relation;
+            if ($v['ext_data']){
+                $v['relate_username'] = json_decode($v['ext_data'])->relation;
+            }
             switch ($v['type']) {
                 case 1:
                     $v['typeName'] = '绩效';
