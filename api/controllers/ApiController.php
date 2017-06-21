@@ -35,7 +35,7 @@ class ApiController extends Controller
                     'code' => 10001,
                     'timestamp' => time(),
                     'message' => '网站维护中',
-                    'data' => [],
+                    'data' => ['offTime'=>$offlineTime->start.'-'.$offlineTime->end],
                 ]));
 
             }
