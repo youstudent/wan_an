@@ -105,7 +105,7 @@ class Member extends \yii\db\ActiveRecord
         // 获取用户id
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
-$member_id=1;
+
         $arr = ['username', 'parent_id', 'name', 'mobile', 'deposit_bank', 'bank_account', 'address',
                 'child_num', 'a_coin', 'b_coin'];
         $query = (new \yii\db\Query());
