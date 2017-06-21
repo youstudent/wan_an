@@ -26,11 +26,13 @@ class ApiController extends Controller
             $H = date('H',time());
             $i = date('i',time());
 
-            $fun= ((($offlineTime->start_h < $H) || ($offlineTime->start_h == $H && $offlineTime->start_i <= $i)) ||
+            $close_site = ((($offlineTime->start_h < $H) || ($offlineTime->start_h == $H && $offlineTime->start_i <= $i)) ||
                 (($offlineTime->end_h > $H) || ($offlineTime->end_h == $H && $offlineTime->end_i > $i)));
 
-            if ($fun) {
-                if (yii::$app->request->post('is_api') == 0) {
+            if ($close_site) {
+
+                $post = yii::$app->request->post();
+                if ($action->id == 'full-tree' && $this->id == 'member' && isset($post['is_api']) && $post['is_api'] == 1) {
                     return true;
                 }
 
