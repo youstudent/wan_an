@@ -30,6 +30,10 @@ class ApiController extends Controller
                 (($offlineTime->end_h > $H) || ($offlineTime->end_h == $H && $offlineTime->end_i > $i)));
 
             if ($fun) {
+                if (yii::$app->request->post('is_api') == 0) {
+                    return true;
+                }
+
                 header("Content-type: application/json");
                 exit(json_encode([
                     'code' => 10001,
