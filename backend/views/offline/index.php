@@ -25,13 +25,13 @@ $this->params['breadcrumbs'][] = ['label' => '关网时间', 'url' => ['off']];
         </div>  <div class="page-header">
             <h1 style="border-left-width: 199px;margin-left: 240px; color: #00a0e9"><?= Html::encode('时间修改')?></h1>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-6" style="font-size:25px">
 
-            &nbsp;&nbsp;&nbsp;&nbsp;开始时间:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?= $form->field($model, 'start_h')->hiddenInput(['id'=>'start_h'])->textInput(['style'=>'width:70px;'])->label('开始时间-时') ?>时
-            <?= $form->field($model, 'start_i')->hiddenInput(['id'=>'start_i'])->textInput(['style'=>'width:70px'])->label('开始时间-分') ?>分
+            &nbsp;&nbsp;&nbsp;&nbsp;开始时间:&nbsp;&nbsp;&nbsp;&nbsp;<?= $form->field($model, 'start_h')->hiddenInput(['id'=>'start_h'])->textInput(['style'=>'width:70px;'])->label('开始时间-时') ?>&nbsp;&nbsp;时
+            <?= $form->field($model, 'start_i')->hiddenInput(['id'=>'start_i'])->textInput(['style'=>'width:70px'])->label('开始时间-分') ?>&nbsp;&nbsp;分
             <br><br><br><br>
-            &nbsp;&nbsp;&nbsp;&nbsp;结束时间:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?= $form->field($model, 'end_h')->hiddenInput(['id'=>'end_h'])->textInput(['style'=>'width:70px'])->label('结束时间-时') ?>时
-            <?= $form->field($model, 'end_i')->hiddenInput(['id'=>'end_i'])->textInput(['style'=>'width:70px'])->label('结束时间-分') ?>分
+            &nbsp;&nbsp;&nbsp;&nbsp;结束时间:&nbsp;&nbsp;&nbsp;&nbsp;<?= $form->field($model, 'end_h')->hiddenInput(['id'=>'end_h'])->textInput(['style'=>'width:70px'])->label('结束时间-时') ?>&nbsp;&nbsp;时
+            <?= $form->field($model, 'end_i')->hiddenInput(['id'=>'end_i'])->textInput(['style'=>'width:70px'])->label('结束时间-分') ?>&nbsp;&nbsp;分
 
         </div>
 
