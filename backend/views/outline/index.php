@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = '退网管理列表';
                 'buttons' => [
                         'confirm' => function ($url, $model, $key){
                             if($model->status == 0){
-                                return Html::button('确认', ['class' => 'btn btn-default']);
+                                return Html::a(Html::tag('span', '确认', ['class' => "btn btn-xs btn-danger"]), ['outline/change', 'id'=>$model->id]);
                             }
                         }
                 ]
