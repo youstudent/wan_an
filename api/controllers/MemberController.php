@@ -224,7 +224,7 @@ class MemberController extends ApiController
             $json = [ 'code'=> 1, 'data' => $data, 'message'=> 'success'];
             return $this->asJson($json);
         }
-        $json = [ 'code'=> 0, 'data' => [], 'message'=> $model->getFirstErrors()];
+        $json = [ 'code'=> 0, 'data' => [], 'message'=> $model->errorMsg];
         return $this->asJson($json);
     }
     /**

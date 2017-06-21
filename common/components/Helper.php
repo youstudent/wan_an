@@ -192,6 +192,18 @@ class Helper{
     }
 
     /**
+     * 检查会员是否在 $above_member_id 的区里面
+     * @param $above_member_id
+     * @param $member_id
+     * @return bool
+     */
+    public static function checkMemberIsUnder($above_member_id, $member_id)
+    {
+        $one =  MemberNode::find()->where(['above_member_id'=>$above_member_id, 'member_id'=>$member_id])->select('member_id')->one();
+        return $one ? true : false;
+    }
+
+    /**
      * 用户名转换成memberid
      * @param $username
      * @return mixed
