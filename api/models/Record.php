@@ -67,7 +67,7 @@ class Record extends \yii\db\ActiveRecord
             $code = 0;
             $this->addError('code', $code);
             $this->addError('message', $message);
-            return false;
+            return false;   
         }
         if ($data['coin'] <= 0) {
             $this->addError('code', 0);
@@ -124,7 +124,7 @@ class Record extends \yii\db\ActiveRecord
                 ->where(['member_id' => $member_id])
                 ->orderBy(['created_at' => SORT_DESC])
                 ->all();
-        if ($model == false) {
+        if ($model === false || $model ===null) {
             $this->addError('code', 0);
             $this->addError('message', '没有提现记录');
             return false;
