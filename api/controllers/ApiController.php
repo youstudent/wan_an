@@ -30,16 +30,12 @@ class ApiController extends Controller
                 (($offlineTime->end_h > $H) || ($offlineTime->end_h == $H && $offlineTime->end_i > $i)));
 
             if ($fun) {
-                Yii::$app->response->format = Response::FORMAT_JSON;
-                $code = 10001;
-                $data = [];
-                $time = '';
-                $time = $time ? $time : time();
+                header("Content-type: application/json");
                 exit(json_encode([
-                    'code' => $code,
-                    'timestamp' => $time,
+                    'code' => 10001,
+                    'timestamp' => time(),
                     'message' => '网站维护中',
-                    'data' => $data,
+                    'data' => [],
                 ]));
 
             }
