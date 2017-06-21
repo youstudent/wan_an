@@ -265,4 +265,18 @@ class GoodsController extends Controller
             }
         }
     }
+    
+    //百度编辑器
+    public function actions(){
+        return [
+            'ueditor'=>[
+                'class' => 'common\widgets\ueditor\UeditorAction',
+                'config'=>[
+                    //上传图片配置
+                    'imageUrlPrefix' => Yii::$app->params['img_domain'], /* 图片访问路径前缀 */
+                    'imagePathFormat' => Yii::getAlias('@web').'/public'."/upload/branner_imgs/{yyyy}{mm}{dd}/{time}{rand:6}", /* 上传保存路径,可以自定义保存路径和文件名格式 */
+                ]
+            ]
+        ];
+    }
 }

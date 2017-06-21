@@ -38,7 +38,7 @@ class Upload extends Model
             //获取文件上传的相对路径
             $img_path = $this->getSavePath('goods', $this->img_path->name);
             $this->img_path->saveAs(Yii::getAlias('@webroot') . $img_path);
-            $model->img_path = $this->db_save_path;
+            $model->img_path = '/public'.$this->db_save_path;
             $model->save();
             return $model->id;
         }
@@ -54,7 +54,7 @@ class Upload extends Model
             $img_path = $this->getSavePath('fruiter', $this->img_path->name);
             $model->fruiter_id = $params['fruiter_id'];
             $this->img_path->saveAs(Yii::getAlias('@webroot') . $img_path);
-            $model->img_path = $this->db_save_path;
+            $model->img_path = '/public'.$this->db_save_path;
             $model->save();
             return $model->id;
         }

@@ -67,7 +67,7 @@ class Branner extends \yii\db\ActiveRecord
         if ($this->img) {
             $path = '/public/upload/branner_imgs/';
             $uniqid = uniqid();
-            $save_path = '/upload/branner_imgs/' . $uniqid  . '.' . $this->img->extension; ;
+            $save_path = '/public/upload/branner_imgs/' . $uniqid  . '.' . $this->img->extension; ;
             $path = $path . $uniqid . '.' . $this->img->extension;
             $path_dir = dirname(Yii::getAlias('@webroot') . $path);
             if (!is_dir($path_dir)) {
@@ -96,7 +96,7 @@ class Branner extends \yii\db\ActiveRecord
             if ($this->img) {
                 $path = '/public/upload/branner_imgs/';
                 $uniqid = uniqid();
-                $save_path = '/upload/branner_imgs/' . $uniqid  . '.' . $this->img->extension; ;
+                $save_path = '/public/upload/branner_imgs/' . $uniqid  . '.' . $this->img->extension; ;
                 $path = $path . $uniqid . '.' . $this->img->extension;
                 $path_dir = dirname(Yii::getAlias('@webroot') . $path);
                 if (!is_dir($path_dir)) {
