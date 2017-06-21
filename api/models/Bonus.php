@@ -69,29 +69,35 @@ class Bonus extends \yii\db\ActiveRecord
         $member_id = $session['member_id'];
 
         $query = (new \yii\db\Query());
-
+//        $pagesize =($page-1)* $size;
         // 判断调用的type类型
         // 全部
         if ($type == 0) {
-            $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())
+            $bonus = $query->select('type,created_at,num,ext_data')->from(Bonus::tableName())
                     ->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>[1,2,3,5]])
                     ->orderBy(['created_at' => SORT_DESC])
+//                    ->limit($size)
+//                    ->offset($pagesize)
                     ->all();
         }
 
         // 绩效
         if ($type == 1) {
-            $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())
+            $bonus = $query->select('type,created_at,num,ext_data')->from(Bonus::tableName())
                     ->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>1])
                     ->orderBy(['created_at' => SORT_DESC])
+//                    ->limit($size)
+//                    ->offset($pagesize)
                     ->all();
         }
 
         // 分享
         if ($type == 2) {
-            $bonus = $query->select('type,created_at,num')->from(Bonus::tableName())
+            $bonus = $query->select('type,created_at,num,ext_data')->from(Bonus::tableName())
                     ->where(['member_id' => $member_id, 'coin_type' => 1, 'type' =>2])
                     ->orderBy(['created_at' => SORT_DESC])
+//                    ->limit($size)
+//                    ->offset($pagesize)
                     ->all();
         }
 
@@ -99,7 +105,8 @@ class Bonus extends \yii\db\ActiveRecord
             return null;
         }
         foreach ($bonus as &$v) {
-            $v['created_at'] = date('Y/m/d H:i:s', $v['created_at']);
+            $v['created_at'] = date('Y/m/d H:i', $v['created_at']);
+            $v['relate_username'] = json_decode($v['ext_data'])->relation;
             switch ($v['type']) {
                 case 1:
                     $v['typeName'] = '绩效';

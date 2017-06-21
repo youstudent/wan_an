@@ -41,6 +41,7 @@ class Member extends \yii\db\ActiveRecord
     public $gross_income;
     public $gorss_bonus;
     public $group_num;
+    public $parent_username;
     /**
      * @inheritdoc
      */
@@ -104,16 +105,21 @@ class Member extends \yii\db\ActiveRecord
         // 获取用户id
         $session = Yii::$app->session->get('member');
         $member_id = $session['member_id'];
-
+$member_id=1;
         $arr = ['username', 'parent_id', 'name', 'mobile', 'deposit_bank', 'bank_account', 'address',
                 'child_num', 'a_coin', 'b_coin'];
         $query = (new \yii\db\Query());
         $data= $query->select($arr)->from(Member::tableName())
                     ->where(['id' => $member_id])
                     ->one();
+
         if(!isset($data) || empty($data)){
             return null;
         }
+        if ($data['parent_id']){
+            $data['parent_username'] = Member::findOne(['id'=>$data['parent_id']])->username;
+        }
+
 
         $data['child'] = Helper::getMemberUnderNum($member_id);
 //        $child = 1;

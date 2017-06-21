@@ -47,6 +47,8 @@ class MemberController extends ApiController
     {
         $model = new Bonus();
         $type = \Yii::$app->request->get('type');
+//        $size = \Yii::$app->request->get('size');
+//        $page = \Yii::$app->request->get('page');
         if ($bonus = $model->getBonus($type)) {
             return $this->jsonReturn(1, 'success', $bonus);
         }
