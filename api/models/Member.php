@@ -6,6 +6,7 @@ use common\components\Helper;
 use common\models\District;
 use Yii;
 use yii\db\Query;
+use yii\helpers\ArrayHelper;
 use yii\web\IdentityInterface;
 use api\models\Session;
 use yii\captcha\CaptchaAction;
@@ -416,5 +417,27 @@ class Member extends \yii\db\ActiveRecord
             return $data;
         }
         return null;
+    }
+
+    /**
+     * 分享记录或者注册记录
+     * @param int $type
+     * @param $member_id
+     * @return array|\yii\db\ActiveRecord[]
+     */
+    public function log($type = 1, $member_id)
+    {
+        if($type == 1){
+            $log = Bonus::find()->where(['type'=> 5, 'member_id'=>$member_id]);
+        }else{
+            $log = Bonus::find()->where(['type'=>2, 'member_id'=>$member_id]);
+        }
+        $data = $log->select('num,created_at,ext_data')->orderBy(['created_at'=>SORT_DESC])->asArray()->all();
+        foreach($data as &$val){
+            $val['relation'] = ArrayHelper::getValue(json_decode($val['ext_data'], true), 'relation', '');
+            $val['created_at'] = date("Y-m-d H:i", $val['created_at']);
+            unset($val['ext_data']);
+        }
+        return $data;
     }
 }
