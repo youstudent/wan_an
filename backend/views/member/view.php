@@ -71,6 +71,14 @@ $this->params['breadcrumbs'][] = '奖金详情';
             'mergeHeader'=>true,
         ],
         [
+            'attribute' => 'relate_username',
+            'value' => function ($model) {
+                return Bonus::getRelateName($model->id);
+            },
+            'filter'    => false,
+            'mergeHeader'=>true,
+        ],
+        [
             'attribute' => 'created_at',
             'label' => '获得时间',
             'value' => function ($model) {
