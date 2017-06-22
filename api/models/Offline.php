@@ -54,10 +54,10 @@ class Offline extends \yii\db\ActiveRecord
     {
         $model = Offline::findOne(1);
 
-//        if (!$model) {
-//            $model->start = '01时01分';
-//            $model->end = '01时01分';
-//        }
+        if (!$model) {
+            $model->start = '23时59分';
+            $model->end = '00时01分';
+        }
 
         $start = explode('时',$model->start);
         $end = explode('时',$model->end);
