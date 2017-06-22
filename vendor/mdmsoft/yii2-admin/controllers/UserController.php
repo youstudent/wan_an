@@ -121,7 +121,7 @@ class UserController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
+        $model->password_hash = '';
         if ($model->load(Yii::$app->request->post()) && $model->updateUser($id,Yii::$app->request->post())) {
             Yii::$app->session->setFlash('success', '修改成功');
             return $this->redirect(['index']);

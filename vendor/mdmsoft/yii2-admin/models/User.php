@@ -75,15 +75,16 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function updateUser($id,$data)
     {
-        $user = User::findOne($id);
+        $this->load($data, 'User');
 
-        $user->load($data, 'User');
+        $user = $this->findOne($id);
+        $user->username = $data['User']['username'];
+        if(!empty($data['User']['password_hash'])){
+            $user->password_hash = $data['User']['password_hash'];
+            $user->setPassword($this->password_hash);
+        }
 
-        $this->username = $data['User']['username'];
-        $this->password_hash = $data['User']['password_hash'];
-        $user->setPassword($this->password_hash);
-
-        if ($this->validate() && $user->save(false)) {
+        if ($user->save(false)) {
             return $user;
         }
 
