@@ -24,6 +24,7 @@ class MemberSearch extends Member
     public function rules()
     {
         return [
+            ['username', 'string'],
             [['id', 'parent_id', 'last_login_time', 'status','updated_at', 'vip_number', 'a_coin', 'b_coin', 'child_num', 'out_status'], 'integer'],
             [['name', 'password', 'mobile', 'deposit_bank', 'bank_account', 'address','created_at', 'referrer_username', 'register_username'], 'safe'],
         ];
@@ -85,6 +86,7 @@ class MemberSearch extends Member
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'password', $this->password])
+            ->andFilterWhere(['like', 'member.username', $this->username])
             ->andFilterWhere(['like', 'member.mobile', $this->mobile])
             ->andFilterWhere(['like', 'deposit_bank', $this->deposit_bank])
             ->andFilterWhere(['like', 'bank_account', $this->bank_account])

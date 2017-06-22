@@ -112,6 +112,13 @@ $this->params['breadcrumbs'][] = '果树管理列表';
                 'allowSortSetting' => true,
                 'gridOptions' => [
                     'dataProvider' => $dataProvider,
+                    'pager'=>[
+                        //'options'=>['class'=>'hidden']//关闭自带分页
+                        'firstPageLabel'=>'首页',
+                        'prevPageLabel'=>'上一页',
+                        'nextPageLabel'=>'下一页',
+                        'lastPageLabel'=>'尾页',
+                    ],
                     'showPageSummary' => true,
                     'floatHeader' => true,
                     'pjax' => true,

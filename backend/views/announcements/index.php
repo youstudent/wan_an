@@ -101,6 +101,13 @@ $this->params['breadcrumbs'][] = '公告管理列表';
                 'allowSortSetting' => true,
                 'gridOptions' => [
                     'dataProvider' => $dataProvider,
+                    'pager'=>[
+                        //'options'=>['class'=>'hidden']//关闭自带分页
+                        'firstPageLabel'=>'首页',
+                        'prevPageLabel'=>'上一页',
+                        'nextPageLabel'=>'下一页',
+                        'lastPageLabel'=>'尾页',
+                    ],
                     'showPageSummary' => true,
                     'floatHeader' => true,
                     'pjax' => true,
@@ -109,7 +116,7 @@ $this->params['breadcrumbs'][] = '公告管理列表';
                 ],
                 'options' => ['id' => 'Announcements'.Yii::$app->user->identity->id] // a unique identifier is important
     ]);
-
+   
     DynaGrid::end();
    $js =<<<JS
        $(function () {
@@ -134,6 +141,7 @@ $this->params['breadcrumbs'][] = '公告管理列表';
 
 JS;
 $this->registerJs($js);
+
 ?>   
 </div>
 

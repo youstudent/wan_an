@@ -11,6 +11,7 @@ use backend\models\Bonus;
  * @property integer $id
  * @property integer $parent_id
  * @property string $name
+ * @property string $username
  * @property string $password
  * @property string $mobile
  * @property string $deposit_bank
@@ -60,6 +61,7 @@ class Member extends \yii\db\ActiveRecord
     {
         return [
             'id' => '会员ID',
+            'username' => '账号',
             'parent_id' => '直推会员id',
             'name' => '用户姓名',
             'password' => '会员密码',
@@ -78,6 +80,7 @@ class Member extends \yii\db\ActiveRecord
             'group_num' => '区数量',
             'child' => '区数量',
             'parent_vip' => '直推会员卡号',
+            'relate_name' => '关联用户',
         ];
     }
 

@@ -59,6 +59,7 @@ class Bonus extends \yii\db\ActiveRecord
             'updated_at' => '更新时间',
             'poundage' => '手续费',
             'ext_data' => '扩展',
+            'relate_username' => '关联账号',
         ];
     }
 
@@ -92,4 +93,14 @@ class Bonus extends \yii\db\ActiveRecord
         return $this->hasOne(Member::className(), ['id' => 'member_id']);
     }
 
+    public static function getRelateName($id)
+    {
+        $query = (new \yii\db\Query());
+        $bonus = $query->select('ext_data')->from(Bonus::tableName())
+            ->where(['id' => $id])
+            ->one();
+        $relate_username = json_decode($bonus['ext_data'])->relation;
+
+        return $relate_username;
+    }
 }
