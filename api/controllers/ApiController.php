@@ -26,11 +26,24 @@ class ApiController extends Controller
             $H = date('H',time());
             $i = date('i',time());
 
-            $fun= ((($offlineTime->start_h < $H) || ($offlineTime->start_h == $H && $offlineTime->start_i <= $i)) ||
-                (($offlineTime->end_h > $H) || ($offlineTime->end_h == $H && $offlineTime->end_i > $i)));
+            $start_H = $offlineTime->start_h < $H;
+            $start_h = $offlineTime->start_h == $H;
+            $start_i = $offlineTime->start_i <= $i;
 
-            if ($fun) {
-                if (yii::$app->request->post('is_api') == 0) {
+            $end_H = $offlineTime->end_h > $H;
+            $end_h = $offlineTime->end_h == $H;
+            $end_i = $offlineTime->end_i >= $i;
+            if (($offlineTime->start_h >= $offlineTime->end_h) && ($offlineTime->start_i > $offlineTime->end_i) ) {
+                $close_site = ((($start_H) || ($start_h && $start_i)) || (($end_H) || ($end_h == $H && $end_i)));
+            } else {
+                $close_site = ((($start_H) || ($start_h && $start_i)) && (($end_H) || ($end_h == $H && $end_i)));
+            }
+
+
+            if ($close_site) {
+
+                $post = yii::$app->request->post();
+                if ($action->id == 'full-tree' && $this->id == 'member' && isset($post['is_api']) && $post['is_api'] == 1) {
                     return true;
                 }
 
