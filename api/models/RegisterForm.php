@@ -194,6 +194,8 @@ class RegisterForm extends Member
             }
             $this->transaction->commit();
             $this->unLock();
+            //执行缓存清空
+            Helper::cleanMemberCache();
             return true;
         }catch(Exception $exception){
             $this->transaction->rollBack();
@@ -599,16 +601,20 @@ class RegisterForm extends Member
     public function addReferrerDistrictBonus($member_id)
     {
         $count = MemberDistrict::find()->where(['member_id'=>$member_id, 'is_extra'=>1])->count();
+        $username = '默认额外分享用户';
+        if($count > 0){
+            $relation_member_id = MemberDistrict::find()->where(['member_id'=>$member_id, 'is_extra'=>1])->orderBy(['id'=>SORT_DESC])->select('member_id')->scalar();
+            $username = Helper::memberId2Username($relation_member_id);
+        }
         if($count == 1){
-            Helper::addMemberACoin($member_id, 300);
-            return Helper::saveBonusLog($member_id, 1, 3, 300, 0, ['note'=> '添加会员'. $this->username . '奖励,额外第4区', 'relation'=>$this->username]);
+            return Helper::saveBonusLog($member_id, 1, 3, 300, 0, ['note'=> '添加会员'. $this->username . '奖励,额外第4区', 'relation'=>$username]);
         }
         if($count == 2){
             Helper::addMemberACoin($member_id, 600);
-            return Helper::saveBonusLog($member_id, 1, 3, 600, 0, ['note'=> '添加会员'. $this->username . '奖励,额外第5区', 'relation'=>$this->username]);
+            return Helper::saveBonusLog($member_id, 1, 3, 600, 0, ['note'=> '添加会员'. $this->username . '奖励,额外第5区', 'relation'=>$username]);
         }else{
             Helper::addMemberACoin($member_id, 900);
-            return Helper::saveBonusLog($member_id, 1, 3, 900, 0, ['note'=> '添加会员'. $this->username . '奖励,额外6个以上', 'relation'=>$this->username]);
+            return Helper::saveBonusLog($member_id, 1, 3, 900, 0, ['note'=> '添加会员'. $this->username . '奖励,额外6个以上', 'relation'=>$username]);
         }
     }
     /**

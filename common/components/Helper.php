@@ -10,6 +10,7 @@ use common\models\MemberDistrict;
 use common\models\MemberNode;
 use common\models\ShareLog;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 class Helper{
     /**
@@ -166,33 +167,56 @@ class Helper{
     }
 
     /**
-     * 获取玩家的挂靠数
+     * 获取会员的挂靠数
      * @param $member_id
-     * @return int|string
+     * @return mixed
      */
     public static function getMemberUnderNum($member_id)
     {
-        return MemberNode::find()->where(['above_member_id'=>$member_id])->count();
+        $underNum = Yii::$app->cache->get('under_num');
+        if(empty($underNum) || !isset($underNum[$member_id])){
+           $member_under_num = MemberNode::find()->select('count(id) as num,above_member_id')->where(['above_member_id'=>$member_id])->groupBy('above_member_id')->indexBy('above_member_id')->scalar();
+           $underNum[$member_id] = $member_under_num ? $member_under_num : 0;
+            Yii::$app->cache->set('under_num', $underNum);
+        }
+        return ArrayHelper::getValue($underNum, $member_id, 0);
     }
 
     /**
-     * 获取玩家的满区数量
+     * 获取会员的挂靠区数
      * @param $member_id
-     * @return int|string
+     * @return mixed
      */
     public static function getMemberUnderDistrict($member_id)
     {
-        $member_ids  = MemberNode::find()->where(['above_member_id'=>$member_id])->select('member_id')->column();
+        $underDistrict = Yii::$app->cache->get('under_district');
+        if(empty($underDistrict) || !isset($underDistrict[$member_id])){
+            $member_under_ids = MemberNode::find()->select('member_id')->where(['above_member_id'=>$member_id])->asArray()->column();
+            if(isset($member_id) && count($member_under_ids)){
+                //获取区数量
+                $underDistrict[$member_id] = District::find()->where(['member_id'=>$member_under_ids, 'seat'=>40])->count();
 
-        if(isset($member_id) && count($member_ids)){
-            //获取区数量
-            return District::find()->where(['member_id'=>$member_ids, 'seat'=>40])->count();
+            }else{
+                $underDistrict[$member_id] = 0;
+            }
+            Yii::$app->cache->set('under_district', $underDistrict);
         }
-        return 0;
+        return ArrayHelper::getValue($underDistrict, $member_id, 0);
     }
 
     /**
-     * 检查会员是否在 $above_member_id 的区里面
+     * 清楚缓存
+     * @return bool
+     */
+    public static function cleanMemberCache()
+    {
+        Yii::$app->cache->delete('under_num');
+        Yii::$app->cache->delete('under_district');
+        return true;
+    }
+
+    /**
+     * 检查会员是否在 $above_member_id的绩效里面
      * @param $above_member_id
      * @param $member_id
      * @return bool
