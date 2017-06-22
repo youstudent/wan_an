@@ -55,6 +55,8 @@ class Offline extends \yii\db\ActiveRecord
         $model = Offline::findOne(1);
 
         if (!$model) {
+            $model = new Offline();
+            $model->id = 1;
             $model->start = '23时59分';
             $model->end = '00时01分';
         }
