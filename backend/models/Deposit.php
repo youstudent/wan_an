@@ -100,6 +100,7 @@ class Deposit extends \yii\db\ActiveRecord
         }
         $this->created_at = time();
         //如果是扣除，先判断数量是否够
+        $transaction = Yii::$app->db->beginTransaction();
         if ($this->operation == 2) {
             if($this->type == 1){
                 if ($member->a_coin < $this->num) {
@@ -120,7 +121,8 @@ class Deposit extends \yii\db\ActiveRecord
 
             $this->member_id = $member->id;
 
-            if(!$this->save(false) && $member->save(false)){
+            if(!$this->save(false) || !$member->save(false)){
+                $transaction->rollBack();
                 return false;
             }
             return Helper::saveBonusLog($member->id, $this->type, 7, $this->num, 0, ['note'=> '后台扣除']);
@@ -134,9 +136,11 @@ class Deposit extends \yii\db\ActiveRecord
 
             $this->member_id = $member->id;
 
-            if(!$this->save(false) && $member->save(false)){
+            if(!$this->save(false) || !$member->save(false)){
+                $transaction->rollBack();
                 return false;
             }
+            $transaction->commit();
             return Helper::saveBonusLog($member->id, $this->type, 6, $this->num, 0, ['note'=> '后台充值']);
         }
     }
