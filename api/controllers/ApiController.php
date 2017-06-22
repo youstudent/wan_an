@@ -26,20 +26,22 @@ class ApiController extends Controller
             $H = date('H',time());
             $i = date('i',time());
 
-            $fun= ((($offlineTime->start_h < $H) || ($offlineTime->start_h == $H && $offlineTime->start_i <= $i)) ||
+            $close_site = ((($offlineTime->start_h < $H) || ($offlineTime->start_h == $H && $offlineTime->start_i <= $i)) ||
                 (($offlineTime->end_h > $H) || ($offlineTime->end_h == $H && $offlineTime->end_i > $i)));
 
-            if ($fun) {
-                Yii::$app->response->format = Response::FORMAT_JSON;
-                $code = 10001;
-                $data = [];
-                $time = '';
-                $time = $time ? $time : time();
+            if ($close_site) {
+
+                $post = yii::$app->request->post();
+                if ($action->id == 'full-tree' && $this->id == 'member' && isset($post['is_api']) && $post['is_api'] == 1) {
+                    return true;
+                }
+
+                header("Content-type: application/json");
                 exit(json_encode([
-                    'code' => $code,
-                    'timestamp' => $time,
+                    'code' => 10001,
+                    'timestamp' => time(),
                     'message' => '网站维护中',
-                    'data' => $data,
+                    'data' => ['offTime'=>$offlineTime->start.'-'.$offlineTime->end],
                 ]));
 
             }

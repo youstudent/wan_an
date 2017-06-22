@@ -18,8 +18,8 @@ class BonusSearch extends Bonus
     public function rules()
     {
         return [
-            [['id', 'member_id', 'coin_type', 'type', 'num', 'created_at', 'updated_at', 'poundage'], 'integer'],
-            [['ext_data'], 'safe'],
+            [['id', 'member_id', 'coin_type', 'type', 'num', 'poundage'], 'integer'],
+            [['ext_data','created_at','updated_at'], 'safe'],
         ];
     }
 
@@ -51,18 +51,21 @@ class BonusSearch extends Bonus
             return $dataProvider;
         }
 
+        $start='';
+        $end = '';
+        //格式化时间
+        if ($this->created_at){
+            $start_date = substr($this->created_at,0,10);
+            $start = strtotime($start_date);
+            $end_date =  substr($this->created_at,12);
+            $end = strtotime($end_date);
+        }
+
         $query->andFilterWhere([
-            'id' => $this->id,
-            'member_id' => $this->member_id,
             'coin_type' => $this->coin_type,
             'type' => $this->type,
-            'num' => $this->num,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
-            'poundage' => $this->poundage,
-        ]);
-
-        $query->andFilterWhere(['like', 'ext_data', $this->ext_data]);
+//            'created_at' => $this->created_at,
+        ])->andFilterWhere(['>=','created_at',$start])->andFilterWhere(['<=','created_at',$end]);
 
         return $dataProvider;
     }

@@ -224,7 +224,7 @@ class MemberController extends ApiController
             $json = [ 'code'=> 1, 'data' => $data, 'message'=> 'success'];
             return $this->asJson($json);
         }
-        $json = [ 'code'=> 0, 'data' => [], 'message'=> $model->getFirstErrors()];
+        $json = [ 'code'=> 0, 'data' => [], 'message'=> $model->errorMsg];
         return $this->asJson($json);
     }
     /**
@@ -251,6 +251,6 @@ class MemberController extends ApiController
         if($data = $model->log(Yii::$app->request->getQueryParam('type'), ArrayHelper::getValue(Yii::$app->session->get('member'), 'member_id'))){
             return $this->jsonReturn(1, 'success', $data);
         }
-        return $this->jsonReturn(0, '赞无记录', []);
+        return $this->jsonReturn(0, '暂无记录');
     }
 }

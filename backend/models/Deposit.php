@@ -117,7 +117,10 @@ class Deposit extends \yii\db\ActiveRecord
                 }
                 $member->b_coin =  $member->b_coin - $this->num;
             }
-            if(!$this->save()){
+
+            $this->member_id = $member->id;
+
+            if(!$this->save(false)){
                 return false;
             }
             return Helper::saveBonusLog($member->id, $this->type, 7, $this->num, 0, ['note'=> '后台扣除']);
@@ -128,7 +131,10 @@ class Deposit extends \yii\db\ActiveRecord
             if($this->type == 2){
                 $member->b_coin = $member->b_coin + $this->num;
             }
-            if(!$this->save()){
+
+            $this->member_id = $member->id;
+
+            if(!$this->save(false)){
                 return false;
             }
             return Helper::saveBonusLog($member->id, $this->type, 6, $this->num, 0, ['note'=> '后台充值']);

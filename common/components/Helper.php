@@ -172,7 +172,7 @@ class Helper{
      */
     public static function getMemberUnderNum($member_id)
     {
-        return MemberNode::find()->where(['member_id'=>$member_id])->count();
+        return MemberNode::find()->where(['above_member_id'=>$member_id])->count();
     }
 
     /**
@@ -182,13 +182,25 @@ class Helper{
      */
     public static function getMemberUnderDistrict($member_id)
     {
-        $member_ids  = MemberNode::find()->where(['member_id'=>$member_id])->select('above_member_id')->column();
+        $member_ids  = MemberNode::find()->where(['above_member_id'=>$member_id])->select('member_id')->column();
 
         if(isset($member_id) && count($member_ids)){
             //获取区数量
             return District::find()->where(['member_id'=>$member_ids, 'seat'=>40])->count();
         }
         return 0;
+    }
+
+    /**
+     * 检查会员是否在 $above_member_id 的区里面
+     * @param $above_member_id
+     * @param $member_id
+     * @return bool
+     */
+    public static function checkMemberIsUnder($above_member_id, $member_id)
+    {
+        $one =  MemberNode::find()->where(['above_member_id'=>$above_member_id, 'member_id'=>$member_id])->select('member_id')->one();
+        return $one ? true : false;
     }
 
     /**

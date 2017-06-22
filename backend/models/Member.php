@@ -78,6 +78,7 @@ class Member extends \yii\db\ActiveRecord
             'group_num' => '区数量',
             'child' => '区数量',
             'parent_vip' => '直推会员卡号',
+            'relate_name' => '关联用户',
         ];
     }
 

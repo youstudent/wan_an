@@ -104,7 +104,27 @@ class District extends \yii\db\ActiveRecord
     {
         $username = ArrayHelper::getValue($post, 'username');
         $up =  ArrayHelper::getValue($post, 'up', 0);
+        $is_api = ArrayHelper::getValue($post, 'is_api', 0);
         //找到这个vip的 base 区
+
+
+
+        //是前端请求的接口，就要判断权限
+        if($is_api == 1){
+            $username = $username ? $username : ArrayHelper::getValue(Yii::$app->session->get('member'), 'username');
+            $member_id = Helper::username2MemberId($username);
+            if(empty($member_id)){
+
+                $this->errorMsg = '会员不存在';
+                return false;
+            }
+            //判断会员在不在挂靠区里面
+            $login_member_id = ArrayHelper::getValue(Yii::$app->session->get('member'), 'member_id');
+            if($login_member_id != $member_id && Helper::checkMemberIsUnder($login_member_id, $member_id) == false){
+                $this->errorMsg = '无权限';
+                return false;
+            }
+        }
 
         $vip_number = $username ? Helper::username2VipNumber($username) : 1;
 
