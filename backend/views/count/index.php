@@ -95,7 +95,7 @@ $log_model = $log->offset($pages->offset)->limit($pages->limit)->all();
 ?>
 
 
-<table class="table table-hover table-bordered table-striped" >
+<table class="table table-hover table-bordered " >
     <thead>
     <tr class="danger" >
         <th>会员名</th>
@@ -156,6 +156,7 @@ $log_model = $log->offset($pages->offset)->limit($pages->limit)->all();
     </tbody>
 </table>
 
-<?= LinkPager::widget(['pagination' => $pages]); ?>
+<?= LinkPager::widget(['pagination' => $pages,'nextPageLabel' =>'下一页','prevPageLabel' =>'上一页','firstPageLabel' => '首页',
+    'lastPageLabel' => '尾页', ]); ?>
 
 
