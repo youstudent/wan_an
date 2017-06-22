@@ -19,8 +19,10 @@ class OfflineController extends Controller
     {
         $model = Offline::findOne(1);
         if (!$model) {
-            $model->start = '00时00分';
-            $model->end = '00时00分';
+            $model = new Offline();
+            $model->id = 1;
+            $model->start = '23时59分';
+            $model->end = '00时01分';
         }
         $time = $model->offline($model);
         return $this->render('index', [
@@ -31,6 +33,12 @@ class OfflineController extends Controller
     public function actionUpdate()
     {
         $model = Offline::findOne(1);
+        if (!$model) {
+            $model = new Offline();
+            $model->id = 1;
+            $model->start = '23时59分';
+            $model->end = '00时01分';
+        }
 
         if ($model->updateTime(Yii::$app->request->post(), $model)) {
             Yii::$app->session->setFlash('success', '修改成功');
