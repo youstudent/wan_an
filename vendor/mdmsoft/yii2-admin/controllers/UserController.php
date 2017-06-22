@@ -50,7 +50,7 @@ class UserController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['post'],
+                    'delete' => ['get'],
                     'logout' => ['post'],
                     'activate' => ['post'],
                 ],
@@ -140,7 +140,11 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        if ($id == 1) {
+            Yii::$app->session->setFlash('error', '不能删除内置管理员');
+        } else {
+            $this->findModel($id)->delete();
+        }
 
         return $this->redirect(['index']);
     }
