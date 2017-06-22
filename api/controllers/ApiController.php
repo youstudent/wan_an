@@ -33,8 +33,12 @@ class ApiController extends Controller
             $end_H = $offlineTime->end_h > $H;
             $end_h = $offlineTime->end_h == $H;
             $end_i = $offlineTime->end_i >= $i;
+            if (($offlineTime->start_h >= $offlineTime->end_h) && ($offlineTime->start_i > $offlineTime->end_i) ) {
+                $close_site = ((($start_H) || ($start_h && $start_i)) || (($end_H) || ($end_h == $H && $end_i)));
+            } else {
+                $close_site = ((($start_H) || ($start_h && $start_i)) && (($end_H) || ($end_h == $H && $end_i)));
+            }
 
-            $close_site = ((($start_H) || ($start_h && $start_i)) && (($end_H) || ($end_h == $H && $end_i)));
 
             if ($close_site) {
 
