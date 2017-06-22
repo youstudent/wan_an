@@ -33,13 +33,18 @@ class MemberForm extends Member
      */
     public function updateMember($id,$data)
     {
-        $member = Member::findOne($id);
+        $this->load($data, 'Member');
 
-        $member->load($data, 'Member');
-
-        $this->vip_number = $data['Member']['vip_number'];
-        $this->password = $data['Member']['password'];
-        $member->setPassword($this->password);
+        $member = $this->findOne($id);
+        $member->deposit_bank = $this->deposit_bank;
+        $member->mobile = $this->mobile;
+        $member->bank_account = $this->bank_account;
+        $member->address = $this->address;
+        $member->name = $this->name;
+        if(!empty($data['Member']['password'])){
+            $member->password = $data['Member']['password'];
+            $member->setPassword($this->password);
+        }
 
         if ($member->save(false)) {
             return $member;
