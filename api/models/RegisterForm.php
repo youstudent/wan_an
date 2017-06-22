@@ -115,7 +115,6 @@ class RegisterForm extends Member
      */
     public function register($post, $action_member_id)
     {
-        //$action_member_id=1;
         if(!$this->load($post, '') || !$this->validate()){
             $this->errorMsg = current($this->getFirstErrors());
             return false;
@@ -128,7 +127,6 @@ class RegisterForm extends Member
             $this->errorMsg = '注入的金豆和金种子和必须等于900';
             return false;
         }
-        $this->unLock();
         if($this->checkLock() == false){
             $this->errorMsg = '后台正在进行注册操作，请稍后再试';
             return false;
@@ -280,9 +278,13 @@ class RegisterForm extends Member
      */
     public function rewardActionMember($member_id)
     {
-
        $member = Member::findOne(['id'=>$member_id]);
-       if($member->a_coin < $this->a_coin){
+       if(!isset($member)){
+           $this->addError('errorMsg', '推荐人信息获取失败');
+           return false;
+       }
+       if(!isset($member) || $member->a_coin < $this->a_coin){
+
            $this->addError('a_coin', '金果数量不足');
            return false;
        }
