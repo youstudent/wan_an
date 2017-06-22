@@ -120,7 +120,7 @@ class Deposit extends \yii\db\ActiveRecord
 
             $this->member_id = $member->id;
 
-            if(!$this->save(false)){
+            if(!$this->save(false) && $member->save(false)){
                 return false;
             }
             return Helper::saveBonusLog($member->id, $this->type, 7, $this->num, 0, ['note'=> '后台扣除']);
@@ -134,7 +134,7 @@ class Deposit extends \yii\db\ActiveRecord
 
             $this->member_id = $member->id;
 
-            if(!$this->save(false)){
+            if(!$this->save(false) && $member->save(false)){
                 return false;
             }
             return Helper::saveBonusLog($member->id, $this->type, 6, $this->num, 0, ['note'=> '后台充值']);
