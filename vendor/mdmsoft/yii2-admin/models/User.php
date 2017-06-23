@@ -55,7 +55,8 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE]],
-            [[' name','email', 'password_hash'], 'safe'],
+            [[' username','email', 'password_hash'], 'safe'],
+            [['username'], 'unique', 'message' => "{attribute}已经被占用了"],
         ];
     }
     public function attributeLabels()
@@ -84,7 +85,7 @@ class User extends ActiveRecord implements IdentityInterface
             $user->setPassword($this->password_hash);
         }
 
-        if ($user->save(false)) {
+        if ($this->validate() && $user->save(false)) {
             return $user;
         }
 
