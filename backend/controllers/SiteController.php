@@ -63,12 +63,12 @@ class SiteController extends Controller
     {
 
         if (!Yii::$app->user->isGuest) {
-            return $this->redirect('/record/index');
+            return $this->redirect('/home/index');
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->redirect('/record/index');
+            return $this->redirect('/home/index');
         } else {
             return $this->render('login', [
                 'model' => $model,
@@ -88,5 +88,13 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
-    
+    /**
+     * 重写错误.
+     *
+     * @return string
+     */
+    public function actionError()
+    {
+
+    }
 }

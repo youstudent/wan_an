@@ -69,6 +69,7 @@ return [
         'class' => 'mdm\admin\components\AccessControl',
         'allowActions' => [
             'site/*',
+            'home/index',
         ]
     ],
     'params' => $params,
