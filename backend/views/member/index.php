@@ -113,6 +113,12 @@ $this->params['breadcrumbs'][] = '会员管理列表';
             'mergeHeader'=>true,
         ],
         [
+            'attribute' => 'child_num',
+            'label' => '直推数',
+            'filter'    => false,
+            'mergeHeader'=>true,
+        ],
+        [
             'attribute' => 'last_login_time',
             'label' => '最后登录时间',
             'value' => function ($model) {

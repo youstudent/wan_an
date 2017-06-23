@@ -36,7 +36,7 @@ class Deposit extends \yii\db\ActiveRecord
         return [
             [['username','type','operation'], 'required'],
             [['member_id', 'type', 'operation', 'num', 'created_at', 'updated_at'], 'integer'],
-            [['num'], 'number', 'min'=> 1]
+            [['num'], 'number', 'min'=> 1, 'max'=> '2147483647']
         ];
     }
 

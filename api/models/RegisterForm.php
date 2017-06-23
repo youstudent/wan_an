@@ -12,6 +12,7 @@ use common\components\Helper;
 use common\models\District;
 use common\models\DistrictChangeLog;
 use common\models\MemberDistrict;
+use common\models\MemberNode;
 use common\models\ShareLog;
 use common\models\Tree;
 use Yii;
@@ -231,8 +232,10 @@ class RegisterForm extends Member
         }
 
         //添加一个推荐人奖励-
-        $result = Helper::addMemberACoin($this->referrer_id, Yii::$app->params['coin_type_2_money']);
-        Helper::saveBonusLog($this->referrer_id, 1, 2, Yii::$app->params['coin_type_2_money'], 0, ['note'=> '分享会员'. $this->username . '奖励', 'relation'=>$this->username]);
+        Helper::shareMemberLog($this->referrer_id, $blank_member->id);
+        //给分享人添加区数和奖金记录
+        $result = $this->setIncMemberShare($this->referrer_id);
+
         if($result == false){
             $this->errorMsg = '添加分享人奖金失败';
             $this->unLock();
@@ -514,6 +517,13 @@ class RegisterForm extends Member
                     $result = $district_model->modifyBonus($member->id, $new_member_id);
                     if ($result == false) {
                         $this->errorMsg = '继承奖金失败';
+
+                        return false;
+                    }
+                    //交换数据
+                    $result = MemberNode::exchangeMemberNode($member->id, $new_member_id);
+                    if ($result == false){
+                        $this->errorMsg = '业绩交换失败';
 
                         return false;
                     }
