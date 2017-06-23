@@ -52,18 +52,21 @@ class MemberNode extends \yii\db\ActiveRecord
      */
     public static function exchangeMemberNode($member_id_1, $member_id_2)
     {
-        $flag = true;
-        $flag = $flag && Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['member_id'=>-10001], ['member_id'=>$member_id_1])->execute();
-        $flag = $flag && Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['above_member_id'=>-20001], ['above_member_id'=>$member_id_1])->execute();
+        try{
+            Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['member_id'=>-10001], ['member_id'=>$member_id_1])->execute();
+            Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['above_member_id'=>-20001], ['above_member_id'=>$member_id_1])->execute();
 
-        $flag = $flag && Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['member_id'=>-10002], ['member_id'=>$member_id_2])->execute();
-        $flag = $flag && Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['above_member_id'=>-20002], ['above_member_id'=>$member_id_2])->execute();
+            Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['member_id'=>-10002], ['member_id'=>$member_id_2])->execute();
+            Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['above_member_id'=>-20002], ['above_member_id'=>$member_id_2])->execute();
 
-        $flag = $flag && Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['member_id'=>$member_id_2], ['member_id'=> '-10001'])->execute();
-        $flag = $flag && Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['above_member_id'=>$member_id_2], ['above_member_id'=> '-20001'])->execute();
+            Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['member_id'=>$member_id_2], ['member_id'=> '-10001'])->execute();
+            Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['above_member_id'=>$member_id_2], ['above_member_id'=> '-20001'])->execute();
 
-        $flag = $flag && Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['member_id'=>$member_id_1], ['member_id'=> '-10002'])->execute();
-        $flag = $flag && Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['above_member_id'=>$member_id_1], ['above_member_id'=> '-20002'])->execute();
-        return $flag;
+            Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['member_id'=>$member_id_1], ['member_id'=> '-10002'])->execute();
+            Yii::$app->db->createCommand()->update(MemberNode::tableName(), ['above_member_id'=>$member_id_1], ['above_member_id'=> '-20002'])->execute();
+        }catch(\Exception $e){
+            return false;
+        }
+        return true;
     }
 }
