@@ -13,9 +13,9 @@ return [
     'controllerNamespace' => 'api\controllers',
     'components' => [
         'request' => [
-            'csrfParam' => '_csrf-api',
             'enableCookieValidation' => true,
-            'cookieValidationKey' => '0nUZkaG9ZasdcscasdwqaAAktUpJ1gchbn4nc',
+            'enableCsrfValidation' => true,
+            'cookieValidationKey' => 'Xb72Xc6WLiqkpeaF5_SekGJroBBiIlCr',
         ],
         'user' => [
             'identityClass' => 'common\models\User',
