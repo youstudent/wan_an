@@ -75,6 +75,9 @@ $this->params['breadcrumbs'][] = '管理员列表';
                         return Html::a(Html::tag('span', '修改', ['class' => "btn btn-xs btn-success"]), ['user/update', 'id'=>$model->id]);
                     },
                     'delete' => function ($url, $model, $key) {
+                        if ($model->id == 1) {
+                            return '';
+                        }
                         return Html::a(Html::tag('span', '删除', ['class' => "btn btn-xs btn-danger"]), ['user/delete', 'id'=>$model->id]);
                     },
                 ],

@@ -25,7 +25,7 @@ use kartik\widgets\SwitchInput;
         
             <?= $form->field($model, 'parent_vip')->textInput(['readonly'=>'true']) ?>
 
-            <?= $form->field($model, 'mobile')->textInput(['maxlength' => 255]) ?>
+            <?= $form->field($model, 'mobile')->textInput(['maxlength' => 15]) ?>
 
             <?= $form->field($model, 'deposit_bank')->textInput(['maxlength' => 255]) ?>
 
@@ -36,9 +36,9 @@ use kartik\widgets\SwitchInput;
 
             <?= $form->field($model, 'vip_number')->textInput(['readonly'=>'true']) ?>
 
-            <?= $form->field($model, 'name')->textInput(['maxlength' => 255]) ?>
+            <?= $form->field($model, 'name')->textInput(['maxlength' => 10]) ?>
 
-            <?= $form->field($model, 'password')->passwordInput(['maxlength' => 255]) ?>
+            <?= $form->field($model, 'password')->passwordInput(['maxlength' => 16]) ?>
 
             <?= $form->field($model, 'bank_account')->textInput(['maxlength' => 255]) ?>
         </div>
