@@ -521,7 +521,7 @@ class RegisterForm extends Member
                         return false;
                     }
                     //交换数据
-                    $result = MemberNode::exchangeMemberNode($member->id, $new_member_id);
+                    MemberNode::exchangeMemberNode($member->id, $new_member_id);
                     if ($result == false){
                         $this->errorMsg = '业绩交换失败';
 
@@ -571,7 +571,7 @@ class RegisterForm extends Member
         Helper::memberDistrictLog($root_member_info->parent_id, $district, $is_extra);
         //执行额外分享逻辑
         if($is_extra){
-            $this->addReferrerDistrictBonus($root_member_info->parent_id);
+            $this->addReferrerDistrictBonus($root_member_info->parent_id, $root_member['member_id']);
         }
         return true;
 
@@ -603,19 +603,17 @@ class RegisterForm extends Member
         }
         return false;
     }
+
     /**
      * 添加额外分享奖励
      * @param $member_id
+     * @param $relation_member_id
      * @return \common\models\Bonus|null
      */
-    public function addReferrerDistrictBonus($member_id)
+    public function addReferrerDistrictBonus($member_id, $relation_member_id)
     {
         $count = MemberDistrict::find()->where(['member_id'=>$member_id, 'is_extra'=>1])->count();
-        $username = '默认额外分享用户';
-        if($count > 0){
-            $relation_member_id = MemberDistrict::find()->where(['member_id'=>$member_id, 'is_extra'=>1])->orderBy(['id'=>SORT_DESC])->select('member_id')->scalar();
-            $username = Helper::memberId2Username($relation_member_id);
-        }
+        $username = Helper::memberId2Username($relation_member_id);
         if($count == 1){
             return Helper::saveBonusLog($member_id, 1, 3, 300, 0, ['note'=> '添加会员'. $this->username . '奖励,额外第4区', 'relation'=>$username]);
         }
