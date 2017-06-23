@@ -125,6 +125,7 @@ class Deposit extends \yii\db\ActiveRecord
                 $transaction->rollBack();
                 return false;
             }
+            $transaction->commit();
             return Helper::saveBonusLog($member->id, $this->type, 7, $this->num, 0, ['note'=> '后台扣除']);
         }else{
             if($this->type == 1){
