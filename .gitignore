@@ -37,3 +37,6 @@ phpunit.phar
 
 # 图片路径
 /backend/web/public/upload
+
+# 公共缓存
+/common/runtime/*
