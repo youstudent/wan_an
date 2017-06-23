@@ -330,7 +330,6 @@ class Pagination extends Object implements Linkable
             $links[self::LINK_NEXT] = $this->createUrl($currentPage + 1, null, $absolute);
             $links[self::LINK_LAST] = $this->createUrl($pageCount - 1, null, $absolute);
         }
-
         return $links;
     }
 
