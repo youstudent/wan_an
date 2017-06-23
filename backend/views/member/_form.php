@@ -30,6 +30,8 @@ use kartik\widgets\SwitchInput;
             <?= $form->field($model, 'deposit_bank')->textInput(['maxlength' => 255]) ?>
 
             <?= $form->field($model, 'address')->textInput(['maxlength' => 255]) ?>
+
+            <?= $form->field($model, 'username')->textInput() ?>
         </div>
 
         <div class="col-md-6">
@@ -38,7 +40,7 @@ use kartik\widgets\SwitchInput;
 
             <?= $form->field($model, 'name')->textInput(['maxlength' => 10]) ?>
 
-            <?= $form->field($model, 'password')->passwordInput(['maxlength' => 16]) ?>
+            <?= $form->field($model, 'password')->passwordInput(['maxlength' => 16, 'value'=>'']) ?>
 
             <?= $form->field($model, 'bank_account')->textInput(['maxlength' => 255]) ?>
         </div>
