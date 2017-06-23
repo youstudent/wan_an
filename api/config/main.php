@@ -15,7 +15,7 @@ return [
         'request' => [
             'csrfParam' => '_csrf-api',
             'enableCookieValidation' => true,
-            'cookieValidationKey' => 'your-validation-key',
+            'cookieValidationKey' => '0nUZkaG9ZasdcscasdwqaAAktUpJ1gchbn4nc',
         ],
         'user' => [
             'identityClass' => 'common\models\User',

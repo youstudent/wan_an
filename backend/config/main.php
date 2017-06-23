@@ -15,6 +15,10 @@ return [
     'language' => 'zh-CN',
     'name' => '万岸会员管理系统',
     'modules' => [
+        'request' => [
+            // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
+            'cookieValidationKey' => '0nUZkaG9ZtfpcK0v34ktUpJ1gchbn4nc',
+        ],
         'admin' => [
             'class' => 'mdm\admin\Module',
         ],
