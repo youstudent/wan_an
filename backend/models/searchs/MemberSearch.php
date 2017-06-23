@@ -82,7 +82,7 @@ class MemberSearch extends Member
             'a_coin' => $this->a_coin,
             'b_coin' => $this->b_coin,
             'child_num' => $this->child_num,
-        ])->andFilterWhere(['>=','created_at',$start])->andFilterWhere(['<=','created_at',$end]);
+        ])->andFilterWhere(['>=','member.created_at',$start])->andFilterWhere(['<=','member.created_at',$end]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'password', $this->password])
