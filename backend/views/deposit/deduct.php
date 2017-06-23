@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = '扣除';
             <?= $form->field($model, 'type')->dropDownList(['1'=>'金果', '2'=>'金种子'],
                 ['prompt'=>'请选择','style'=>'width:300px'])  ?>
 
-            <?= $form->field($model, 'num')->textInput(['style'=>'width:300px']) ?>
+            <?= $form->field($model, 'num')->textInput(['style'=>'width:300px'])->label('扣除数量') ?>
 
             <?= $form->field($model, 'operation')->hiddenInput(['value'=>2]) ?>
 
