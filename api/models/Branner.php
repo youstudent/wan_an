@@ -2,6 +2,7 @@
 
 namespace api\models;
 
+use common\components\Helper;
 use Yii;
 use app\models\User;
 use api\models\Member;
@@ -69,11 +70,12 @@ class Branner extends \yii\db\ActiveRecord
         $out_status = 0;
         if ($outNum == 1) {
             $out_status = 1;
+            $out_status = 0;
         }
 
         $memberModel = new Member();
         $son = $memberModel->son($member_id);
-        $child = $memberModel->child($member_id);
+        $child = Helper::getMemberUnderNum($member_id);
         $void_status = 0;
         if ($son == 0 && $child >= 3) {
             $void_status = 1;
