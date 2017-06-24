@@ -367,7 +367,7 @@ CREATE TABLE `wa_member` (
 --  Records of `wa_member`
 -- ----------------------------
 BEGIN;
-INSERT INTO `wa_member` VALUES ('1', '1', 'wanan', '0', '0', '万岸', '$2y$13$gu094onaVGc9v5Juiz6SD.Tcoxio8IANlYRZjgd7mlFEDjS1OtIVK', '13219890986', '成都银行', '', '', '192.168.2.118', '1497946697', '1', '1497343480', '0', '0', '0', '0', '0');
+INSERT INTO `wa_member` VALUES ('1', '1', 'mc168', '0', '0', '万岸', '$2y$13$gu094onaVGc9v5Juiz6SD.Tcoxio8IANlYRZjgd7mlFEDjS1OtIVK', '13219890986', '成都银行', '', '', '192.168.2.118', '1497946697', '1', '1497343480', '0', '0', '0', '0', '0');
 COMMIT;
 
 -- ----------------------------
