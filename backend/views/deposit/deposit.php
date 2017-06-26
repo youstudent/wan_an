@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = '充值';
 
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-            <?= Html::submitButton('充值', ['class' => 'btn btn-danger']) ?>
+            <?= Html::button('充值', ['class' => 'btn btn-danger', 'data'=> ['confirm'=>'确定要充值么?']]) ?>
         </div>
     </div>
 
