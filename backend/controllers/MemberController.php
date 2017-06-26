@@ -306,7 +306,7 @@ class MemberController extends Controller
 
     public function actionSysRest()
     {
-        $sql = file_get_contents(Yii::getAlias('@webroot'). ' /../../databases/init.sql');
-        Yii::$app->db->createCommand($sql)->execute();
+//        $sql = file_get_contents(Yii::getAlias('@webroot'). ' /../../databases/init.sql');
+//        Yii::$app->db->createCommand($sql)->execute();
     }
 }
