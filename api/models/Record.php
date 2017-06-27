@@ -74,15 +74,16 @@ class Record extends \yii\db\ActiveRecord
             $this->addError('message','提现金额不能为负数或0');
             return false;
         };
-        if ($data['coin'] % 100 != 0) {
+        $withdraw_limit_multiple = Yii::$app->params['withdraw_limit_multiple'] ? Yii::$app->params['withdraw_limit_multiple'] : 200;
+        if ($data['coin'] % $withdraw_limit_multiple != 0) {
             $this->addError('code', 0);
-            $this->addError('message', '提现金额必须是100的倍数');
+            $this->addError('message', '提现金额必须是'. $withdraw_limit_multiple .'的倍数');
             return false;
         };
         $member = Member::findOne(['id' => $id]);
-        if ($member->child_num == 0) {
+        if ($member->child_num < 2) {
             $this->addError('code', 0);
-            $this->addError('message', '必须直推至少一人才能提现');
+            $this->addError('message', '必须直推至少2人才能提现');
             return false;
         };
         if ($member->a_coin < abs($data['coin']) ) {

@@ -58,11 +58,16 @@ class Give extends \yii\db\ActiveRecord
     //金果和金种子的赠送
     public function give($data){
         $session = Yii::$app->session->get('member');
+        $session['member_id'] = 1;
         $member_id = $session['member_id'];
 
         $member = Member::findOne(['id' => $member_id]);
-        $result = Member::findOne(['parent_id' => $member_id]);
         $give_member  = Member::findOne(['username'=>$data['username']]);
+        $limit_multiple = Yii::$app->params['give_limit_multiple'] ? Yii::$app->params['give_limit_multiple'] : '100';
+        if($data['give_coin'] % $limit_multiple ){
+            $this->addError('message','赠送金果或者金种子必须是'. $limit_multiple . '倍数');
+            return false;
+        }
         if ($data['give_coin']<=0){
             $this->addError('message','赠送金果和金种子必须大于0');
             return false;
@@ -75,8 +80,8 @@ class Give extends \yii\db\ActiveRecord
             $this->addError('message', '没有该会员');
             return false;
         }
-        if ($result == null || $result == false) {
-            $this->addError('message', '必须直推一个人,才能赠送金果和金种子');
+        if ($member->child_num < 2) {
+            $this->addError('message', '必须直推2个人,才能赠送金果和金种子');
             return false;
         }
         if ($data['coinType']==1){

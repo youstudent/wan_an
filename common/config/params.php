@@ -10,5 +10,9 @@ return [
     'coin_type_1_money' => '150',
     'coin_type_2_money' => '300',
 
-    'lock_file_key' => 'MEMBER_REGISTER_KEY'
+    'lock_file_key' => 'MEMBER_REGISTER_KEY',
+
+    //倍数限制
+    'give_limit_multiple' => '100',
+    'withdraw_limit_multiple' => '200',
 ];
