@@ -58,7 +58,6 @@ class Give extends \yii\db\ActiveRecord
     //金果和金种子的赠送
     public function give($data){
         $session = Yii::$app->session->get('member');
-        $session['member_id'] = 1;
         $member_id = $session['member_id'];
 
         $member = Member::findOne(['id' => $member_id]);
