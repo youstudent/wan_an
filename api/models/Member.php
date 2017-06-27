@@ -7,9 +7,7 @@ use common\models\District;
 use Yii;
 use yii\db\Query;
 use yii\helpers\ArrayHelper;
-use yii\web\IdentityInterface;
-use api\models\Session;
-use yii\captcha\CaptchaAction;
+use common\models\ShareLog;
 /**
  * This is the model class for table "wa_member".
  *
@@ -135,7 +133,7 @@ class Member extends \yii\db\ActiveRecord
     public function son($id)
     {
         $query = (new \yii\db\Query());
-        $num = $query->from(Member::tableName())->where(['parent_id' => $id])->count();
+        $num = $query->from(ShareLog::tableName())->where(['referrer_id' => $id])->count();
 
         return $num;
     }

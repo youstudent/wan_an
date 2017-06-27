@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = '扣除';
 
     <div class="row">
         <div class="col-md-10 col-md-offset-1">
-            <?= Html::submitButton('扣除', ['class' => 'btn btn-danger']) ?>
+            <?= Html::button('扣除', ['class' => 'btn btn-danger', 'data'=> ['confirm'=>'确定要扣除么?']]) ?>
         </div>
     </div>
 
