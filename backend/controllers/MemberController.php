@@ -249,7 +249,7 @@ class MemberController extends Controller
                 $attr[] = $k;
             }
         }
-            
+
             foreach ($values as $value) {
                 if ($type == LogUpload::TYPE_INSERT)
                     $model = new Member;

@@ -118,24 +118,12 @@ class Member extends \yii\db\ActiveRecord
             $data['parent_username'] = Member::findOne(['id'=>$data['parent_id']])->username;
         }
 
-
         $data['child'] = Helper::getMemberUnderNum($member_id);
 //        $child = 1;
         $data['group_num'] = Helper::getMemberUnderDistrict($member_id);
 //        $group = 1;
 
         return $data;
-    }
-    /**
-     * 直推数查询
-     * @return int
-     */
-    public function son($id)
-    {
-        $query = (new \yii\db\Query());
-        $num = $query->from(ShareLog::tableName())->where(['referrer_id' => $id])->count();
-
-        return $num;
     }
 
     /**
