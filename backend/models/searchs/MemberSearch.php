@@ -48,6 +48,7 @@ class MemberSearch extends Member
     public function search($params)
     {
         $query = Member::find();
+        $query->alias('member');
         $query->joinWith('referrer');
         $query->joinWith('register');
 
@@ -84,7 +85,7 @@ class MemberSearch extends Member
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'password', $this->password])
-            ->andFilterWhere(['like', 'mobile', $this->mobile])
+            ->andFilterWhere(['like', 'member.mobile', $this->mobile])
             ->andFilterWhere(['like', 'deposit_bank', $this->deposit_bank])
             ->andFilterWhere(['like', 'bank_account', $this->bank_account])
             ->andFilterWhere(['like', 'address', $this->address])

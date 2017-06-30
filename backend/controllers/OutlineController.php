@@ -126,7 +126,25 @@ class OutlineController extends Controller
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
-    
+
+    /**
+     * Deletes an existing Member model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionChange()
+    {
+        $model = new Outline();
+
+        if($model->change(Yii::$app->request->queryParams)){
+            Yii::$app->session->setFlash('success', '已确认');
+        }else{
+            Yii::$app->session->setFlash('error', $model->getErrors());
+        }
+        return $this->redirect(['index']);
+
+    }
     public function actionSample() {
 
         //$objPHPExcel = new \PHPExcel();
