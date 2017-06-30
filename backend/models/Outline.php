@@ -68,4 +68,16 @@ class Outline extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Member::className(), ['id' => 'member_id']);
     }
+
+    public function change($param)
+    {
+        $model = Outline::findOne($param['id']);
+
+        $model->status = 1;
+        if ($model->save(false)) {
+            return $model;
+        }
+
+        return  null;
+    }
 }
